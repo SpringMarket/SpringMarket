@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +44,7 @@ public class CandyService {
     public void warmupCandy() {
 
         log.info("Warm Up Start....");
-
+        /*
         List<Candy> candy = candyRepository.findAll();
         List<CandyResponseDetailDto> candyResponseDetailDtos = new ArrayList<>();
 
@@ -51,31 +52,31 @@ public class CandyService {
             if (r == candy.size()) break;
             candyResponseDetailDtos.add(CandyResponseDetailDto.toDto(candy.get(r)));
             redisService.setCandy("candy::" + candyResponseDetailDtos.get(r).getCandyId(), candyResponseDetailDtos.get(r), Duration.ofSeconds(100));
-        }
+        }*/
+        candyRepository.warmup();
     }
 
 
 
     // 사탕 전체 조회
     @Transactional(readOnly = true)
-    public void findAllCandy(Pageable pageable, String category, Boolean stock, List<Long> price, String age, String keyword) {
+    public Page<CandyResponseDetailDto> findAllCandy(Pageable pageable, String category, Boolean stock, List<Long> price, String age, String keyword) {
 
         log.info("Search All Log Start....");
 
-        // Query DSL Filter 추가 ^___^
-
+        return candyRepository.mainFilter(pageable, category,  stock, price, age, keyword);
     }
 
 
     // 사탕 상세 조회 -> Cache Aside
     @Cacheable(value = "candy", key = "#id") // [post::1], [name : "" , cre ...]
     @Transactional(readOnly = true)
-    public void findCandy(Long id) {
+    public CandyResponseDetailDto findCandy(Long categoryId, Long id) {
 
         log.info("Search Once Log Start....");
+        Candy candy = candyRepository.detail(categoryId, id);
 
-        // 상세조회 로직 + 인덱싱
-
+        return CandyResponseDetailDto.toDto(candy);
     }
 
     // 사탕 주문

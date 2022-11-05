@@ -45,16 +45,14 @@ public class CandyController {
                                  @RequestParam(value = "keyword", required = false) String keyword
                                  ) {
 
-        candyService.findAllCandy(pageable, category, stock, price, age, keyword);
-        return success();
+        return success(candyService.findAllCandy(pageable, category, stock, price, age, keyword));
     }
 
     // 상세 페이지
-    @GetMapping("/candy/{id}")
-    public Response findCandy(@PathVariable Long id) {
+    @GetMapping("/candy/{category_id}/{id}")
+    public Response findCandy(@PathVariable Long category_id, Long id) {
 
-        candyService.findCandy(id);
-        return success();
+        return success(candyService.findCandy(category_id,id));
     }
 
     // 상품 주문

@@ -14,7 +14,8 @@ public class CandyResponseDto {
     private String title;
     private String photo;
     private Long price;
-    private boolean stock;
+    //private boolean stock;
+    private Long stock;
     private Long view;
     private Long categoryId;
 
@@ -24,7 +25,7 @@ public class CandyResponseDto {
                 candy.getTitle(),
                 candy.getPhoto(),
                 candy.getPrice(),
-                candy.getStock()!=0,
+                candy.getStock(),
                 candy.getView(),
                 candy.getCategory().getId()
         );

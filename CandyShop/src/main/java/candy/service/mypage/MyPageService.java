@@ -8,6 +8,7 @@ import candy.exception.RequestException;
 import candy.repository.candy.CandyRepository;
 import candy.repository.candy.OrderRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,13 +27,13 @@ public class MyPageService {
 
     // 주문 목록 조회
     @Transactional(readOnly = true)
-    public List<MyPageResponseDto> myPage(Pageable pageable, User user) {
+    public Page<MyPageResponseDto> myPage(Pageable pageable, User user) {
 
-        List<Order> orders = orderRepository.findByUser(user);
+        /*List<Order> orders = orderRepository.findByUser(user);
         List<MyPageResponseDto> myPageResponseDtos = new ArrayList<>();
-        orders.stream().forEach(i -> myPageResponseDtos.add(MyPageResponseDto.toDto(i)));
+        orders.stream().forEach(i -> myPageResponseDtos.add(MyPageResponseDto.toDto(i)));*/
 
-        return myPageResponseDtos;
+        return orderRepository.orderFilter(user,pageable);
     }
 
     // 주문 취소
