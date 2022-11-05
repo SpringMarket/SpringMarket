@@ -36,13 +36,17 @@ public class CandyController {
     // orderBy first(JPA) or last(Query DSL) 성능테스트
     @GetMapping("/candy")
     public Response findAllCandy(@PageableDefault(size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        return success(candyService.findAllCandy(pageable));
+
+        candyService.findAllCandy(pageable);
+        return success();
     }
 
     // 상세 페이지
     @GetMapping("/candy/{id}")
     public Response findPost(@PathVariable Long id) {
-        return success(candyService.findCandy(id));
+
+        candyService.findCandy(id);
+        return success();
     }
 
     // 상품 주문

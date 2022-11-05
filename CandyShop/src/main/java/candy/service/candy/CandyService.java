@@ -1,17 +1,13 @@
 package candy.service.candy;
 
-import candy.dto.P;
 import candy.dto.candy.CandyResponseDetailDto;
-import candy.dto.candy.CandyResponseDto;
 import candy.entity.candy.Candy;
 import candy.entity.candy.Order;
-import candy.entity.post.Post;
 import candy.entity.user.User;
 import candy.exception.ExceptionType;
 import candy.exception.RequestException;
 import candy.repository.candy.CandyRepository;
 import candy.repository.candy.OrderRepository;
-import candy.repository.post.PostRepository;
 import candy.service.RedisService;
 import com.amazonaws.services.s3.AmazonS3Client;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +27,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class CandyService {
-    private final PostRepository postRepository;
     private final AmazonS3Client amazonS3Client;
     private final CandyRepository candyRepository;
     private final OrderRepository orderRepository;
@@ -63,26 +58,24 @@ public class CandyService {
 
     // 사탕 전체 조회
     @Transactional(readOnly = true)
-    public List<CandyResponseDto> findAllCandy(Pageable pageable) {
+    public void findAllCandy(Pageable pageable) {
 
         log.info("Search All Log Start....");
 
         // Query DSL Filter 추가 ^___^
 
-        return ...;
     }
 
 
     // 사탕 상세 조회 -> Cache Aside
     @Cacheable(value = "candy", key = "#id") // [post::1], [name : "" , cre ...]
     @Transactional(readOnly = true)
-    public CandyResponseDetailDto findCandy(Long id) {
+    public void findCandy(Long id) {
 
         log.info("Search Once Log Start....");
 
         // 상세조회 로직 + 인덱싱
 
-        return ...;
     }
 
     // 사탕 주문
