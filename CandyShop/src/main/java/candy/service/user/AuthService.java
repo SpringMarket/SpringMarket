@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
+import java.time.Duration;
 
 @Service
 @RequiredArgsConstructor
@@ -74,7 +75,7 @@ public class AuthService {
 //
 //        refreshTokenRepository.save(refreshToken);
 
-        redisService.setValues(authentication.getName(), tokenDto.getRefreshToken());
+        redisService.setValues(authentication.getName(), tokenDto.getRefreshToken(), Duration.ofDays(1));
 
         response.addHeader("AccessToken", tokenDto.getAccessToken());
         response.addHeader("RefreshToken", tokenDto.getRefreshToken());

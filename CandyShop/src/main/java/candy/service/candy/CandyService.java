@@ -44,7 +44,8 @@ public class CandyService {
 
         log.info("Warm Up Start....");
 
-        List<Candy> candy = candyRepository.findAll();
+        List<Candy> candy = candyRepository.findAllByViewDesc();
+
         List<CandyResponseDetailDto> candyResponseDetailDtos = new ArrayList<>();
 
         for (int r=0; r<500; r++) { // r=1
