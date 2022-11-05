@@ -58,7 +58,7 @@ public class CandyService {
 
     // 사탕 전체 조회
     @Transactional(readOnly = true)
-    public void findAllCandy(Pageable pageable) {
+    public void findAllCandy(Pageable pageable, String category, Boolean stock, List<Long> price, String age, String keyword) {
 
         log.info("Search All Log Start....");
 
