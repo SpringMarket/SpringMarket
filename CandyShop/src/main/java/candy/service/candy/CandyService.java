@@ -40,7 +40,7 @@ public class CandyService {
 
     // Warm UP -> Named Post Put !
     @Transactional(readOnly = true)
-    public void warmup() {
+    public void warmupCandy() {
 
         log.info("Warm Up Start....");
 

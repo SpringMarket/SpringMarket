@@ -25,10 +25,10 @@ public class CandyController {
 
 
     // Warm UP
-    @GetMapping("/warmup")
-    public Response warmup() {
+    @GetMapping("/candycandy")
+    public Response warmupCandy() {
 
-        candyService.warmup();
+        candyService.warmupCandy();
         return success();
     }
 
@@ -43,7 +43,7 @@ public class CandyController {
 
     // 상세 페이지
     @GetMapping("/candy/{id}")
-    public Response findPost(@PathVariable Long id) {
+    public Response findCandy(@PathVariable Long id) {
 
         candyService.findCandy(id);
         return success();

@@ -11,7 +11,7 @@ plugins {
     id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
-group = 'candy'
+group = ''
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
@@ -57,6 +57,9 @@ dependencies {
 
     // JSON
     implementation 'org.json:json:20220924'
+
+    // AOP
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
 
 
 }

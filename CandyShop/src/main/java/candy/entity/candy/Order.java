@@ -3,7 +3,6 @@ package candy.entity.candy;
 
 import candy.entity.user.User;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -40,7 +39,7 @@ public class Order {
         return orderStatus;
     }
 
-    @ColumnDefault("배송중")
+    @Column
     private String orderStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -55,6 +54,7 @@ public class Order {
 
     public Order(Candy candy, Long orderNum, User user) {
         this.orderNum = orderNum;
+        this.orderStatus = "배송중";
         this.candy = candy;
         this.user = user;
     }

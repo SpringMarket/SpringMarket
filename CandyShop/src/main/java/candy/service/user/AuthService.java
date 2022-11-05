@@ -3,9 +3,9 @@ package candy.service.user;
 
 import candy.config.jwt.TokenProvider;
 import candy.dto.user.*;
-import candy.exception.ExceptionType;
 import candy.entity.user.Authority;
 import candy.entity.user.User;
+import candy.exception.ExceptionType;
 import candy.exception.RequestException;
 import candy.repository.user.UserRepository;
 import candy.service.RedisService;
@@ -49,10 +49,6 @@ public class AuthService {
         validateEmailInfo(emailValidDto);
     }
 
-    @Transactional
-    public void nameDuplicate(NameValidDto nameValidDto) {
-        validateNameInfo(nameValidDto);
-    }
 
 
     @Transactional
@@ -138,10 +134,6 @@ public class AuthService {
             throw new RequestException(ExceptionType.ALREADY_EXISTS_EXCEPTION);
     }
 
-    private void validateNameInfo(NameValidDto nameValidDto) {
-        if (userRepository.existsByName(nameValidDto.getName()))
-            throw new RequestException(ExceptionType.ALREADY_EXISTS_EXCEPTION);
-    }
 
     private void validatePassword(LoginRequestDto loginRequestDto, User user) {
         if (!passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())) {

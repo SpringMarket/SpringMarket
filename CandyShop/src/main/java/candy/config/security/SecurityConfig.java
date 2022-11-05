@@ -85,55 +85,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .antMatchers("/**").permitAll()
 
-//                .antMatchers("/swagger-ui/**", "/v3/**", "/test").permitAll() // swagger
-//                .antMatchers(HttpMethod.GET, "/image/**").permitAll()
-//                .antMatchers(HttpMethod.GET, "/api/warmup").permitAll()
-//
-//                .antMatchers("/api/signup", "/api/login", "/api/reissue").permitAll()
-//
-//                .antMatchers(HttpMethod.GET, "/api/users").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-//                .antMatchers(HttpMethod.GET, "/api/users/{id}").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-//                .antMatchers(HttpMethod.PUT, "/api/users/{id}").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-//                .antMatchers(HttpMethod.DELETE, "/api/users/{id}").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-//
-//                .antMatchers(HttpMethod.POST, "/api/post").authenticated()
-//                .antMatchers(HttpMethod.GET, "/api/post").permitAll()
-//                .antMatchers(HttpMethod.GET, "/api/post/best").permitAll()
-//                .antMatchers(HttpMethod.GET, "/api/post/{id}").permitAll()
-//                .antMatchers(HttpMethod.POST, "/api/post/{id}/like").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-//                .antMatchers(HttpMethod.POST, "/api/post/{id}").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-//                .antMatchers(HttpMethod.PUT, "/api/post/{id}").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-//                .antMatchers(HttpMethod.DELETE, "/api/post/{id}").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-//
-//                .antMatchers(HttpMethod.GET, "/api/mypage/post").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-//                .antMatchers(HttpMethod.GET, "/api/mypage/comment").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-//                .antMatchers(HttpMethod.GET, "/api/mypage/like").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-//
-//                .antMatchers(HttpMethod.POST, "/api/id-duplicate").permitAll()
-//                .antMatchers(HttpMethod.POST, "/api/name-duplicate").permitAll()
-//
-//                .antMatchers(HttpMethod.GET, "/api/post/{postId}/comment").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-//                .antMatchers(HttpMethod.GET, "/api/post/comment/{commentId}").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-//                .antMatchers(HttpMethod.POST, "/api/post/{postId}/comment").authenticated()
-//                .antMatchers(HttpMethod.PUT, "/api/post/{postId}/comment/{commentId}").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-//                .antMatchers(HttpMethod.DELETE, "/api/post/{postId}/comment/{commentId}").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-//
-//                .antMatchers(HttpMethod.POST, "/api/comment/{id}/nested").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-//                .antMatchers(HttpMethod.PUT, "/api/comment/nested/{id}").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-//                .antMatchers(HttpMethod.DELETE, "/api/comment/nested/{id}").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-//
-//                .antMatchers(HttpMethod.GET, "/api/comment/nested/{id}").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-//                .antMatchers(HttpMethod.POST, "/api/comment/{id}/nested").authenticated()
-//                .antMatchers(HttpMethod.PUT, "/api/comment/nested/{id}").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-//                .antMatchers(HttpMethod.DELETE, "/api/comment/nested/{id}").authenticated()
-//
-//
-//                .anyRequest().hasAnyRole("ROLE_ADMIN")
-
-                // .anyRequest().authenticated() // 나머지는 전부 인증 필요
-                // .anyRequest().permitAll()   // 나머지는 모두 그냥 접근 가능
-
-                // JwtFilter 를 addFilterBefore 로 등록했던 JwtSecurityConfig 클래스를 적용
                 .and()
                 .apply(new JwtSecurityConfig(tokenProvider));
     }

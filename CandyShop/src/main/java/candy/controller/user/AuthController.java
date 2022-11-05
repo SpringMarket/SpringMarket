@@ -1,6 +1,9 @@
 package candy.controller.user;
 
-import candy.dto.user.*;
+import candy.dto.user.EmailValidDto;
+import candy.dto.user.LoginRequestDto;
+import candy.dto.user.SignUpRequestDto;
+import candy.dto.user.TokenRequestDto;
 import candy.response.Response;
 import candy.service.user.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -12,38 +15,39 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import static candy.response.Response.success;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api")
 public class AuthController {
 
     private final AuthService authService;
+
+
+
     @PostMapping("/signup")
+//    @StopWatch
     public Response signup(@Valid @RequestBody SignUpRequestDto signUpRequestDto) {
         authService.signup(signUpRequestDto);
-        return Response.success();
+        return success();
     }
 
     @PostMapping("/id-duplicate")
+//    @StopWatch
     public Response emailDuplicate(@RequestBody EmailValidDto emailValidDto) {
         authService.emailDuplicate(emailValidDto);
-        return Response.success();
+        return success();
     }
 
-    @PostMapping("/name-duplicate")
-    public Response nameDuplicate(@RequestBody NameValidDto nameValidDto) {
-        authService.nameDuplicate(nameValidDto);
-        return Response.success();
-    }
 
     @PostMapping("/login")
     public Response login(@Valid @RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
-        return Response.success(authService.login(loginRequestDto, response));
+        return success(authService.login(loginRequestDto, response));
     }
-
 
     @PostMapping("/reissue")
     public Response reissue(@RequestBody TokenRequestDto tokenRequestDto, HttpServletResponse response) {
-        return Response.success(authService.reissue(tokenRequestDto, response));
+        return success(authService.reissue(tokenRequestDto, response));
     }
 }
