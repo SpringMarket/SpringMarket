@@ -27,14 +27,12 @@ public class AuthController {
 
 
     @PostMapping("/signup")
-//    @StopWatch
     public Response signup(@Valid @RequestBody SignUpRequestDto signUpRequestDto) {
         authService.signup(signUpRequestDto);
         return success();
     }
 
     @PostMapping("/id-duplicate")
-//    @StopWatch
     public Response emailDuplicate(@RequestBody EmailValidDto emailValidDto) {
         authService.emailDuplicate(emailValidDto);
         return success();
