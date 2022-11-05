@@ -14,6 +14,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static candy.response.Response.success;
 
 @RequiredArgsConstructor
@@ -35,9 +37,15 @@ public class CandyController {
     // 메인 페이지
     // orderBy first(JPA) or last(Query DSL) 성능테스트
     @GetMapping("/candy")
-    public Response findAllCandy(@PageableDefault(size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+    public Response findAllCandy(@PageableDefault(size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+                                 @RequestParam(value = "category", required = false) String category,
+                                 @RequestParam(value = "stock", required = false) Boolean stock,
+                                 @RequestParam(value = "price", required = false) List<Long> price,
+                                 @RequestParam(value = "age", required = false) String age,
+                                 @RequestParam(value = "keyword", required = false) String keyword
+                                 ) {
 
-        candyService.findAllCandy(pageable);
+        candyService.findAllCandy(pageable, category, stock, price, age, keyword);
         return success();
     }
 
