@@ -8,8 +8,6 @@ import candy.exception.ExceptionType;
 import candy.exception.RequestException;
 import candy.repository.candy.CandyRepository;
 import candy.repository.candy.OrderRepository;
-import candy.service.RedisService;
-import com.amazonaws.services.s3.AmazonS3Client;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,8 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Duration;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -28,10 +24,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class CandyService {
-    private final AmazonS3Client amazonS3Client;
     private final CandyRepository candyRepository;
     private final OrderRepository orderRepository;
-    private final RedisService redisService;
 
 
     @Value("${cloud.aws.s3.bucket}")
@@ -80,7 +74,7 @@ public class CandyService {
     }
 
     // 사탕 주문
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) // -> start
     public void orderCandy(Long id, Long orderNum, User user) {
 
         log.info("Order Start....");
