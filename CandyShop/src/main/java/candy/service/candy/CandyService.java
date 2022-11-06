@@ -8,6 +8,7 @@ import candy.exception.ExceptionType;
 import candy.exception.RequestException;
 import candy.repository.candy.CandyRepository;
 import candy.repository.candy.OrderRepository;
+import candy.service.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.util.List;
 
 
@@ -26,6 +28,7 @@ import java.util.List;
 public class CandyService {
     private final CandyRepository candyRepository;
     private final OrderRepository orderRepository;
+    private final RedisService redisService;
 
 
     @Value("${cloud.aws.s3.bucket}")
@@ -38,16 +41,14 @@ public class CandyService {
     public void warmupCandy() {
 
         log.info("Warm Up Start....");
-        /*
-        List<Candy> candy = candyRepository.findAll();
-        List<CandyResponseDetailDto> candyResponseDetailDtos = new ArrayList<>();
 
-        for (int r=0; r<500; r++) { // r=1
-            if (r == candy.size()) break;
-            candyResponseDetailDtos.add(CandyResponseDetailDto.toDto(candy.get(r)));
-            redisService.setCandy("candy::" + candyResponseDetailDtos.get(r).getCandyId(), candyResponseDetailDtos.get(r), Duration.ofSeconds(100));
-        }*/
-        candyRepository.warmup();
+        List<Candy> candyCandy =candyRepository.warmup();
+
+        for (Candy candy : candyCandy) {
+            redisService.setCandy("candy::" + candy.getId(), CandyResponseDetailDto.toDto(candy), Duration.ofDays(1));
+        }
+
+        log.info("..... Success!");
     }
 
 

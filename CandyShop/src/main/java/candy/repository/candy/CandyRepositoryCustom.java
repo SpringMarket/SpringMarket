@@ -11,5 +11,5 @@ public interface CandyRepositoryCustom {
     //Page<Candy> mainFilter(Pageable pageable, String category, Boolean stock, List<Long> price, String age, String keyword);
     Page<CandyResponseDetailDto> mainFilter(Pageable pageable, String category, Boolean stock, List<Long> price, String age, String keyword);
     Candy detail(Long categoryId, Long candyId);
-    void warmup();
+    List<Candy> warmup();
 }

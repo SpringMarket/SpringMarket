@@ -85,9 +85,9 @@ public class CandyRepositoryImpl implements CandyRepositoryCustom {
     }
 
     @Override
-    public void warmup() {
+    public List<Candy> warmup() {
         QCandy qCandy = QCandy.candy;
-        queryFactory.selectFrom(qCandy)
+        return queryFactory.selectFrom(qCandy)
                 .groupBy(qCandy.category)
                 .orderBy(qCandy.view.desc()) // 다시 확인
                 .limit(60)
