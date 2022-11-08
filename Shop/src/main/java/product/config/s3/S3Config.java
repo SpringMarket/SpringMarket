@@ -1,3 +1,4 @@
+/*
 package product.config.s3;
 
 import com.amazonaws.auth.AWSCredentials;
@@ -30,4 +31,4 @@ public class S3Config {
                 .withRegion(region)
                 .build();
     }
-}
+}*/

@@ -31,8 +31,8 @@ public class ProductService {
     private final RedisService redisService;
 
 
-    @Value("${cloud.aws.s3.bucket}")
-    String bucket;
+    /*@Value("${cloud.aws.s3.bucket}")
+    String bucket;*/
 
 
 
