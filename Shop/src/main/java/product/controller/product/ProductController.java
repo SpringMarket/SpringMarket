@@ -1,18 +1,17 @@
 package product.controller.product;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 import product.entity.user.User;
 import product.exception.ExceptionType;
 import product.exception.RequestException;
 import product.repository.user.UserRepository;
 import product.response.Response;
 import product.service.product.ProductService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -37,15 +36,16 @@ public class ProductController {
     // 메인 페이지
     // orderBy first(JPA) or last(Query DSL) 성능테스트
     @GetMapping("/product")
-    public Response findAllProduct(@PageableDefault(size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+    public Response findAllProduct(@PageableDefault(size = 20) Pageable pageable,
                                  @RequestParam(value = "category", required = false) String category,
                                  @RequestParam(value = "stock", required = false) Boolean stock,
-                                 @RequestParam(value = "price", required = false) List<Long> price,
                                  @RequestParam(value = "age", required = false) String age,
-                                 @RequestParam(value = "keyword", required = false) String keyword
+                                 @RequestParam(value = "price", required = false) List<Long> price,
+                                 @RequestParam(value = "keyword", required = false) String keyword,
+                                 @RequestParam(value = "sort", required = false) String sort
                                  ) {
 
-        return success(productService.findAllProduct(pageable, category, stock, price, age, keyword));
+        return success(productService.findAllProduct(pageable, category, stock, price, age, keyword, sort));
     }
 
     // 상세 페이지

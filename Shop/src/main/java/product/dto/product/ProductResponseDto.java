@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import java.time.format.DateTimeFormatter;
 
 @Data
 @AllArgsConstructor
@@ -17,6 +18,7 @@ public class ProductResponseDto {
     //private boolean stock;
     private Long stock;
     private Long view;
+    private String createdTime;
     private Long categoryId;
 
     public static ProductResponseDto toDto(Product product){
@@ -27,6 +29,7 @@ public class ProductResponseDto {
                 product.getPrice(),
                 product.getStock(),
                 product.getView(),
+                DateTimeFormatter.ofPattern("yyyy-MM-dd").format(product.getCreatedTime()),
                 product.getCategory().getId()
         );
     }

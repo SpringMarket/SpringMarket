@@ -1,11 +1,16 @@
 package product.entity.product;
 
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -35,6 +40,15 @@ public class Product {
 
     @Column(nullable = false)
     private Long view;
+
+    @DateTimeFormat // 2022-11-08 15:07:26:1252156
+    private LocalDateTime createdTime;
+
+    @PrePersist
+    public void createDate() {
+        this.createdTime = LocalDateTime.now();
+    }
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)

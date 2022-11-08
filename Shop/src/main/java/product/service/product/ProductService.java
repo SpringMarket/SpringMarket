@@ -55,11 +55,11 @@ public class ProductService {
 
     // 사탕 전체 조회
     @Transactional(readOnly = true)
-    public Page<ProductResponseDetailDto> findAllProduct(Pageable pageable, String category, Boolean stock, List<Long> price, String age, String keyword) {
+    public Page<ProductResponseDetailDto> findAllProduct(Pageable pageable, String category, Boolean stock, List<Long> price, String age, String keyword, String sort) {
 
         log.info("Search All Log Start....");
 
-        return productRepository.mainFilter(pageable, category,  stock, price, age, keyword);
+        return productRepository.mainFilter(pageable, category,  stock, price, age, keyword, sort);
     }
 
 
