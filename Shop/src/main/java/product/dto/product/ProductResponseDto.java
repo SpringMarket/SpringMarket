@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 @AllArgsConstructor
 @NotBlank
 public class ProductResponseDto {
-    private Long id;
+    private Long productId;
     private String title;
     private String photo;
     private Long price;
@@ -23,14 +23,14 @@ public class ProductResponseDto {
 
     public static ProductResponseDto toDto(Product product){
         return new ProductResponseDto(
-                product.getId(),
+                product.getProductId(),
                 product.getTitle(),
                 product.getPhoto(),
                 product.getPrice(),
                 product.getStock(),
                 product.getView(),
                 DateTimeFormatter.ofPattern("yyyy-MM-dd").format(product.getCreatedTime()),
-                product.getCategory().getId()
+                product.getCategory().getCategoryId()
         );
     }
 }

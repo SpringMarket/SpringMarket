@@ -24,7 +24,7 @@ public class ProductResponseDetailDto {
 
     @QueryProjection
     public ProductResponseDetailDto(Product product) {
-        this.productId = product.getId();
+        this.productId = product.getProductId();
         this.title = product.getTitle();
         this.content = product.getContent();
         this.photo = product.getPhoto();
@@ -32,13 +32,13 @@ public class ProductResponseDetailDto {
         this.stock = product.getStock();
         this.view = product.getView();
         this.createdTime = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(product.getCreatedTime());
-        this.categoryId = product.getCategory().getId();
+        this.categoryId = product.getCategory().getCategoryId();
     }
 
 
     public static ProductResponseDetailDto toDto(Product product){
         return new ProductResponseDetailDto(
-                product.getId(),
+                product.getProductId(),
                 product.getTitle(),
                 product.getContent(),
                 product.getPhoto(),
@@ -46,7 +46,7 @@ public class ProductResponseDetailDto {
                 product.getStock(),
                 product.getView(),
                 DateTimeFormatter.ofPattern("yyyy-MM-dd").format(product.getCreatedTime()),
-                product.getCategory().getId()
+                product.getCategory().getCategoryId()
 
         );
     }

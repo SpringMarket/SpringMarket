@@ -20,7 +20,7 @@ public class MyPageResponseDto {
 
     public static MyPageResponseDto toDto(Order order) {
         return new MyPageResponseDto(
-                order.getId(),
+                order.getOrderId(),
                 order.getProduct().getTitle(),
                 order.getProduct().getPrice(),
                 order.getOrderNum(),

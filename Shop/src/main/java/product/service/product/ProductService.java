@@ -45,7 +45,7 @@ public class ProductService {
         List<Product> candyCandy =productRepository.warmup();
 
         for (Product product : candyCandy) {
-            redisService.setProduct("product::" + product.getId(), ProductResponseDetailDto.toDto(product), Duration.ofDays(1));
+            redisService.setProduct("product::" + product.getProductId(), ProductResponseDetailDto.toDto(product), Duration.ofDays(1));
         }
 
         log.info("..... Success!");

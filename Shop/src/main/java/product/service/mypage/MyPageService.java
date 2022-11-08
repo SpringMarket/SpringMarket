@@ -41,7 +41,7 @@ public class MyPageService {
             throw new RequestException(ORDER_FINISH_EXCEPTION);
         }
 
-        Product product = productRepository.findById(order.getProduct().getId())
+        Product product = productRepository.findById(order.getProduct().getProductId())
                 .orElseThrow(() -> new RequestException(NOT_FOUND_EXCEPTION));
 
 
