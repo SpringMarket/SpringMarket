@@ -80,7 +80,7 @@ public class ProductService {
 
         log.info("Order Start....");
 
-        Product product = productRepository.findById(id).orElseThrow(() -> new RequestException(ExceptionType.NOT_FOUND_EXCEPTION));
+        Product product = productRepository.findByProductId(id).orElseThrow(() -> new RequestException(ExceptionType.NOT_FOUND_EXCEPTION));
         product.order(orderNum);
 
         Order order = new Order(product, orderNum, user);

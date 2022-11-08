@@ -24,7 +24,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom{
         QOrder qOrder = QOrder.order;
         List<MyPageResponseDto> result =  queryFactory.from(qOrder)
                 .select(Projections.constructor(MyPageResponseDto.class,
-                        qOrder.id, qOrder.product.title, qOrder.product.price, qOrder.orderNum, qOrder.orderStatus, qOrder.orderTime))
+                        qOrder.orderId, qOrder.product.title, qOrder.product.price, qOrder.orderNum, qOrder.orderStatus, qOrder.orderTime))
                 .where(qOrder.user.eq(user))
                 .orderBy(qOrder.orderTime.desc())
                 .limit(pageable.getPageSize()) // 현재 제한한 갯수

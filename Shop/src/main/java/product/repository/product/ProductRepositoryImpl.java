@@ -66,7 +66,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 //                        qProduct.id, qProduct.title, qProduct.content, qProduct.photo,
 //                        qProduct.price, qProduct.stock,qProduct.view,qProduct.category.id))
                 .select(new QProductResponseDetailDto(qProduct))
-                .innerJoin(qOrder).on(qProduct.id.eq(qOrder.product.id))
+                .innerJoin(qOrder).on(qProduct.productId.eq(qOrder.product.productId))
                 .where(qProduct.category.category.eq(category))
                 .where(isStock(stock))
                 .where(qOrder.user.age.eq(age))
@@ -85,8 +85,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     public Product detail(Long categoryId, Long productId) {
         QProduct qProduct = QProduct.product;
         return queryFactory.selectFrom(qProduct)
-                .where(qProduct.category.id.eq(categoryId))
-                .where(qProduct.id.eq(productId))
+                .where(qProduct.category.categoryId.eq(categoryId))
+                .where(qProduct.productId.eq(productId))
                 .fetchOne();
     }
 
