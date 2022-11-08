@@ -13,9 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static candy.exception.ExceptionType.NOT_FOUND_EXCEPTION;
 import static candy.exception.ExceptionType.ORDER_FINISH_EXCEPTION;
 
@@ -50,6 +47,7 @@ public class MyPageService {
 
 
         candy.cancel(order.getOrderNum());
+
         order.cancel();
     }
 }

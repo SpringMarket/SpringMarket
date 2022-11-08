@@ -1,7 +1,6 @@
 package candy.repository.candy;
 
 import candy.dto.candy.CandyResponseDetailDto;
-import candy.dto.candy.CandyResponseDto;
 import candy.entity.candy.Candy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

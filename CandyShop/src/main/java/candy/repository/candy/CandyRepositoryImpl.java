@@ -1,11 +1,9 @@
 package candy.repository.candy;
 
 import candy.dto.candy.CandyResponseDetailDto;
-import candy.dto.candy.CandyResponseDto;
 import candy.entity.candy.Candy;
 import candy.entity.candy.QCandy;
 import candy.entity.candy.QOrder;
-import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;

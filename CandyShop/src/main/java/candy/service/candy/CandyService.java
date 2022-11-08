@@ -9,7 +9,6 @@ import candy.exception.RequestException;
 import candy.repository.candy.CandyRepository;
 import candy.repository.candy.OrderRepository;
 import candy.service.RedisService;
-import com.amazonaws.services.s3.AmazonS3Client;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -28,7 +26,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class CandyService {
-    private final AmazonS3Client amazonS3Client;
     private final CandyRepository candyRepository;
     private final OrderRepository orderRepository;
     private final RedisService redisService;
@@ -44,16 +41,14 @@ public class CandyService {
     public void warmupCandy() {
 
         log.info("Warm Up Start....");
-        /*
-        List<Candy> candy = candyRepository.findAll();
-        List<CandyResponseDetailDto> candyResponseDetailDtos = new ArrayList<>();
 
-        for (int r=0; r<500; r++) { // r=1
-            if (r == candy.size()) break;
-            candyResponseDetailDtos.add(CandyResponseDetailDto.toDto(candy.get(r)));
-            redisService.setCandy("candy::" + candyResponseDetailDtos.get(r).getCandyId(), candyResponseDetailDtos.get(r), Duration.ofSeconds(100));
-        }*/
-        candyRepository.warmup();
+        List<Candy> candyCandy =candyRepository.warmup();
+
+        for (Candy candy : candyCandy) {
+            redisService.setCandy("candy::" + candy.getId(), CandyResponseDetailDto.toDto(candy), Duration.ofDays(1));
+        }
+
+        log.info("..... Success!");
     }
 
 
@@ -80,7 +75,7 @@ public class CandyService {
     }
 
     // 사탕 주문
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) // -> start
     public void orderCandy(Long id, Long orderNum, User user) {
 
         log.info("Order Start....");
