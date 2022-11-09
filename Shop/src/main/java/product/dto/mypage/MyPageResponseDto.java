@@ -18,6 +18,15 @@ public class MyPageResponseDto {
     private String orderStatus;
     private String orderTime;
 
+    public MyPageResponseDto(Order order){
+        this.orderId = order.getOrderId();
+        this.title = order.getProduct().getTitle();
+        this.price = order.getProduct().getPrice();
+        this.orderNum = order.getOrderNum();
+        this.orderStatus = order.getOrderStatus();
+        this.orderTime = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(order.getOrderTime());
+    }
+
     public static MyPageResponseDto toDto(Order order) {
         return new MyPageResponseDto(
                 order.getOrderId(),

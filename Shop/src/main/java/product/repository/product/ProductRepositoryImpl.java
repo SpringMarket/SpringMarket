@@ -21,28 +21,24 @@ import java.util.List;
 @Repository
 public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private final JPAQueryFactory queryFactory;
-    private QOrder qOrder;
-    private QProduct qProduct;
-
 
     // CandyResponseDto와 성능 비교 (content 차이)
     @Override
     public Page<ProductResponseDetailDto> mainFilter(Pageable pageable, String category, Boolean stock,
-                                                     Long minPrice, Long maxPrice, String age, String keyword, String sorting) {
+                                                     Long minPrice, Long maxPrice, String keyword, String sorting) {
 
-        QOrder qOrder = QOrder.order;
         QProduct qProduct = QProduct.product;
         // 데이터 수 줄여서 조회 테스트
         // 커버링 인덱스 테스트
 
-        List<ProductResponseDetailDto> result = queryFactory.from(qOrder)
+        List<ProductResponseDetailDto> result = queryFactory.from(qProduct)
 //                .select(new QProductResponseDetailDto(qProduct))
                 .select(Projections.constructor(ProductResponseDetailDto.class,qProduct))
-                .where(qProduct.category.category.eq(category))
-                .where(isStock(stock))
-                .where(minPriceRange(minPrice))
-                .where(maxPriceRange(maxPrice))
-                .where(qProduct.title.contains(keyword)) // like("%" + str + "%")
+                .where(categoryFilter(category),
+                        (isStock(stock)),
+                        minPriceRange(minPrice),
+                        maxPriceRange(maxPrice),
+                        qProduct.title.contains(keyword)) // like("%" + str + "%")
                 .limit(pageable.getPageSize()) // 현재 제한한 갯수
                 .offset(pageable.getOffset())
                 .orderBy(sorting(sorting))
@@ -51,21 +47,24 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         return new PageImpl<>(result,pageable,result.size());
     }
 
+    private BooleanExpression categoryFilter(String category) {
+        if (StringUtils.isNullOrEmpty(category)) return null;
+        return QProduct.product.category.category.eq(category);
+    }
+
+    private BooleanExpression isStock(Boolean stock) {
+        if (!stock) return null;
+        return QProduct.product.productInfo.stock.ne(0L);
+    }
+
     private BooleanExpression minPriceRange(Long minPrice) {
-        if (minPrice != null) qProduct.price.gt(minPrice);
+        if (minPrice != null) QProduct.product.price.gt(minPrice);
         return null;
     }
 
     private BooleanExpression maxPriceRange(Long maxPrice) {
-        if (maxPrice != null) qProduct.price.lt(maxPrice);
+        if (maxPrice != null) QProduct.product.price.lt(maxPrice);
         return null;
-    }
-
-    private BooleanExpression isStock(Boolean stock) {
-        if (!stock) {
-            return null;
-        }
-        return qProduct.productInfo.stock.ne(0L);
     }
 
     private OrderSpecifier<?> sorting(String sorting) {

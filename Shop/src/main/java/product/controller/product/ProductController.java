@@ -39,14 +39,13 @@ public class ProductController {
     public Response findAllProduct(@PageableDefault(size = 20) Pageable pageable,
                                  @RequestParam(value = "category", required = false) String category,
                                  @RequestParam(value = "stock", required = false) Boolean stock,
-                                 @RequestParam(value = "age", required = false) String age,
                                  @RequestParam(value = "minPrice", required = false) Long minPrice,
                                    @RequestParam(value = "maxPrice", required = false) Long maxPrice,
                                  @RequestParam(value = "keyword", required = false) String keyword,
                                  @RequestParam(value = "sorting", required = false) String sorting
                                  ) {
 
-        return success(productService.findAllProduct(pageable, category, stock, minPrice, maxPrice, age, keyword, sorting));
+        return success(productService.findAllProduct(pageable, category, stock, minPrice, maxPrice, keyword, sorting));
     }
 
     // 상세 페이지
