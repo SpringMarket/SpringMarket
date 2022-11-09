@@ -42,10 +42,10 @@ public class ProductController {
                                  @RequestParam(value = "age", required = false) String age,
                                  @RequestParam(value = "price", required = false) List<Long> price,
                                  @RequestParam(value = "keyword", required = false) String keyword,
-                                 @RequestParam(value = "sort", required = false) String sort
+                                 @RequestParam(value = "sorting", required = false) String sorting
                                  ) {
 
-        return success(productService.findAllProduct(pageable, category, stock, price, age, keyword, sort));
+        return success(productService.findAllProduct(pageable, category, stock, price, age, keyword, sorting));
     }
 
     // 상세 페이지
