@@ -40,7 +40,7 @@ public class ProductController {
                                  @RequestParam(value = "category", required = false) String category,
                                  @RequestParam(value = "stock", required = false) Boolean stock,
                                  @RequestParam(value = "minPrice", required = false) Long minPrice,
-                                   @RequestParam(value = "maxPrice", required = false) Long maxPrice,
+                                 @RequestParam(value = "maxPrice", required = false) Long maxPrice,
                                  @RequestParam(value = "keyword", required = false) String keyword,
                                  @RequestParam(value = "sorting", required = false) String sorting
                                  ) {

@@ -95,13 +95,12 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     }
 
     @Override
-    public List<Product> warmup() {
+    public List<Product> warmup(Long categoryId) {
         QProduct qProduct = QProduct.product;
         return queryFactory.selectFrom(qProduct)
-                .groupBy(qProduct.category)
-                .orderBy(qProduct.productInfo.view.desc()) // 다시 확인
+                .where(qProduct.category.categoryId.eq(categoryId))
+                .orderBy(qProduct.productInfo.view.desc())
                 .limit(60)
                 .fetch();
     }
-
 }

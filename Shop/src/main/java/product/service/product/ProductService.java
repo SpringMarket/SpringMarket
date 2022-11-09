@@ -19,6 +19,7 @@ import product.repository.product.ProductRepository;
 import product.service.RedisService;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -42,7 +43,12 @@ public class ProductService {
 
         log.info("Warm Up Start....");
 
-        List<Product> candyCandy =productRepository.warmup();
+        List<Product> candyCandy = new ArrayList<>();
+
+        for (long k =1; k<6; k++) {
+            List<Product> list = productRepository.warmup(k);
+            candyCandy.addAll(list);
+        }
 
         for (Product product : candyCandy) {
             redisService.setProduct("product::" + product.getProductId(), ProductResponseDetailDto.toDto(product), Duration.ofDays(1));
