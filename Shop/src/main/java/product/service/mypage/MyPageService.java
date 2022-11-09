@@ -8,9 +8,12 @@ import org.springframework.transaction.annotation.Transactional;
 import product.dto.mypage.MyPageResponseDto;
 import product.entity.product.Order;
 import product.entity.product.Product;
+import product.entity.product.ProductInfo;
 import product.entity.user.User;
+import product.exception.ExceptionType;
 import product.exception.RequestException;
 import product.repository.product.OrderRepository;
+import product.repository.product.ProductInfoRepository;
 import product.repository.product.ProductRepository;
 
 import static product.exception.ExceptionType.NOT_FOUND_EXCEPTION;
@@ -41,13 +44,11 @@ public class MyPageService {
             throw new RequestException(ORDER_FINISH_EXCEPTION);
         }
 
-        Product product = productRepository.findByProductId(order.getProduct().getProductId())
-                .orElseThrow(() -> new RequestException(NOT_FOUND_EXCEPTION));
+        Product product = productRepository.findByProductId(order.getProduct().getProductId()).orElseThrow(() -> new RequestException(ExceptionType.NOT_FOUND_EXCEPTION));
+        product.getProductInfo().cancel(order.getOrderNum());
 
 
-
-        product.cancel(order.getOrderNum());
-
+        // 주문 취소로 status 변경
         order.cancel();
     }
 }

@@ -1,7 +1,5 @@
 package product.entity.product;
 
-
-import com.querydsl.core.annotations.QueryProjection;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,7 +19,7 @@ import java.time.LocalDateTime;
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long productId;
 
     @Column(nullable = false)
@@ -36,11 +34,6 @@ public class Product {
     @Column(nullable = false)
     private Long price;
 
-    @Column(nullable = false)
-    private Long stock;
-
-    @Column(nullable = false)
-    private Long view;
 
     @DateTimeFormat // 2022-11-08 15:07:26:1252156
     private LocalDateTime createdTime;
@@ -56,10 +49,10 @@ public class Product {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Category category;
 
-    public void order(Long orderNum){
-        this.stock -= orderNum;
-    }
-    public void cancel(Long orderNum) { this.stock += orderNum;
-    }
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_info_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private ProductInfo productInfo;
+
 }
 

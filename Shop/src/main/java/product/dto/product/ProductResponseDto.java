@@ -27,8 +27,8 @@ public class ProductResponseDto {
                 product.getTitle(),
                 product.getPhoto(),
                 product.getPrice(),
-                product.getStock(),
-                product.getView(),
+                product.getProductInfo().getStock(),
+                product.getProductInfo().getView(),
                 DateTimeFormatter.ofPattern("yyyy-MM-dd").format(product.getCreatedTime()),
                 product.getCategory().getCategoryId()
         );

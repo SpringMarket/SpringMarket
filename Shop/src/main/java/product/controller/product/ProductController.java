@@ -40,12 +40,13 @@ public class ProductController {
                                  @RequestParam(value = "category", required = false) String category,
                                  @RequestParam(value = "stock", required = false) Boolean stock,
                                  @RequestParam(value = "age", required = false) String age,
-                                 @RequestParam(value = "price", required = false) List<Long> price,
+                                 @RequestParam(value = "minPrice", required = false) Long minPrice,
+                                   @RequestParam(value = "maxPrice", required = false) Long maxPrice,
                                  @RequestParam(value = "keyword", required = false) String keyword,
                                  @RequestParam(value = "sorting", required = false) String sorting
                                  ) {
 
-        return success(productService.findAllProduct(pageable, category, stock, price, age, keyword, sorting));
+        return success(productService.findAllProduct(pageable, category, stock, minPrice, maxPrice, age, keyword, sorting));
     }
 
     // 상세 페이지
