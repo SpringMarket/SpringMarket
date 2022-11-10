@@ -27,10 +27,11 @@ public class ProductController {
 
     // Warm UP
     @GetMapping("/candycandy")
-    public Response warmupCandy() {
+    public Response warmup() {
 
-        productService.warmupCandy();
-        return success();
+        productService.warmup();
+
+        return success("Start ^__^ !!");
     }
 
     // 메인 페이지
@@ -49,20 +50,20 @@ public class ProductController {
     }
 
     // 상세 페이지
-    @GetMapping("/product/{category_id}/{id}")
-    public Response findProduct(@PathVariable Long category_id, @PathVariable Long id) {
+    @GetMapping("/product/{id}")
+    public Response findProduct(@PathVariable Long id) {
 
-        return success(productService.findProduct(category_id,id));
+        return success(productService.findProduct(id));
     }
 
     // 상품 주문
     @PostMapping("/product/{id}/order")
     public Response order(@PathVariable Long id, @RequestBody Long orderNum) {
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new RequestException(ExceptionType.ACCESS_DENIED_EXCEPTION));
-        // () -> redirect login.html
-        productService.orderProduct(id, orderNum, user);
+
+        productService.orderProduct(id, orderNum, authentication);
+
         return success();
     }
 

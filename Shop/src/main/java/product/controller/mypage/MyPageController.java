@@ -31,10 +31,10 @@ public class MyPageController {
     // 주문 목록 조회
     @GetMapping("/mypage")
     public Response myPage(@PageableDefault(size = 10) Pageable pageable) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByEmail(authentication.getName()).orElseThrow(() -> new RequestException(ACCESS_DENIED_EXCEPTION));
 
-        return success(myPageService.myPage(pageable, user));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        return success(myPageService.myPage(pageable, authentication));
     }
 
     // 주문 취소
@@ -42,16 +42,8 @@ public class MyPageController {
     public Response cancel(@PathVariable Long orderId) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByEmail(authentication.getName()).orElseThrow(() -> new RequestException(ACCESS_DENIED_EXCEPTION));
 
-        Order order = orderRepository.findById(orderId).orElseThrow(() -> new RequestException(NOT_FOUND_EXCEPTION));
-
-        if (!user.equals(order.getUser())) {
-            throw new RequestException(ACCESS_DENIED_EXCEPTION);
-        }
-
-        myPageService.cancel(user, order);
-
+        myPageService.cancel(authentication, orderId);
         return success();
     }
 }

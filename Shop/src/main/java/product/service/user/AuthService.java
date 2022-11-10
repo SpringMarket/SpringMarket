@@ -32,6 +32,7 @@ public class AuthService {
 
 
 
+
     @Transactional
     public void signup(SignUpRequestDto signUpRequestDto) {
         if (userRepository.existsByEmail(signUpRequestDto.getEmail()))

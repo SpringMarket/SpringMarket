@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import product.dto.product.ProductResponseDetailDto;
@@ -16,6 +17,7 @@ import product.exception.ExceptionType;
 import product.exception.RequestException;
 import product.repository.product.OrderRepository;
 import product.repository.product.ProductRepository;
+import product.repository.user.UserRepository;
 import product.service.RedisService;
 
 import java.time.Duration;
@@ -28,6 +30,7 @@ import java.util.List;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
+    private final UserRepository userRepository;
     private final OrderRepository orderRepository;
     private final RedisService redisService;
 
@@ -36,21 +39,20 @@ public class ProductService {
     String bucket;*/
 
 
-
     // Warm UP -> Named Post Put !
-    @Transactional(readOnly = true)
-    public void warmupCandy() {
+    @Transactional
+    public void warmup() {
 
         log.info("Warm Up Start....");
 
-        List<Product> candyCandy = new ArrayList<>();
+        List<Product> warmupProduct = new ArrayList<>();
 
         for (long k =1; k<6; k++) {
             List<Product> list = productRepository.warmup(k);
-            candyCandy.addAll(list);
+            warmupProduct.addAll(list);
         }
 
-        for (Product product : candyCandy) {
+        for (Product product : warmupProduct) {
             redisService.setProduct("product::" + product.getProductId(), ProductResponseDetailDto.toDto(product), Duration.ofDays(1));
         }
 
@@ -59,7 +61,7 @@ public class ProductService {
 
 
 
-    // 사탕 전체 조회
+    // 상품 전체 조회
     @Transactional(readOnly = true)
     public Page<ProductResponseDetailDto> findAllProduct(Pageable pageable, String category, Boolean stock, Long minPrice, Long maxPrice, String keyword, String sort) {
 
@@ -69,24 +71,31 @@ public class ProductService {
     }
 
 
-    // 사탕 상세 조회 -> Cache Aside
+    // 상품 상세 조회 -> Cache Aside
     @Cacheable(value = "product", key = "#id") // [post::1], [name : "" , cre ...]
     @Transactional(readOnly = true)
-    public ProductResponseDetailDto findProduct(Long categoryId, Long id) {
+    public ProductResponseDetailDto findProduct(Long id) {
 
         log.info("Search Once Log Start....");
-        Product product = productRepository.detail(categoryId, id);
+
+        Product product = productRepository.detail(id);
 
         return ProductResponseDetailDto.toDto(product);
     }
 
     // 상품 주문
-    @Transactional(readOnly = true) // -> start
-    public void orderProduct(Long id, Long orderNum, User user) {
+    @Transactional
+    public void orderProduct(Long id, Long orderNum, Authentication authentication) {
 
         log.info("Order Start....");
 
+        User user = userRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new RequestException(ExceptionType.ACCESS_DENIED_EXCEPTION));
+
         Product product = productRepository.findByProductId(id).orElseThrow(() -> new RequestException(ExceptionType.NOT_FOUND_EXCEPTION));
+
+        if(product.getProductInfo().getStock() < orderNum) throw new RequestException(ExceptionType.OUT_OF_STOCK_EXCEPTION);
+
         product.getProductInfo().order(orderNum);
 
         Order order = new Order(product, orderNum, user);

@@ -86,10 +86,9 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     }
 
     @Override
-    public Product detail(Long categoryId, Long productId) {
+    public Product detail(Long productId) {
         QProduct qProduct = QProduct.product;
         return queryFactory.selectFrom(qProduct)
-                .where(qProduct.category.categoryId.eq(categoryId))
                 .where(qProduct.productId.eq(productId))
                 .fetchOne();
     }
