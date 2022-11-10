@@ -144,8 +144,8 @@ class ProductServiceTest {
         Boolean stock = true; // Default 처리 필요
         Long minPrice = null;
         Long maxPrice = null;
-        String keyword = "Test"; // 공백 허용 처리 필요
-        String sort = "조회순"; // 공백 허용 처리 필요
+        String keyword = null;
+        String sort = null;
 
         // WHEN
         Page<ProductResponseDetailDto> list = productRepository.mainFilter(pageable, category, stock, minPrice, maxPrice, keyword, sort);
