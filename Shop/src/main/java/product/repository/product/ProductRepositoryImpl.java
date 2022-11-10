@@ -35,10 +35,10 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 //                .select(new QProductResponseDetailDto(qProduct))
                 .select(Projections.constructor(ProductResponseDetailDto.class,qProduct))
                 .where(categoryFilter(category),
-                        (isStock(stock)),
+                        isStock(stock),
                         minPriceRange(minPrice),
                         maxPriceRange(maxPrice),
-                        qProduct.title.contains(keyword)) // like("%" + str + "%")
+                        keywordContain(keyword)) // like("%" + str + "%")
                 .limit(pageable.getPageSize()) // 현재 제한한 갯수
                 .offset(pageable.getOffset())
                 .orderBy(sorting(sorting))
@@ -65,6 +65,11 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private BooleanExpression maxPriceRange(Long maxPrice) {
         if (maxPrice != null) QProduct.product.price.lt(maxPrice);
         return null;
+    }
+
+    private BooleanExpression keywordContain(String keyword){
+        if(StringUtils.isNullOrEmpty(keyword)) return null;
+        return QProduct.product.title.contains(keyword);
     }
 
     private OrderSpecifier<?> sorting(String sorting) {
