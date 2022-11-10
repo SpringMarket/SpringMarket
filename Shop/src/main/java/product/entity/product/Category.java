@@ -12,9 +12,14 @@ import javax.persistence.*;
 public class Category {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     private Long categoryId;
 
     @Column(nullable = false)
     private String category;
+
+    public Category(String category) {
+        this.category = category;
+    }
 }
