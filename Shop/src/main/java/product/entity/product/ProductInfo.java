@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class ProductInfo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productInfoId;
 
     @Column(nullable = false)
@@ -36,14 +36,7 @@ public class ProductInfo {
     @Column(nullable = false)
     private Long view;
 
-    public ProductInfo(Long ten, Long twenty, Long thirty, Long forty, Long stock, Long view) {
-        this.ten = ten;
-        this.twenty = twenty;
-        this.thirty = thirty;
-        this.forty = forty;
-        this.stock = stock;
-        this.view = view;
-    }
+
 
     public void order(Long orderNum){
         this.stock -= orderNum;

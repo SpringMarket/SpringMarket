@@ -20,6 +20,7 @@ import product.repository.product.ProductRepository;
 import product.repository.user.UserRepository;
 import product.service.RedisService;
 
+import javax.validation.constraints.Null;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -92,7 +93,11 @@ public class ProductService {
         User user = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new RequestException(ExceptionType.ACCESS_DENIED_EXCEPTION));
 
-        Product product = productRepository.findByProductId(id).orElseThrow(() -> new RequestException(ExceptionType.NOT_FOUND_EXCEPTION));
+
+        Product product = productRepository.findByProductId(id);
+//                .orElseThrow(() -> new RequestException(ExceptionType.NOT_FOUND_EXCEPTION));
+
+        if (product == null) throw new RequestException(ExceptionType.NOT_FOUND_EXCEPTION);
 
         if(product.getProductInfo().getStock() < orderNum) throw new RequestException(ExceptionType.OUT_OF_STOCK_EXCEPTION);
 

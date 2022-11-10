@@ -40,6 +40,7 @@ public class MyPageService {
     @Transactional
     public void cancel(Authentication authentication, Long orderId) {
 
+
         User user = userRepository.findByEmail(authentication.getName()).orElseThrow(() -> new RequestException(ACCESS_DENIED_EXCEPTION));
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new RequestException(NOT_FOUND_EXCEPTION));
 
@@ -51,7 +52,10 @@ public class MyPageService {
             throw new RequestException(ORDER_FINISH_EXCEPTION);
         }
 
-        Product product = productRepository.findByProductId(order.getProduct().getProductId()).orElseThrow(() -> new RequestException(ExceptionType.NOT_FOUND_EXCEPTION));
+        Product product = productRepository.findByProductId(order.getProduct().getProductId());
+//                .orElseThrow(() -> new RequestException(ExceptionType.NOT_FOUND_EXCEPTION));
+        if (product == null) throw new RequestException(ExceptionType.NOT_FOUND_EXCEPTION);
+
         product.getProductInfo().cancel(order.getOrderNum());
 
         // 주문 취소로 status 변경

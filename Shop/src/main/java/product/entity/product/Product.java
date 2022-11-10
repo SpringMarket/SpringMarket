@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,7 +20,7 @@ import java.time.LocalDateTime;
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
 
     @Column(nullable = false)
@@ -33,16 +34,6 @@ public class Product {
 
     @Column(nullable = false)
     private Long price;
-
-    public Product(String title, String content, String photo, Long price, LocalDateTime createdTime, Category category, ProductInfo productInfo) {
-        this.title = title;
-        this.content = content;
-        this.photo = photo;
-        this.price = price;
-        this.createdTime = createdTime;
-        this.category = category;
-        this.productInfo = productInfo;
-    }
 
 
     @DateTimeFormat // 2022-11-08 15:07:26:1252156
