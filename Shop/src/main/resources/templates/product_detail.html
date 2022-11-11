@@ -59,23 +59,13 @@
         getProduct()
     })
     function getProduct(product_id){
-        let data = {
-            title: $('#title').val(),
-            content: $('#content').val(),
-            photo: $('#photo').val(),
-            price: $('#price').val(),
-            stock: $('#stock').val(),
-            view: $('#view').val(),
-            createdTime: $('#createdTime').val(),
-            categoryId: $('#categoryId').val()
-        };
         console.log(data);
 
         $.ajax({
             type:"GET",
             url:`api/product/${product_id}`,
             contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify(data),
+            data: {},
             success: function(response){
                 console.log('success')
                 window.location.reload();
