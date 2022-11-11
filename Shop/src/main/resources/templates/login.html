@@ -36,25 +36,25 @@
     <button id="login-id-submit" class="btn btn-dark" onclick="onLogin()" type="button" >로그인</button>
     <hr>
     <p class="text" th:text="'아직 회원이 아니라면?'"></p>
-    <button id="login-id-btn" onclick="location.href='/signup'">회원 가입</button>
+    <button id="login-id-btn" onclick="location.href='/api/signup'">회원 가입</button>
   </div>
 
   <div id="login-failed" style="display:none" class="alert alert-danger" role="alert">로그인에 실패하였습니다.</div>
 </div>
 </body>
 <script>
-  const href = location.href;
-  const queryString = href.substring(href.indexOf("?")+1)
-  if (queryString === 'error') {
-    const errorDiv = document.getElementById('login-failed');
-    errorDiv.style.display = 'block';
-  }
+  // const href = location.href;
+  // const queryString = href.substring(href.indexOf("?")+1)
+  // if (queryString === 'error') {
+  //   const errorDiv = document.getElementById('login-failed');
+  //   errorDiv.style.display = 'block';
+  // }
 
   //로그인
   function onLogin() {
     $.ajax({
       type: "POST",
-      url: `/login`,
+      url: `/api/login`,
       contentType: "application/json",
       data: JSON.stringify({
         email: $('#email').val(),
@@ -62,13 +62,13 @@
       }),
       success: function (response, textStatus, request) {
 
-        const jwtToken = request.getResponseHeader("Authorization");
+        const jwtToken = request.getResponseHeader("AccessToken");
 
         if (jwtToken) {
           $.cookie("token", jwtToken);
           $.ajaxSetup({
             headers:{
-              "Authorization": jwtToken
+              "AccessToken": jwtToken
             }
           });
 

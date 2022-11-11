@@ -71,7 +71,7 @@
 
         $.ajax({
             type: "POST",
-            url: `/signup`,
+            url: `/api/signup`,
             contentType: "application/json",
             data: JSON.stringify({
                 email: $('#email').val(),
@@ -89,7 +89,7 @@
                             'Authorization': $.cookie('token', jwtToken, {path: '/'})
                         }
                     });
-                    window.location.href = '/';// 성공 시 메인 페이지 이동
+                    window.location.href = '/login.html';// 성공 시 메인 페이지 이동
                 } else {
                     window.location.href = '/login?error';//에러 페이지 이동
                 }
