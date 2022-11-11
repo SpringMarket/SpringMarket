@@ -5,20 +5,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import product.entity.user.User;
-import product.exception.ExceptionType;
-import product.exception.RequestException;
+import product.dto.product.ProductResponseDetailDto;
 import product.repository.user.UserRepository;
 import product.response.Response;
 import product.service.product.ProductService;
 
-import java.util.List;
-
 import static product.response.Response.success;
 
 @RequiredArgsConstructor
-@RestController
+@Controller
 @RequestMapping("/api")
 public class ProductController {
     private final ProductService productService;
@@ -51,10 +49,14 @@ public class ProductController {
 
     // 상세 페이지
     @GetMapping("/product/{id}")
-    public Response findProduct(@PathVariable Long id) {
+    public String findProduct(Model model, @PathVariable Long id) {
 
-        return success(productService.findProduct(id));
+        //return success(productService.findProduct(id));
+        ProductResponseDetailDto product = productService.findProduct(id);
+        model.addAttribute("response", product);
+        return "product_detail";
     }
+
 
     // 상품 주문
     @PostMapping("/product/{id}/order")
