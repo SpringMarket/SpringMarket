@@ -73,7 +73,9 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     }
 
     private OrderSpecifier<?> sorting(String sorting) {
+
         if(StringUtils.isNullOrEmpty(sorting)) return QProduct.product.productInfo.productInfoId.desc();
+
         switch (sorting) {
             case "조회순":
                 return QProduct.product.productInfo.view.desc();

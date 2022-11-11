@@ -1,5 +1,6 @@
 package product.config.security;
 
+import com.amazonaws.HttpMethod;
 import product.config.jwt.JwtSecurityConfig;
 import product.config.jwt.JwtAccessDeniedHandler;
 import product.config.jwt.JwtAuthenticationEntryPoint;
@@ -83,7 +84,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
 
-                .antMatchers("/**").permitAll()
+//                .antMatchers("/**").permitAll()
 
                 .and()
                 .apply(new JwtSecurityConfig(tokenProvider));
