@@ -44,8 +44,6 @@ class ProductServiceTest {
     @Autowired
     CategoryRepository categoryRepository;
     @Autowired
-    EntityManager entityManager;
-    @Autowired
     ProductInfoRepository productInfoRepository;
     @Autowired
     OrderRepository orderRepository;
@@ -53,7 +51,7 @@ class ProductServiceTest {
     UserRepository userRepository;
 
     @BeforeAll
-    void setting(){
+    void setUp(){
 
         Category category = Category.builder()
                 .categoryId(1L)

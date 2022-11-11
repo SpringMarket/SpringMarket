@@ -46,6 +46,7 @@ public class AuthService {
                 .build());
     }
 
+
     @Transactional
     public void emailDuplicate(EmailValidDto emailValidDto) {
         validateEmailInfo(emailValidDto);
