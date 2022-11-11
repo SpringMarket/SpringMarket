@@ -5,10 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import product.dto.product.ProductResponseDetailDto;
 import product.repository.user.UserRepository;
 import product.response.Response;
 import product.service.product.ProductService;
@@ -16,7 +13,7 @@ import product.service.product.ProductService;
 import static product.response.Response.success;
 
 @RequiredArgsConstructor
-@Controller
+@RestController
 @RequestMapping("/api")
 public class ProductController {
     private final ProductService productService;
@@ -47,14 +44,20 @@ public class ProductController {
         return success(productService.findAllProduct(pageable, category, stock, minPrice, maxPrice, keyword, sorting));
     }
 
+//    // 상세 페이지
+//    @GetMapping("/product/{id}")
+//    public String findProduct(Model model, @PathVariable Long id) {
+//
+//        //return success(productService.findProduct(id));
+//        ProductResponseDetailDto product = productService.findProduct(id);
+//        model.addAttribute("response", product);
+//        return "product_detail";
+//    }
     // 상세 페이지
     @GetMapping("/product/{id}")
-    public String findProduct(Model model, @PathVariable Long id) {
+    public Response findProduct(@PathVariable Long id) {
 
-        //return success(productService.findProduct(id));
-        ProductResponseDetailDto product = productService.findProduct(id);
-        model.addAttribute("response", product);
-        return "product_detail";
+        return success(productService.findProduct(id));
     }
 
 
