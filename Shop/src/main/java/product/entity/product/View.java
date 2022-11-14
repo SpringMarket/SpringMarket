@@ -23,9 +23,4 @@ public class View {
 
     @Column(nullable = false)
     private Long view;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Product product;
 }

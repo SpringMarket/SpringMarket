@@ -71,14 +71,6 @@ public class RedisService {
         }
     }
 
-    // product 말고 view entity 가져오기
-    public void viewProduct( ){
-        // key : "product ::" + "productId" value : count
-        // (product::1).increment(value)
-        // 스케줄러(0.0.10 * * *) update
-        // 상품 조회 : query dsl
-    }
-
 }
 
 

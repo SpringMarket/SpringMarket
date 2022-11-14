@@ -56,11 +56,15 @@ public class Product {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private ProductInfo productInfo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stock_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Stock stock;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "view_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private View view;
 
 }
 

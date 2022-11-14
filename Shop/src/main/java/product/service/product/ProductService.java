@@ -82,8 +82,6 @@ public class ProductService {
         log.info("Search Once Log Start....");
         Product product = productRepository.detail(id);
 
-        redisService.viewProduct();
-
         return ProductResponseDetailDto.toDto(product);
     }
 
@@ -92,7 +90,8 @@ public class ProductService {
 
         ValueOperations<String, String> values = redisTemplate.opsForValue();
 
-        if(values.get(key) == null) redisService.setView(key, productRepository.findByProductId(productId).getView.getCount);
+        // query 로직으로 수정해야함
+        if(values.get(key) == null) redisService.setView(key, String.valueOf(productRepository.findByProductId(productId).getView().getView()));
         else values.increment(key);
 
         log.info("View" + values.get(key));
