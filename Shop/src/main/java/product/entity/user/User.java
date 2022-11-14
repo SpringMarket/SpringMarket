@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Optional;
 
 @Data
 @AllArgsConstructor
@@ -28,6 +29,8 @@ public class User {
     private String password;
 
     @Column(nullable = false)
+    private String name;
+    @Column(nullable = false)
     private String age;
 
     @Enumerated(EnumType.STRING)
@@ -41,4 +44,5 @@ public class User {
         this.age = age;
         this.authority = authority;
     }
+
 }

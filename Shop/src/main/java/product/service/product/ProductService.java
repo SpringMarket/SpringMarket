@@ -75,7 +75,7 @@ public class ProductService {
 
 
     // 상품 상세 조회 -> Cache Aside
-    @Cacheable(value = "product", key = "#id") // [post::1], [name : "" , cre ...]
+    @Cacheable(value = "product", key = "#id") // [product::1], [name : "" , cre ...]
     @Transactional(readOnly = true)
     public ProductResponseDetailDto findProduct(Long id) {
 
@@ -85,10 +85,12 @@ public class ProductService {
         return ProductResponseDetailDto.toDto(product);
     }
 
+    // 조회수 ++
+    // productView::1 , 1
     public void countView(Long productId) {
         String key = "productView::" + productId;
 
-        ValueOperations<String, String> values = redisTemplate.opsForValue();
+        ValueOperations<String, String> values = redisTemplate.opsForValue(); // Redis String 자료구조 저장소 선언
 
         // query 로직으로 수정해야함
         if(values.get(key) == null) redisService.setView(key, String.valueOf(productRepository.findByProductId(productId).getView().getView()));
@@ -96,7 +98,5 @@ public class ProductService {
 
         log.info("View" + values.get(key));
     }
-
-
 }
 

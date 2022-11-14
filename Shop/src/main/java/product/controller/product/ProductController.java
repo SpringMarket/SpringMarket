@@ -44,15 +44,6 @@ public class ProductController {
         return success(productService.findAllProduct(pageable, category, stock, minPrice, maxPrice, keyword, sorting));
     }
 
-//    // 상세 페이지
-//    @GetMapping("/product/{id}")
-//    public String findProduct(Model model, @PathVariable Long id) {
-//
-//        //return success(productService.findProduct(id));
-//        ProductResponseDetailDto product = productService.findProduct(id);
-//        model.addAttribute("response", product);
-//        return "product_detail";
-//    }
     // 상세 페이지
     @GetMapping("/products/{id}")
     public Response findProduct(@PathVariable Long id) {
@@ -62,9 +53,4 @@ public class ProductController {
         return success(productService.findProduct(id));
 
     }
-
-
-
-
-
 }

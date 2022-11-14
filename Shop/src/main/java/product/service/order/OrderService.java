@@ -40,7 +40,6 @@ public class OrderService {
         log.info("Order Start....");
 
         User user = userRepository.findByEmail(authentication.getName());
-        //        .orElseThrow(() -> new RequestException(ExceptionType.ACCESS_DENIED_EXCEPTION));
         if(user == null) throw new RequestException(ExceptionType.ACCESS_DENIED_EXCEPTION);
 
         Product product = productRepository.findByProductId(productId);
@@ -86,6 +85,7 @@ public class OrderService {
         if (order.getOrderStatus().equals("배송완료") || order.getOrderStatus().equals("주문취소")) {
             throw new RequestException(ORDER_FINISH_EXCEPTION);
         }
+
         Product product = productRepository.findByProductId(order.getProduct().getProductId());
         if (product == null) throw new RequestException(ExceptionType.NOT_FOUND_EXCEPTION);
 

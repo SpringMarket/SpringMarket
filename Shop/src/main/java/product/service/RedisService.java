@@ -30,7 +30,7 @@ public class RedisService {
     }
 
     @Scheduled(cron = "0 0/10 * * * ?")
-    public void deleteViewCntCacheFromRedis() {
+    public void UpdateViewRDS() {
         Set<String> redisKeys = redisTemplate.keys("productView*");
 
         assert redisKeys != null;
@@ -40,8 +40,6 @@ public class RedisService {
             Long viewCnt = Long.parseLong(Objects.requireNonNull(redisTemplate.opsForValue().get(data)));
 
             productRepository.addView(productId, viewCnt);
-
-            redisTemplate.delete(data);
         }
     }
 
