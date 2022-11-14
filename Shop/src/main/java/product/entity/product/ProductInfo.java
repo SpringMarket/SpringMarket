@@ -33,13 +33,7 @@ public class ProductInfo {
     private Long over_forty;
 
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Product product;
-
-    public void order(Product product, Long orderNum, String age){
-        this.product = product;
+    public void order(Long orderNum, String age){
         switch (age){
             case "10대":
                 ten += orderNum; break;
@@ -52,8 +46,7 @@ public class ProductInfo {
         }
     }
 
-    public void cancel(Product product, Long orderNum, String age){
-        this.product = product;
+    public void cancel(Long orderNum, String age){
         switch (age){
             case "10대":
                 ten -= orderNum; break;

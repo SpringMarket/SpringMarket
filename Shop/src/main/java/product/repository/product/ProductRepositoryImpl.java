@@ -53,7 +53,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
     private BooleanExpression isStock(Boolean stock) {
         if (!stock) return null;
-        return QProduct.product.productInfo.stock.ne(0L);
+        return QProduct.product.stock.stock.ne(0L);
     }
 
     private BooleanExpression minPriceRange(Long minPrice) {
@@ -73,11 +73,11 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
     private OrderSpecifier<?> sorting(String sorting) {
 
-        if(StringUtils.isNullOrEmpty(sorting)) return QProduct.product.productInfo.productInfoId.desc();
+        if(StringUtils.isNullOrEmpty(sorting)) return null;
 
         switch (sorting) {
             case "조회순":
-                return QProduct.product.productInfo.view.desc();
+                return QProduct.product.view.view.desc();
             case "날짜순":
                 return QProduct.product.createdTime.desc();
             case "10대":
@@ -87,7 +87,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             case "30대":
                 return QProduct.product.productInfo.thirty.desc();
             case "40대 이상":
-                return QProduct.product.productInfo.forty.desc();
+                return QProduct.product.productInfo.over_forty.desc();
         }
         return null;
     }
@@ -105,7 +105,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         QProduct qProduct = QProduct.product;
         return queryFactory.selectFrom(qProduct)
                 .where(qProduct.category.categoryId.eq(categoryId))
-                .orderBy(qProduct.productInfo.view.desc())
+                .orderBy(qProduct.view.view.desc())
                 .limit(60)
                 .fetch();
     }
