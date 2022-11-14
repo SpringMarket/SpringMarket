@@ -1,6 +1,6 @@
-package product.dto.mypage;
+package product.dto.order;
 
-import product.entity.product.Order;
+import product.entity.order.Order;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

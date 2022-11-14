@@ -1,6 +1,6 @@
-package product.repository.product;
+package product.repository.order;
 
-import product.dto.mypage.MyPageResponseDto;
+import product.dto.order.MyPageResponseDto;
 import product.entity.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

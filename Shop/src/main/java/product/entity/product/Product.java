@@ -20,7 +20,7 @@ import java.time.format.DateTimeFormatter;
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long productId;
 
     @Column(nullable = false)
@@ -49,11 +49,6 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Category category;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_info_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private ProductInfo productInfo;
 
 }
 

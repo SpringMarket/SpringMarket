@@ -11,18 +11,17 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import product.dto.product.ProductResponseDetailDto;
 import product.entity.product.Category;
-import product.entity.product.Order;
+import product.entity.order.Order;
 import product.entity.product.Product;
 import product.entity.product.ProductInfo;
 import product.entity.user.Authority;
 import product.entity.user.User;
 import product.repository.product.CategoryRepository;
-import product.repository.product.OrderRepository;
+import product.repository.order.OrderRepository;
 import product.repository.product.ProductInfoRepository;
 import product.repository.product.ProductRepository;
 import product.repository.user.UserRepository;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;

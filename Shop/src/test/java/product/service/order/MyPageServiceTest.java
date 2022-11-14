@@ -1,6 +1,5 @@
-package product.service.mypage;
+package product.service.order;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -10,9 +9,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import product.dto.mypage.MyPageResponseDto;
+import product.dto.order.MyPageResponseDto;
 import product.entity.product.Category;
-import product.entity.product.Order;
+import product.entity.order.Order;
 import product.entity.product.Product;
 import product.entity.product.ProductInfo;
 import product.entity.user.Authority;
@@ -20,16 +19,13 @@ import product.entity.user.User;
 import product.exception.ExceptionType;
 import product.exception.RequestException;
 import product.repository.product.CategoryRepository;
-import product.repository.product.OrderRepository;
+import product.repository.order.OrderRepository;
 import product.repository.product.ProductInfoRepository;
 import product.repository.product.ProductRepository;
 import product.repository.user.UserRepository;
 import product.service.product.TestConfig;
 
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static product.exception.ExceptionType.ACCESS_DENIED_EXCEPTION;
 import static product.exception.ExceptionType.ORDER_FINISH_EXCEPTION;
 

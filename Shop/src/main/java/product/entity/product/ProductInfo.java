@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -15,7 +17,7 @@ import javax.persistence.*;
 public class ProductInfo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long productInfoId;
 
     @Column(nullable = false)
@@ -28,20 +30,40 @@ public class ProductInfo {
     private Long thirty;
 
     @Column(nullable = false)
-    private Long forty;
-
-    @Column(nullable = false)
-    private Long stock;
-
-    @Column(nullable = false)
-    private Long view;
+    private Long over_forty;
 
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Product product;
 
-    public void order(Long orderNum){
-        this.stock -= orderNum;
+    public void order(Product product, Long orderNum, String age){
+        this.product = product;
+        switch (age){
+            case "10대":
+                ten += orderNum; break;
+            case "20대":
+                twenty += orderNum; break;
+            case "30대":
+                thirty += orderNum; break;
+            case "40대 이상":
+                over_forty += orderNum; break;
+        }
     }
-    public void cancel(Long orderNum) { this.stock += orderNum;}
 
+    public void cancel(Product product, Long orderNum, String age){
+        this.product = product;
+        switch (age){
+            case "10대":
+                ten -= orderNum; break;
+            case "20대":
+                twenty -= orderNum; break;
+            case "30대":
+                thirty -= orderNum; break;
+            case "40대 이상":
+                over_forty -= orderNum; break;
+        }
+    }
 
 }

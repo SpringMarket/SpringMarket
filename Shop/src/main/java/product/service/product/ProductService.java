@@ -2,7 +2,6 @@ package product.service.product;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,17 +9,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import product.dto.product.ProductResponseDetailDto;
-import product.entity.product.Order;
+import product.entity.order.Order;
 import product.entity.product.Product;
 import product.entity.user.User;
 import product.exception.ExceptionType;
 import product.exception.RequestException;
-import product.repository.product.OrderRepository;
+import product.repository.order.OrderRepository;
 import product.repository.product.ProductRepository;
 import product.repository.user.UserRepository;
 import product.service.RedisService;
 
-import javax.validation.constraints.Null;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -84,28 +82,6 @@ public class ProductService {
         return ProductResponseDetailDto.toDto(product);
     }
 
-    // 상품 주문
-    @Transactional
-    public void orderProduct(Long id, Long orderNum, Authentication authentication) {
 
-        log.info("Order Start....");
-
-        User user = userRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new RequestException(ExceptionType.ACCESS_DENIED_EXCEPTION));
-
-
-        Product product = productRepository.findByProductId(id);
-//                .orElseThrow(() -> new RequestException(ExceptionType.NOT_FOUND_EXCEPTION));
-
-        if (product == null) throw new RequestException(ExceptionType.NOT_FOUND_EXCEPTION);
-
-        if(product.getProductInfo().getStock() < orderNum) throw new RequestException(ExceptionType.OUT_OF_STOCK_EXCEPTION);
-
-        product.getProductInfo().order(orderNum);
-
-        Order order = new Order(product, orderNum, user);
-
-        orderRepository.save(order);
-    }
 }
 

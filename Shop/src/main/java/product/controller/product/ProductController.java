@@ -3,11 +3,10 @@ package product.controller.product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import product.repository.user.UserRepository;
 import product.response.Response;
+import product.service.order.OrderService;
 import product.service.product.ProductService;
 
 import static product.response.Response.success;
@@ -17,11 +16,12 @@ import static product.response.Response.success;
 @RequestMapping("/api")
 public class ProductController {
     private final ProductService productService;
+    private final OrderService orderService;
     private final UserRepository userRepository;
 
 
     // Warm UP
-    @GetMapping("/candycandy")
+    @GetMapping("/warmup")
     public Response warmup() {
 
         productService.warmup();
@@ -31,7 +31,7 @@ public class ProductController {
 
     // 메인 페이지
     // orderBy first(JPA) or last(Query DSL) 성능테스트
-    @GetMapping("/product")
+    @GetMapping("/products")
     public Response findAllProduct(@PageableDefault(size = 20) Pageable pageable,
                                  @RequestParam(value = "category", required = false) String category,
                                  @RequestParam(value = "stock", required = false) Boolean stock,
@@ -54,23 +54,14 @@ public class ProductController {
 //        return "product_detail";
 //    }
     // 상세 페이지
-    @GetMapping("/product/{id}")
+    @GetMapping("/products/{id}")
     public Response findProduct(@PathVariable Long id) {
 
         return success(productService.findProduct(id));
     }
 
 
-    // 상품 주문
-    @PostMapping("/product/{id}/order")
-    public Response order(@PathVariable Long id, @RequestBody Long orderNum) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        productService.orderProduct(id, orderNum, authentication);
-
-        return success();
-    }
 
 
 }

@@ -12,7 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import product.dto.product.ProductResponseDetailDto;
 import product.entity.product.Product;
-import product.entity.product.QOrder;
 import product.entity.product.QProduct;
 
 import java.util.List;

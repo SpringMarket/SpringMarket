@@ -1,4 +1,4 @@
-package product.repository.product;
+package product.repository.order;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -7,8 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import product.dto.mypage.MyPageResponseDto;
-import product.entity.product.QOrder;
+import product.dto.order.MyPageResponseDto;
+import product.entity.order.QOrder;
 import product.entity.user.User;
 
 import java.util.List;
