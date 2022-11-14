@@ -13,24 +13,18 @@ import java.time.format.DateTimeFormatter;
 public class ProductResponseDto {
     private Long productId;
     private String title;
+    private String content;
     private String photo;
     private Long price;
-    //private boolean stock;
-    private Long stock;
-    private Long view;
     private String createdTime;
-    private Long categoryId;
-
     public static ProductResponseDto toDto(Product product){
         return new ProductResponseDto(
                 product.getProductId(),
                 product.getTitle(),
+                product.getContent(),
                 product.getPhoto(),
                 product.getPrice(),
-                product.getProductInfo().getStock(),
-                product.getProductInfo().getView(),
-                DateTimeFormatter.ofPattern("yyyy-MM-dd").format(product.getCreatedTime()),
-                product.getCategory().getCategoryId()
+                DateTimeFormatter.ofPattern("yyyy-MM-dd").format(product.getCreatedTime())
         );
     }
 }

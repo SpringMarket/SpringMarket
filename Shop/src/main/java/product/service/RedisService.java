@@ -23,9 +23,8 @@ public class RedisService {
     private final RedisTemplate<String, ProductResponseDetailDto> redisTemplateDto;
     private final ProductRepository productRepository;
 
-    public void setView(String key, String data) {
+    public void setView(String key, String data, Duration duration) {
         ValueOperations<String, String> values = redisTemplate.opsForValue();
-        Duration duration =Duration.ofMinutes(15);
         values.set(key, data, duration);
     }
 
@@ -40,6 +39,8 @@ public class RedisService {
             Long viewCnt = Long.parseLong(Objects.requireNonNull(redisTemplate.opsForValue().get(data)));
 
             productRepository.addView(productId, viewCnt);
+
+            redisTemplate.delete(data);
         }
     }
 

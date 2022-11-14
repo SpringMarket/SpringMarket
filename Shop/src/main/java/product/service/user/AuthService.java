@@ -20,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletResponse;
 import java.time.Duration;
 
+import static product.exception.ExceptionType.NOT_FOUND_EXCEPTION;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -56,8 +58,8 @@ public class AuthService {
 
     @Transactional
     public TokenResponseDto login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
-        User user = userRepository.findByEmail(loginRequestDto.getEmail());
-        if(user == null) throw new RequestException(ExceptionType.ACCESS_DENIED_EXCEPTION);
+        User user = userRepository.findByEmail(loginRequestDto.getEmail())
+                .orElseThrow(() -> new RequestException(NOT_FOUND_EXCEPTION));
 
         validatePassword(loginRequestDto, user);
 

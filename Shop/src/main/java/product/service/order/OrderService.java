@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ import product.repository.product.ProductInfoRepository;
 import product.repository.product.ProductRepository;
 import product.repository.product.StockRepository;
 import product.repository.user.UserRepository;
+import product.service.RedisService;
 
 import static product.exception.ExceptionType.*;
 
@@ -28,10 +30,8 @@ import static product.exception.ExceptionType.*;
 @Service
 public class OrderService {
     private final ProductRepository productRepository;
-    private final ProductInfoRepository productInfoRepository;
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
-    private final StockRepository stockRepository;
 
     // 상품 주문
     @Transactional
@@ -39,8 +39,8 @@ public class OrderService {
 
         log.info("Order Start....");
 
-        User user = userRepository.findByEmail(authentication.getName());
-        if(user == null) throw new RequestException(ExceptionType.ACCESS_DENIED_EXCEPTION);
+        User user = userRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new RequestException(NOT_FOUND_EXCEPTION));
 
         Product product = productRepository.findByProductId(productId);
         if (product == null) throw new RequestException(ExceptionType.NOT_FOUND_EXCEPTION);
@@ -56,14 +56,15 @@ public class OrderService {
         // productInfo 변경
         product.getProductInfo().order(orderNum,user.getAge());
 
+
     }
 
     // 주문 목록 조회
     @Transactional(readOnly = true)
     public Page<MyPageResponseDto> myPage(Pageable pageable, Authentication authentication) {
 
-        User user = userRepository.findByEmail(authentication.getName());
-        if(user == null) throw new RequestException(ExceptionType.ACCESS_DENIED_EXCEPTION);
+        User user = userRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new RequestException(NOT_FOUND_EXCEPTION));
 
         return orderRepository.orderFilter(user,pageable);
     }
@@ -72,8 +73,8 @@ public class OrderService {
     @Transactional
     public void cancel(Authentication authentication, Long orderId) {
 
-        User user = userRepository.findByEmail(authentication.getName());
-        if(user == null) throw new RequestException(ExceptionType.ACCESS_DENIED_EXCEPTION);
+        User user = userRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new RequestException(NOT_FOUND_EXCEPTION));
 
         Order order = orderRepository.findByOrderId(orderId);
         if (order == null) throw new RequestException(ExceptionType.NOT_FOUND_EXCEPTION);

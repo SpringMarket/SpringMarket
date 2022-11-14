@@ -18,7 +18,7 @@ import javax.persistence.*;
 public class View {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long view_id;
 
     @Column(nullable = false)

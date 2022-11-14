@@ -18,7 +18,7 @@ import java.util.Optional;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
     @Column(nullable = false)
@@ -28,8 +28,6 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
-    private String name;
     @Column(nullable = false)
     private String age;
 
@@ -44,5 +42,4 @@ public class User {
         this.age = age;
         this.authority = authority;
     }
-
 }

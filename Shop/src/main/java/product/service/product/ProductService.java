@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import product.dto.product.ProductResponseDetailDto;
+import product.dto.product.ProductResponseDto;
 import product.entity.order.Order;
 import product.entity.product.Product;
 import product.entity.user.User;
@@ -31,8 +32,6 @@ import java.util.List;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final UserRepository userRepository;
-    private final OrderRepository orderRepository;
     private final RedisService redisService;
 
     private final RedisTemplate<String, String> redisTemplate;
@@ -77,12 +76,12 @@ public class ProductService {
     // 상품 상세 조회 -> Cache Aside
     @Cacheable(value = "product", key = "#id") // [product::1], [name : "" , cre ...]
     @Transactional(readOnly = true)
-    public ProductResponseDetailDto findProduct(Long id) {
+    public ProductResponseDto findProduct(Long id) {
 
         log.info("Search Once Log Start....");
         Product product = productRepository.detail(id);
 
-        return ProductResponseDetailDto.toDto(product);
+        return ProductResponseDto.toDto(product);
     }
 
     // 조회수 ++
@@ -92,11 +91,9 @@ public class ProductService {
 
         ValueOperations<String, String> values = redisTemplate.opsForValue(); // Redis String 자료구조 저장소 선언
 
-        // query 로직으로 수정해야함
-        if(values.get(key) == null) redisService.setView(key, String.valueOf(productRepository.findByProductId(productId).getView().getView()));
+        if(values.get(key) == null) redisService.setView(key, String.valueOf(productRepository.getView(productId)), Duration.ofMinutes(15));
         else values.increment(key);
 
         log.info("View" + values.get(key));
     }
 }
-
