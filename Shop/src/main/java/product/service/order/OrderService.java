@@ -46,21 +46,16 @@ public class OrderService {
         Product product = productRepository.findByProductId(productId);
         if (product == null) throw new RequestException(ExceptionType.NOT_FOUND_EXCEPTION);
 
-        Stock stock = stockRepository.findByProductId(productId);
-        if (stock == null) throw new RequestException(ExceptionType.NOT_FOUND_EXCEPTION);
+        if(product.getStock().getStock()< orderNum) throw new RequestException(ExceptionType.OUT_OF_STOCK_EXCEPTION);
 
-        if(stock.getStock() < orderNum) throw new RequestException(ExceptionType.OUT_OF_STOCK_EXCEPTION);
+        // 재고 수 추가
+        product.getStock().order(orderNum);
 
-        stock.order(orderNum);
-
-        Order order = new Order(product, orderNum, user);
-
+        Order order = new Order(product,orderNum, user);
         orderRepository.save(order);
 
         // productInfo 변경
-        ProductInfo productInfo = productInfoRepository.findByProductId(product.getProductId());
-        if (productInfo == null) throw new RequestException(ExceptionType.NOT_FOUND_EXCEPTION);
-        productInfo.order(product,orderNum,user.getAge());
+        product.getProductInfo().order(orderNum,user.getAge());
 
     }
 
@@ -78,7 +73,6 @@ public class OrderService {
     @Transactional
     public void cancel(Authentication authentication, Long orderId) {
 
-
         User user = userRepository.findByEmail(authentication.getName());
         if(user == null) throw new RequestException(ExceptionType.ACCESS_DENIED_EXCEPTION);
 
@@ -92,18 +86,19 @@ public class OrderService {
         if (order.getOrderStatus().equals("배송완료") || order.getOrderStatus().equals("주문취소")) {
             throw new RequestException(ORDER_FINISH_EXCEPTION);
         }
+        Product product = productRepository.findByProductId(order.getProduct().getProductId());
+        if (product == null) throw new RequestException(ExceptionType.NOT_FOUND_EXCEPTION);
 
-        Stock stock = stockRepository.findByProductId(order.getProduct().getProductId());
-        if (stock == null) throw new RequestException(ExceptionType.NOT_FOUND_EXCEPTION);
 
-        stock.cancel(order.getOrderNum());
+        if (product.getStock().getStock() == null) throw new RequestException(ExceptionType.NOT_FOUND_EXCEPTION);
+
+        // 재고 수 변경
+        product.getStock().cancel(order.getOrderNum());
 
         // 주문 취소로 status 변경
         order.cancel();
 
         // productInfo 변경
-        ProductInfo productInfo = productInfoRepository.findByProductId(order.getProduct().getProductId());
-        if (productInfo == null) throw new RequestException(ExceptionType.NOT_FOUND_EXCEPTION);
-        productInfo.order(order.getProduct(), order.getOrderNum(),user.getAge());
+        product.getProductInfo().order(order.getOrderNum(),user.getAge());
     }
 }
