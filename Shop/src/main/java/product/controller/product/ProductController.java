@@ -57,7 +57,10 @@ public class ProductController {
     @GetMapping("/products/{id}")
     public Response findProduct(@PathVariable Long id) {
 
+        productService.countView(id);
+
         return success(productService.findProduct(id));
+
     }
 
 

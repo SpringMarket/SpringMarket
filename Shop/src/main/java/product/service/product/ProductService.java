@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +34,8 @@ public class ProductService {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
     private final RedisService redisService;
+
+    private final RedisTemplate<String, String> redisTemplate;
 
 
     /*@Value("${cloud.aws.s3.bucket}")
@@ -76,10 +80,22 @@ public class ProductService {
     public ProductResponseDetailDto findProduct(Long id) {
 
         log.info("Search Once Log Start....");
-
         Product product = productRepository.detail(id);
 
+        redisService.viewProduct();
+
         return ProductResponseDetailDto.toDto(product);
+    }
+
+    public void countView(Long productId) {
+        String key = "productView::" + productId;
+
+        ValueOperations<String, String> values = redisTemplate.opsForValue();
+
+        if(values.get(key) == null) redisService.setView(key, productRepository.findByProductId(productId).getView.getCount);
+        else values.increment(key);
+
+        log.info("View" + values.get(key));
     }
 
 

@@ -56,7 +56,9 @@ public class AuthService {
 
     @Transactional
     public TokenResponseDto login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
-        User user = userRepository.findByEmail(loginRequestDto.getEmail()).orElseThrow(() -> new RequestException(ExceptionType.LOGIN_FAIL_EXCEPTION));
+        User user = userRepository.findByEmail(loginRequestDto.getEmail());
+        if(user == null) throw new RequestException(ExceptionType.ACCESS_DENIED_EXCEPTION);
+
         validatePassword(loginRequestDto, user);
 
         // 1. Login ID/PW 를 기반으로 AuthenticationToken 생성

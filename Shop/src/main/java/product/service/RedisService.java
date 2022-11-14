@@ -1,24 +1,48 @@
 package product.service;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import product.dto.product.ProductResponseDetailDto;
+import product.entity.product.Product;
 import product.exception.ExceptionType;
 import product.exception.RequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
+import product.repository.product.ProductRepository;
 
 import java.time.Duration;
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Service
 public class RedisService {
     private final RedisTemplate<String, String> redisTemplate;
     private final RedisTemplate<String, ProductResponseDetailDto> redisTemplateDto;
+    private final ProductRepository productRepository;
 
-    public void setValues(String key, String data) {
+    public void setView(String key, String data) {
         ValueOperations<String, String> values = redisTemplate.opsForValue();
-        values.set(key, data);
+        Duration duration =Duration.ofMinutes(15);
+        values.set(key, data, duration);
+    }
+
+    @Scheduled(cron = "0 0/10 * * * ?")
+    public void deleteViewCntCacheFromRedis() {
+        Set<String> redisKeys = redisTemplate.keys("productView*");
+
+        assert redisKeys != null;
+
+        for (String data : redisKeys) {
+            Long productId = Long.parseLong(data.split("::")[1]);
+            Long viewCnt = Long.parseLong(Objects.requireNonNull(redisTemplate.opsForValue().get(data)));
+
+            productRepository.addView(productId, viewCnt);
+
+            redisTemplate.delete(data);
+        }
     }
 
     public void setProduct(String key, ProductResponseDetailDto data, Duration duration) {
@@ -46,6 +70,15 @@ public class RedisService {
             throw new RequestException(ExceptionType.TOKEN_EXPIRED_EXCEPTION);
         }
     }
+
+    // product 말고 view entity 가져오기
+    public void viewProduct( ){
+        // key : "product ::" + "productId" value : count
+        // (product::1).increment(value)
+        // 스케줄러(0.0.10 * * *) update
+        // 상품 조회 : query dsl
+    }
+
 }
 
 
