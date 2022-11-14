@@ -20,13 +20,13 @@ import java.util.List;
 @Repository
 public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private final JPAQueryFactory queryFactory;
+    QProduct qProduct = QProduct.product;
 
     // CandyResponseDto와 성능 비교 (content 차이)
     @Override
     public Page<ProductResponseDetailDto> mainFilter(Pageable pageable, String category, Boolean stock,
                                                      Long minPrice, Long maxPrice, String keyword, String sorting) {
 
-        QProduct qProduct = QProduct.product;
         // 데이터 수 줄여서 조회 테스트
         // 커버링 인덱스 테스트
 
@@ -94,7 +94,6 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
     @Override
     public Product detail(Long productId) {
-        QProduct qProduct = QProduct.product;
         return queryFactory.selectFrom(qProduct)
                 .where(qProduct.productId.eq(productId))
                 .fetchOne();
@@ -102,11 +101,28 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
     @Override
     public List<Product> warmup(Long categoryId) {
-        QProduct qProduct = QProduct.product;
         return queryFactory.selectFrom(qProduct)
                 .where(qProduct.category.categoryId.eq(categoryId))
                 .orderBy(qProduct.view.view.desc())
                 .limit(60)
                 .fetch();
     }
+
+    @Override
+    public void addView(Long productId, Long viewCnt) {
+        queryFactory
+                .update(qProduct)
+                .set(qProduct.view.view, viewCnt)
+                .where(qProduct.productId.eq(productId))
+                .execute();
+    }
+
+    @Override
+    public Long getView(Long productId) {
+        return queryFactory.select(qProduct.view.view)
+                .from(qProduct)
+                .where(qProduct.productId.eq(productId))
+                .fetchOne();
+    }
+
 }

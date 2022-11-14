@@ -15,7 +15,6 @@ public class ProductResponseDto {
     private String title;
     private String photo;
     private Long price;
-    //private boolean stock;
     private Long stock;
     private Long view;
     private String createdTime;
@@ -27,8 +26,8 @@ public class ProductResponseDto {
                 product.getTitle(),
                 product.getPhoto(),
                 product.getPrice(),
-                product.getProductInfo().getStock(),
-                product.getProductInfo().getView(),
+                product.getStock().getStock(),
+                product.getView().getView(),
                 DateTimeFormatter.ofPattern("yyyy-MM-dd").format(product.getCreatedTime()),
                 product.getCategory().getCategoryId()
         );

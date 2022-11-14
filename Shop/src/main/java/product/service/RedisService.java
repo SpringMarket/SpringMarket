@@ -25,7 +25,7 @@ public class RedisService {
 
     public void setView(String key, String data) {
         ValueOperations<String, String> values = redisTemplate.opsForValue();
-        Duration duration =Duration.ofMinutes(15);
+        Duration duration = Duration.ofMinutes(15);
         values.set(key, data, duration);
     }
 

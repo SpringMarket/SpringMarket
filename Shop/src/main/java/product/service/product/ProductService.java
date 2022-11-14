@@ -31,8 +31,6 @@ import java.util.List;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final UserRepository userRepository;
-    private final OrderRepository orderRepository;
     private final RedisService redisService;
 
     private final RedisTemplate<String, String> redisTemplate;
@@ -91,12 +89,10 @@ public class ProductService {
         ValueOperations<String, String> values = redisTemplate.opsForValue();
 
         // query 로직으로 수정해야함
-        if(values.get(key) == null) redisService.setView(key, String.valueOf(productRepository.findByProductId(productId).getView().getView()));
+        if(values.get(key) == null) redisService.setView(key, String.valueOf(productRepository.getView(productId)));
         else values.increment(key);
 
         log.info("View" + values.get(key));
     }
 
-
 }
-

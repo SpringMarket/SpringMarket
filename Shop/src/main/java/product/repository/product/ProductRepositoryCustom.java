@@ -13,4 +13,5 @@ public interface ProductRepositoryCustom {
     Product detail(Long productId);
     List<Product> warmup(Long categoryId);
     void addView(Long productId, Long viewCnt);
+    Long getView(Long productId);
 }
