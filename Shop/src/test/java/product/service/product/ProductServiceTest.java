@@ -10,16 +10,12 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import product.dto.product.ProductResponseDetailDto;
-import product.entity.product.Category;
+import product.entity.product.*;
 import product.entity.order.Order;
-import product.entity.product.Product;
-import product.entity.product.ProductInfo;
 import product.entity.user.Authority;
 import product.entity.user.User;
-import product.repository.product.CategoryRepository;
+import product.repository.product.*;
 import product.repository.order.OrderRepository;
-import product.repository.product.ProductInfoRepository;
-import product.repository.product.ProductRepository;
 import product.repository.user.UserRepository;
 
 import java.util.List;
@@ -44,10 +40,17 @@ class ProductServiceTest {
     CategoryRepository categoryRepository;
     @Autowired
     ProductInfoRepository productInfoRepository;
+
     @Autowired
     OrderRepository orderRepository;
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    StockRepository stockRepository;
+
+    @Autowired
+    ViewRepository viewRepository;
 
     @BeforeAll
     void setUp(){
@@ -57,7 +60,6 @@ class ProductServiceTest {
                 .category("Test")
                 .build();
 
-//      entityManager.persist(category);
         categoryRepository.save(category);
 
         ProductInfo productInfo = ProductInfo.builder()
@@ -65,13 +67,24 @@ class ProductServiceTest {
                 .ten(10L)
                 .twenty(20L)
                 .thirty(30L)
-                .forty(40L)
-                .stock(10L)
-                .view(10L)
+                .over_forty(40L)
                 .build();
 
-//      entityManager.persist(productInfo);
         productInfoRepository.save(productInfo);
+
+        Stock stock = Stock.builder()
+                // Default stockId = 1L
+                .stock(10L)
+                .build();
+
+        stockRepository.save(stock);
+
+        View view = View.builder()
+                // Default viewId = 1L
+                .view(50L)
+                .build();
+
+        viewRepository.save(view);
 
         Product product = Product.builder()
                 // Default productId = 1L
@@ -81,9 +94,10 @@ class ProductServiceTest {
                 .price(10000L)
                 .category(category)
                 .productInfo(productInfo)
+                .stock(stock)
+                .view(view)
                 .build();
 
-//      entityManager.persist(product);
         productRepository.save(product);
 
         User user = User.builder()
@@ -93,7 +107,6 @@ class ProductServiceTest {
                 .authority(Authority.ROLE_USER)
                 .build();
 
-//      entityManager.persist(user);
         userRepository.save(user);
 
     }
@@ -117,12 +130,12 @@ class ProductServiceTest {
 
         // GIVEN
         Pageable pageable = Pageable.ofSize(10);
-        String category = "Test";
+        String category = null;
         Boolean stock = true;
-        Long minPrice = 0L;
-        Long maxPrice = 1000000L;
-        String keyword = "Test";
-        String sort = "10대";
+        Long minPrice = null;
+        Long maxPrice = null;
+        String keyword = null;
+        String sort = null;
 
         // WHEN
         Page<ProductResponseDetailDto> list = productRepository.mainFilter(pageable, category, stock, minPrice, maxPrice, keyword, sort);
@@ -139,10 +152,10 @@ class ProductServiceTest {
         Pageable pageable = Pageable.ofSize(10);
         String category = null;
         Boolean stock = true; // Default 처리 필요
-        Long minPrice = null;
-        Long maxPrice = null;
-        String keyword = null;
-        String sort = null;
+        Long minPrice = 10L;
+        Long maxPrice = 1000000L;
+        String keyword = "Test";
+        String sort = "조회순";
 
         // WHEN
         Page<ProductResponseDetailDto> list = productRepository.mainFilter(pageable, category, stock, minPrice, maxPrice, keyword, sort);
@@ -161,23 +174,5 @@ class ProductServiceTest {
 
         // THEN
         assertThat(product1).isEqualTo(product2);
-    }
-
-    @Test
-    @DisplayName("상품 주문")
-    void orderProduct() {
-
-        // GIVEN
-        Product product = productRepository.findByProductId(1L); // Stock = 10
-        User user = userRepository.findByUserId(1L);
-        Long orderNum = 3L;
-
-        // WHEN
-        product.getProductInfo().order(orderNum);
-        Order order = new Order(product, orderNum, user);
-
-        // THEN
-        assertThat(order.getProduct().getProductInfo().getStock()).isEqualTo(7L);
-
     }
 }

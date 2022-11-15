@@ -5,5 +5,4 @@ import product.entity.product.ProductInfo;
 
 public interface ProductInfoRepository extends JpaRepository <ProductInfo, Long> {
 
-    ProductInfo findByProductId(Long productId);
 }

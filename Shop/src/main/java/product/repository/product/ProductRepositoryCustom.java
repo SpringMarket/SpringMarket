@@ -12,4 +12,6 @@ public interface ProductRepositoryCustom {
     Page<ProductResponseDetailDto> mainFilter(Pageable pageable, String category, Boolean stock, Long minPrice, Long maxPrice, String keyword, String sort);
     Product detail(Long productId);
     List<Product> warmup(Long categoryId);
+    void addView(Long productId, Long viewCnt);
+    Long getView(Long productId);
 }
