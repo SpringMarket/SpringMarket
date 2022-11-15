@@ -5,23 +5,25 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import product.dto.order.MyPageResponseDto;
+import product.dto.order.OrderRequestDto;
+import product.dto.product.ProductResponseDetailDto;
 import product.entity.order.Order;
 import product.entity.product.Product;
-import product.entity.product.ProductInfo;
-import product.entity.product.Stock;
 import product.entity.user.User;
 import product.exception.ExceptionType;
 import product.exception.RequestException;
 import product.repository.order.OrderRepository;
-import product.repository.product.ProductInfoRepository;
 import product.repository.product.ProductRepository;
-import product.repository.product.StockRepository;
 import product.repository.user.UserRepository;
 import product.service.RedisService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static product.exception.ExceptionType.*;
 
@@ -55,8 +57,6 @@ public class OrderService {
 
         // productInfo 변경
         product.getProductInfo().order(orderNum,user.getAge());
-
-
     }
 
     // 주문 목록 조회
@@ -102,4 +102,5 @@ public class OrderService {
         // productInfo 변경
         product.getProductInfo().order(order.getOrderNum(),user.getAge());
     }
+
 }

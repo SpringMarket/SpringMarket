@@ -11,17 +11,18 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+
 import static product.response.Response.success;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/order")
+@RequestMapping("/api/product")
 public class OrderController {
 
     private final OrderService orderService;
 
     // 상품 주문
-    @PostMapping
+    @PostMapping("/order")
     public Response order(@RequestBody OrderRequestDto dto) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -32,7 +33,7 @@ public class OrderController {
     }
 
     // 주문 목록 조회
-    @GetMapping
+    @GetMapping("/list")
     public Response myPage(@PageableDefault(size = 10) Pageable pageable) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

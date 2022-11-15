@@ -35,10 +35,8 @@ public class Product {
     @Column(nullable = false)
     private Long price;
 
-
     @DateTimeFormat // 2022-11-08 15:07:26:1252156
     private LocalDateTime createdTime;
-
 
     @PrePersist
     public void createDate() {

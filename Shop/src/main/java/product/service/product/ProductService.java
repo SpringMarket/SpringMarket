@@ -10,15 +10,16 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import product.dto.product.ProductCreateDto;
 import product.dto.product.ProductResponseDetailDto;
 import product.dto.product.ProductResponseDto;
 import product.entity.order.Order;
-import product.entity.product.Product;
+import product.entity.product.*;
 import product.entity.user.User;
 import product.exception.ExceptionType;
 import product.exception.RequestException;
 import product.repository.order.OrderRepository;
-import product.repository.product.ProductRepository;
+import product.repository.product.*;
 import product.repository.user.UserRepository;
 import product.service.RedisService;
 
@@ -33,8 +34,12 @@ import java.util.List;
 public class ProductService {
     private final ProductRepository productRepository;
     private final RedisService redisService;
-
     private final RedisTemplate<String, String> redisTemplate;
+    private final CategoryRepository categoryRepository;
+    private final ProductInfoRepository productInfoRepository;
+    private final StockRepository stockRepository;
+    private final ViewRepository viewRepository;
+
 
 
     /*@Value("${cloud.aws.s3.bucket}")
@@ -55,7 +60,7 @@ public class ProductService {
         }
 
         for (Product product : warmupProduct) {
-            redisService.setProduct("product::" + product.getProductId(), ProductResponseDetailDto.toDto(product), Duration.ofDays(1));
+            redisService.setProduct("product::" + product.getProductId(), ProductResponseDto.toDto(product), Duration.ofDays(1));
         }
 
         log.info("..... Success!");
@@ -84,16 +89,71 @@ public class ProductService {
         return ProductResponseDto.toDto(product);
     }
 
-    // 조회수 ++
-    // productView::1 , 1
+
+    // 상품 조회수 추가
     public void countView(Long productId) {
         String key = "productView::" + productId;
 
+        log.info("View Start");
+
         ValueOperations<String, String> values = redisTemplate.opsForValue(); // Redis String 자료구조 저장소 선언
 
-        if(values.get(key) == null) redisService.setView(key, String.valueOf(productRepository.getView(productId)), Duration.ofMinutes(15));
+        if(values.get(key) == null) {
+            redisService.setView(key, String.valueOf(productRepository.getView(productId)), Duration.ofMinutes(15));
+            values.increment(key);
+        }
         else values.increment(key);
 
         log.info("View" + values.get(key));
+    }
+
+
+    // 상품 데이터 생성 :: 더미
+    public void create(ProductCreateDto pc, Authentication authentication){
+
+        Category category = Category.builder()
+                .categoryId(1L)
+                .category("Test")
+                .build();
+
+        categoryRepository.save(category);
+
+        ProductInfo productInfo = ProductInfo.builder()
+                .ten(10L)
+                .twenty(20L)
+                .thirty(30L)
+                .over_forty(40L)
+                .build();
+
+        productInfoRepository.save(productInfo);
+
+        Stock stock = Stock.builder()
+//                .stock_id(1L)
+                .stock(10L)
+                .build();
+
+        stockRepository.save(stock);
+
+        View view = View.builder()
+                // Default viewId = 1L
+                .view(50L)
+                .build();
+
+        viewRepository.save(view);
+
+        Product product = Product.builder()
+                // Default productId = 1L
+                .title(pc.getTitle())
+                .content(pc.getContent())
+                .photo(pc.getPhoto())
+                .price(pc.getPrice())
+                .category(category)
+                .productInfo(productInfo)
+                .stock(stock)
+                .view(view)
+                .build();
+
+        productRepository.save(product);
+
     }
 }

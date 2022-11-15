@@ -18,29 +18,15 @@ import javax.validation.Valid;
 import static product.response.Response.success;
 
 
-//@Controller
-//@Slf4j
-////////////////////////////////////////////
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api")
 public class AuthController {
 
     private final AuthService authService;
-//
-//    @RequestMapping(value = "/signup", method = RequestMethod.GET)
-//    public String signup() {
-//        log.info("회원가입 페이지로 이동");
-//        return "signup.html";
-//    }
-//
-//    @RequestMapping(value = "/login", method = RequestMethod.GET)
-//    public String login() {
-//        log.info("로그인 페이지로 이동");
-//        return "login.html";
-//    }
 
-///////////////////////////////////////////////////////////////////////////////////////
+
     @PostMapping("/signup")
     public Response signup(@Valid @RequestBody SignUpRequestDto signUpRequestDto) {
         authService.signup(signUpRequestDto);

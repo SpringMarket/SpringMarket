@@ -1,8 +1,7 @@
 package product.service;
 
 import org.springframework.scheduling.annotation.Scheduled;
-import product.dto.product.ProductResponseDetailDto;
-import product.entity.product.Product;
+import product.dto.product.ProductResponseDto;
 import product.exception.ExceptionType;
 import product.exception.RequestException;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Service;
 import product.repository.product.ProductRepository;
 
 import java.time.Duration;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -20,7 +19,8 @@ import java.util.Set;
 @Service
 public class RedisService {
     private final RedisTemplate<String, String> redisTemplate;
-    private final RedisTemplate<String, ProductResponseDetailDto> redisTemplateDto;
+    private final RedisTemplate<String, List<Long>> redisTemplate2;
+    private final RedisTemplate<String, ProductResponseDto> redisTemplateDto;
     private final ProductRepository productRepository;
 
     public void setView(String key, String data, Duration duration) {
@@ -44,14 +44,20 @@ public class RedisService {
         }
     }
 
-    public void setProduct(String key, ProductResponseDetailDto data, Duration duration) {
-        ValueOperations<String, ProductResponseDetailDto> values = redisTemplateDto.opsForValue();
+    public void setProduct(String key, ProductResponseDto data, Duration duration) {
+        ValueOperations<String, ProductResponseDto> values = redisTemplateDto.opsForValue();
         values.set(key, data, duration);
     }
 
     public void setValues(String key, String data, Duration duration) {
         ValueOperations<String, String> values = redisTemplate.opsForValue();
         values.set(key, data, duration);
+    }
+
+    public void setCart(String key, List<Long> list) {
+        ValueOperations<String, List<Long>> values = redisTemplate2.opsForValue();
+
+        values.set(key, list);
     }
 
     public String getValues(String key) {

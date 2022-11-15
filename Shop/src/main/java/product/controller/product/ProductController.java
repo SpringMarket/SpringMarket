@@ -3,7 +3,10 @@ package product.controller.product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import product.dto.product.ProductCreateDto;
 import product.response.Response;
 import product.service.product.ProductService;
 
@@ -40,9 +43,16 @@ public class ProductController {
     // 상세 페이지
     @GetMapping("/products/{id}")
     public Response findProduct(@PathVariable Long id) {
-
         productService.countView(id);
         return success(productService.findProduct(id));
-
     }
+
+    // 상품 데이터 생성 :: 더미
+    @PostMapping("/create")
+    public Response createProduct(@RequestBody ProductCreateDto productCreateDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        productService.create(productCreateDto, authentication);
+        return success();
+    }
+
 }

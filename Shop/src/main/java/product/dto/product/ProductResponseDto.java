@@ -1,5 +1,6 @@
 package product.dto.product;
 
+import lombok.NoArgsConstructor;
 import product.entity.product.Product;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @NotBlank
 public class ProductResponseDto {
     private Long productId;
@@ -17,6 +19,7 @@ public class ProductResponseDto {
     private String photo;
     private Long price;
     private String createdTime;
+
     public static ProductResponseDto toDto(Product product){
         return new ProductResponseDto(
                 product.getProductId(),
