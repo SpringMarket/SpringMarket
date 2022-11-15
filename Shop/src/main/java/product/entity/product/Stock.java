@@ -14,7 +14,6 @@ import javax.persistence.*;
 public class Stock {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long stock_id;
     @Column(nullable = false)
     private Long stock;
@@ -22,6 +21,5 @@ public class Stock {
     public void order(Long orderNum){
         this.stock -= orderNum;
     }
-
     public void cancel(Long orderNum) { this.stock += orderNum;}
 }

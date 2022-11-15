@@ -17,7 +17,6 @@ import javax.persistence.*;
 public class ProductInfo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productInfoId;
 
     @Column(nullable = false)
