@@ -111,14 +111,22 @@ public class ProductService {
     // 상품 데이터 생성 :: 더미
     public void create(ProductCreateDto pc, Authentication authentication){
 
-        Category category = Category.builder()
-                .categoryId(1L)
+        Product product = Product.builder()
+                .title(pc.getTitle())
+                .content(pc.getContent())
+                .photo(pc.getPhoto())
+                .price(pc.getPrice())
+                .build();
+
+        Category category = Category.builder() // 카테고리는 인덱스로 가져오기
+                .categoryId(product.getProductId())
                 .category("Test")
                 .build();
 
         categoryRepository.save(category);
 
         ProductInfo productInfo = ProductInfo.builder()
+                .productInfoId(product.getProductId())
                 .ten(10L)
                 .twenty(20L)
                 .thirty(30L)
@@ -128,30 +136,23 @@ public class ProductService {
         productInfoRepository.save(productInfo);
 
         Stock stock = Stock.builder()
-//                .stock_id(1L)
+                .stock_id(product.getProductId())
                 .stock(10L)
                 .build();
 
         stockRepository.save(stock);
 
         View view = View.builder()
-                // Default viewId = 1L
+                .view_id(product.getProductId())
                 .view(50L)
                 .build();
 
         viewRepository.save(view);
 
-        Product product = Product.builder()
-                // Default productId = 1L
-                .title(pc.getTitle())
-                .content(pc.getContent())
-                .photo(pc.getPhoto())
-                .price(pc.getPrice())
-                .category(category)
-                .productInfo(productInfo)
-                .stock(stock)
-                .view(view)
-                .build();
+        product.setCategory(category);
+        product.setProductInfo(productInfo);
+        product.setView(view);
+        product.setStock(stock);
 
         productRepository.save(product);
 

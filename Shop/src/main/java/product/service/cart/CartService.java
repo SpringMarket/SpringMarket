@@ -31,6 +31,8 @@ public class CartService {
     @Transactional
     public String addCart(Long productId, Authentication authentication){
 
+        if (productRepository.findByProductId(productId) == null) return "선택하신 상품이 존재하지 않습니다.";
+
         String key = "cart::" + authentication.getName(); // key : [cart:jeyun@naver.com] value : [1,2,3,4]
 
         ValueOperations<String, List<Long>> values = redisTemplate.opsForValue();
@@ -93,7 +95,7 @@ public class CartService {
     @Transactional
     public String orderCart(Authentication authentication, List<OrderRequestDto> list) {
 
-        if (list == null) return "장바구니에 상품이 없습니다.";
+        if (list == null) return "선택된 상품이 없습니다.";
 
         String key = "cart::" + authentication.getName();
         ValueOperations<String, List<Long>> values = redisTemplate.opsForValue();

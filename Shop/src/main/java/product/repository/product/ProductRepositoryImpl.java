@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import product.dto.product.ProductResponseDetailDto;
 import product.entity.product.Product;
 import product.entity.product.QProduct;
+import product.entity.product.QView;
 
 import java.util.List;
 
@@ -21,6 +22,8 @@ import java.util.List;
 public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private final JPAQueryFactory queryFactory;
     QProduct qProduct = QProduct.product;
+
+    QView qView = QView.view1;
 
     @Override
     public Page<ProductResponseDetailDto> mainFilter(Pageable pageable, String category, Boolean stock,
@@ -59,9 +62,9 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     @Override
     public void addView(Long productId, Long viewCnt) {
         queryFactory
-                .update(qProduct)
-                .set(qProduct.view.view, viewCnt)
-                .where(qProduct.productId.eq(productId))
+                .update(qView)
+                .set(qView.view, viewCnt)
+                .where(qView.view_id.eq(productId))
                 .execute();
     }
     @Override
@@ -71,9 +74,6 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .where(qProduct.productId.eq(productId))
                 .fetchOne();
     }
-
-
-
 
     private BooleanExpression categoryFilter(String category) {
         if (StringUtils.isNullOrEmpty(category)) return null;

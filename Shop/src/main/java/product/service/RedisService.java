@@ -1,6 +1,9 @@
 package product.service;
 
+import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.transaction.annotation.Transactional;
 import product.dto.product.ProductResponseDto;
 import product.exception.ExceptionType;
 import product.exception.RequestException;
@@ -17,6 +20,7 @@ import java.util.Set;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class RedisService {
     private final RedisTemplate<String, String> redisTemplate;
     private final RedisTemplate<String, List<Long>> redisTemplate2;
@@ -28,9 +32,12 @@ public class RedisService {
         values.set(key, data, duration);
     }
 
-    @Scheduled(cron = "0 0/10 * * * ?")
+    @Scheduled(cron = "0 0/1 * * * ?")
+    @Transactional
     public void UpdateViewRDS() {
         Set<String> redisKeys = redisTemplate.keys("productView*");
+
+        log.info("Starting View Update !");
 
         assert redisKeys != null;
 
@@ -42,6 +49,7 @@ public class RedisService {
 
             redisTemplate.delete(data);
         }
+        log.info("Update View !");
     }
 
     public void setProduct(String key, ProductResponseDto data, Duration duration) {
