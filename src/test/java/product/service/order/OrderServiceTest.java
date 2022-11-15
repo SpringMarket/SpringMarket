@@ -51,7 +51,14 @@ class OrderServiceTest {
     @BeforeAll
     void setUp(){
 
-        Category category = Category.builder()
+        Product product = Product.builder()
+                .title("Test")
+                .content("Test")
+                .photo("Test")
+                .price(10000L)
+                .build();
+
+        Category category = Category.builder() // 카테고리는 인덱스로 가져오기
                 .categoryId(1L)
                 .category("Test")
                 .build();
@@ -59,7 +66,7 @@ class OrderServiceTest {
         categoryRepository.save(category);
 
         ProductInfo productInfo = ProductInfo.builder()
-                // Default productInfoId = 1L
+                .productInfoId(1L)
                 .ten(10L)
                 .twenty(20L)
                 .thirty(30L)
@@ -69,42 +76,25 @@ class OrderServiceTest {
         productInfoRepository.save(productInfo);
 
         Stock stock = Stock.builder()
-                // Default stockId = 1L
+                .stock_id(1L)
                 .stock(10L)
                 .build();
 
         stockRepository.save(stock);
 
         View view = View.builder()
-                // Default viewId = 1L
+                .view_id(1L)
                 .view(50L)
                 .build();
 
         viewRepository.save(view);
 
-        Product product = Product.builder()
-                // Default productId = 1L
-                .title("Test")
-                .content("Test")
-                .photo("Test")
-                .price(10000L)
-                .category(category)
-                .productInfo(productInfo)
-                .stock(stock)
-                .view(view)
-                .build();
+        product.setCategory(category);
+        product.setProductInfo(productInfo);
+        product.setView(view);
+        product.setStock(stock);
 
         productRepository.save(product);
-
-        User user = User.builder()
-                .email("jeyun")
-                .password("1234")
-                .age("20대")
-                .authority(Authority.ROLE_USER)
-                .build();
-
-        userRepository.save(user);
-
     }
 
     @Test
