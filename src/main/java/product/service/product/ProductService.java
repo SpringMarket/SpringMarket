@@ -94,7 +94,7 @@ public class ProductService {
     public void countView(Long productId) {
         String key = "productView::" + productId;
 
-        log.info("View Start");
+        log.info("View Start");  // productView::1 -> 1
 
         ValueOperations<String, String> values = redisTemplate.opsForValue(); // Redis String 자료구조 저장소 선언
 

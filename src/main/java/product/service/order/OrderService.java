@@ -47,16 +47,17 @@ public class OrderService {
         Product product = productRepository.findByProductId(productId);
         if (product == null) throw new RequestException(ExceptionType.NOT_FOUND_EXCEPTION);
 
+        // 재고 부족 예외처리
         if(product.getStock().getStock()< orderNum) throw new RequestException(ExceptionType.OUT_OF_STOCK_EXCEPTION);
 
-        // 재고 수 추가
+        // 상품 재고 차감
         product.getStock().order(orderNum);
 
-        Order order = new Order(product,orderNum, user);
-        orderRepository.save(order);
+        // 상품 정보 변경
+        product.getProductInfo().PlusPreference(orderNum,user.getAge());
 
-        // productInfo 변경
-        product.getProductInfo().order(orderNum,user.getAge());
+        // 주문 데이터 저장
+        orderRepository.save(new Order(product,orderNum, user));
     }
 
     // 주문 목록 조회
@@ -79,28 +80,24 @@ public class OrderService {
         Order order = orderRepository.findByOrderId(orderId);
         if (order == null) throw new RequestException(ExceptionType.NOT_FOUND_EXCEPTION);
 
+        // 로그인된 사용자와 주문 테이블에 저장된 사용자 일치여부 조회
         if (!user.equals(order.getUser())) {
             throw new RequestException(ACCESS_DENIED_EXCEPTION);
         }
 
+        // 주문 상태에 따른 주문 취소 실패 처리
         if (order.getOrderStatus().equals("배송완료") || order.getOrderStatus().equals("주문취소")) {
             throw new RequestException(ORDER_FINISH_EXCEPTION);
         }
 
-        Product product = productRepository.findByProductId(order.getProduct().getProductId());
-        if (product == null) throw new RequestException(ExceptionType.NOT_FOUND_EXCEPTION);
-
-
-        if (product.getStock().getStock() == null) throw new RequestException(ExceptionType.NOT_FOUND_EXCEPTION);
-
         // 재고 수 변경
-        product.getStock().cancel(order.getOrderNum());
+        order.getProduct().getStock().cancel(order.getOrderNum());
 
         // 주문 취소로 status 변경
         order.cancel();
 
         // productInfo 변경
-        product.getProductInfo().order(order.getOrderNum(),user.getAge());
+        order.getProduct().getProductInfo().MinusPreference(order.getOrderNum(),user.getAge());
     }
 
 }

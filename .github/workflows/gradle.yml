@@ -1,51 +1,40 @@
 # This is a basic workflow to help you get started with Actions
 
 name: shop-stalk
+
 on:
   push:
     branches:
       - main
 
-# Controls when the workflow will run
-#on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  #push:
-    #branches: [ "main" ] # main에 push가 될 때 CD가 일어나도록 핸들링
-  #pull_request:
-    #branches: [ "main" ]
 
-  #Allows you to run this workflow manually from the Actions tab
-  #workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
 
       - name: Checkout
-        uses: actions/checkout@v2.4.2
+        uses: actions/checkout@v2
 
-      
+
       - name: Set up JDK 11
-        uses: actions/setup-java@v3.3.0 
+        uses: actions/setup-java@v2
         with:
           distribution: 'temurin'
-          java-version: 11
+          java-version: '11'
 
 
       - name: Grant execute permission for gradlew
+        working-directory: ./
         run: chmod +x ./gradlew
+        shell: bash
 
 
       - name: Build with Gradle
-        uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
-        with:
-          arguments: clean build -x test
+        working-directory: ./
+        run: ./gradlew build -x test
+        shell: bash
 
 
       - name: Get current time

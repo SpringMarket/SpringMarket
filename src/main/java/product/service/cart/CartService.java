@@ -34,7 +34,6 @@ public class CartService {
         if (productRepository.findByProductId(productId) == null) return "선택하신 상품이 존재하지 않습니다.";
 
         String key = "cart::" + authentication.getName(); // key : [cart:jeyun@naver.com] value : [1,2,3,4]
-
         ValueOperations<String, List<Long>> values = redisTemplate.opsForValue();
 
         if(values.get(key) == null) {
@@ -44,9 +43,7 @@ public class CartService {
         }
         else {
             List<Long> list = values.get(key);
-
             if (list.contains(productId)) return "이미 장바구니에 포함된 상품입니다.";
-
             list.add(productId);
             values.set(key, list);
         }
@@ -57,15 +54,12 @@ public class CartService {
     public String deleteCart(Long productId, Authentication authentication){
 
         String key = "cart::" + authentication.getName();
-
         ValueOperations<String, List<Long>> values = redisTemplate.opsForValue();
 
         if(values.get(key) == null) return "장바구니에 상품이 존재하지 않습니다.";
         else {
             List<Long> list = values.get(key);
-
-            if (!list.contains(productId)) return "장바구니에 상품이 존재하지 않습니다.";
-
+            if (!list.contains(productId)) return "장바구니에 선택하신 상품이 존재하지 않습니다.";
             list.remove(productId);
             values.set(key, list);
         }
@@ -77,14 +71,13 @@ public class CartService {
         String key = "cart::" + authentication.getName();
 
         ValueOperations<String, List<Long>> values = redisTemplate.opsForValue();
-
         List<ProductResponseDetailDto> dtos = new ArrayList<>();
 
         if(values.get(key) == null) return null;
         else {
             List<Long> list = values.get(key);
-            for (int k=0; k<list.size(); k++){
-                ProductResponseDetailDto dto = ProductResponseDetailDto.toDto(productRepository.detail(list.get(k)));
+            for (Long cart : list) {
+                ProductResponseDetailDto dto = ProductResponseDetailDto.toDto(productRepository.detail(cart));
                 dtos.add(dto);
             }
         }
@@ -109,5 +102,4 @@ public class CartService {
         }
         return "주문이 성공적으로 진행되었습니다.";
     }
-
 }
