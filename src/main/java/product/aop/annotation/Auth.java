@@ -1,4 +1,4 @@
-package product.aop.annotation;
-
-public @interface Auth {
-}
+//package product.aop.annotation;
+//
+//public @interface Auth {
+//}

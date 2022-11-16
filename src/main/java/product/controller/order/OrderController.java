@@ -1,7 +1,6 @@
 package product.controller.order;
 
 
-import product.aop.annotation.Auth;
 import product.dto.order.OrderRequestDto;
 import product.response.Response;
 import product.service.order.OrderService;
@@ -23,7 +22,6 @@ public class OrderController {
     private final OrderService orderService;
 
     // 상품 주문
-    @Auth
     @PostMapping("/order")
     public Response order(@RequestBody OrderRequestDto dto) {
 
