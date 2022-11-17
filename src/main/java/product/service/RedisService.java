@@ -32,7 +32,7 @@ public class RedisService {
         values.set(key, data, duration);
     }
 
-    @Scheduled(cron = "0 0/1 * * * ?")
+    @Scheduled(cron = "0 0/10 * * * ?")
     @Transactional
     public void UpdateViewRDS() {
         Set<String> redisKeys = redisTemplate.keys("productView*");
@@ -43,7 +43,7 @@ public class RedisService {
 
         for (String data : redisKeys) {
             Long productId = Long.parseLong(data.split("::")[1]);
-            Long viewCnt = Long.parseLong(Objects.requireNonNull(redisTemplate.opsForValue().get(data)));
+            int viewCnt = Integer.parseInt(Objects.requireNonNull(redisTemplate.opsForValue().get(data)));
 
             productRepository.addView(productId, viewCnt);
 

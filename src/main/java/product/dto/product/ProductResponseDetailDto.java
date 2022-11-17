@@ -18,7 +18,7 @@ public class ProductResponseDetailDto {
     private String photo;
     private Long price;
     private Long stock;
-    private Long view;
+    private int view;
     private String createdTime;
     private Long categoryId;
 

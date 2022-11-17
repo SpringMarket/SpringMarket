@@ -21,5 +21,5 @@ public class View {
     private Long view_id;
 
     @Column(nullable = false)
-    private Long view;
+    private int view;
 }

@@ -60,7 +60,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .fetch();
     }
     @Override
-    public void addView(Long productId, Long viewCnt) {
+    public void addView(Long productId, int viewCnt) {
         queryFactory
                 .update(qView)
                 .set(qView.view, viewCnt)
@@ -68,7 +68,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .execute();
     }
     @Override
-    public Long getView(Long productId) {
+    public Integer getView(Long productId) {
         return queryFactory.select(qProduct.view.view)
                 .from(qProduct)
                 .where(qProduct.productId.eq(productId))

@@ -94,7 +94,7 @@ public class ProductService {
         ValueOperations<String, String> values = redisTemplate.opsForValue(); // Redis String 자료구조 저장소 선언
 
         if(values.get(key) == null) {
-            redisService.setView(key, String.valueOf(productRepository.getView(productId)), Duration.ofMinutes(15));
+            redisService.setView(key, String.valueOf(productRepository.getView(productId)), Duration.ofMinutes(35));
             values.increment(key);
         }
         else values.increment(key);
@@ -133,7 +133,7 @@ public class ProductService {
 
         View view = View.builder()
                 .view_id(1L)
-                .view(50L)
+                .view(50)
                 .build();
 
         viewRepository.save(view);
