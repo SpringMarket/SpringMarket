@@ -107,7 +107,7 @@ class OrderServiceTest {
         Product product = productRepository.findByProductId(1L); // Stock : 10
         User user = userRepository.findByUserId(1L);
 
-        product.getProductInfo().order(orderNum, user.getAge()); // 주문 메소드
+        product.getProductInfo().PlusPreference(orderNum, user.getAge()); // 주문 메소드
 
         Order order = new Order(product, orderNum, user);
         orderRepository.save(order);  // 주문 저장
@@ -129,7 +129,7 @@ class OrderServiceTest {
         Long orderNum = 3L;
 
         // WHEN
-        product.getProductInfo().order(orderNum, user.getAge());
+        product.getProductInfo().PlusPreference(orderNum, user.getAge());
         product.getStock().order(orderNum);
 
         Order order = new Order(product, orderNum, user);
@@ -148,7 +148,7 @@ class OrderServiceTest {
         Product product = productRepository.findByProductId(1L); // 재고 : 10
         User user = userRepository.findByUserId(1L);
 
-        product.getProductInfo().order(orderNum, user.getAge()); // 주문 메소드  // 재고 : 7, 상태 : 배송중
+        product.getProductInfo().PlusPreference(orderNum, user.getAge()); // 주문 메소드  // 재고 : 7, 상태 : 배송중
         Order order = new Order(product, orderNum, user); // 주문 저장
 
         Product productCheck = productRepository.findByProductId(order.getProduct().getProductId()); // 주문된 상품 정보
@@ -167,7 +167,7 @@ class OrderServiceTest {
 
         // -> 위 3개의 예외처리가 잘 실행되는지 테스트코드 작성해야합니다.
 
-        product.getProductInfo().cancel(order.getOrderNum(), user.getAge()); // 재고 상태 변경
+        product.getProductInfo().MinusPreference(order.getOrderNum(), user.getAge()); // 재고 상태 변경
         order.cancel(); // 진행 상황 변경
 
         // THEN
