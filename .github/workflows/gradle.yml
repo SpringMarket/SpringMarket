@@ -1,4 +1,4 @@
-# This is a basic workflow to help you get started with Actions
+# # This is a basic workflow to help you get started with Actions
 
 name: spring-market
 
@@ -44,7 +44,7 @@ jobs:
           format: YYYY-MM-DDTHH-mm-ss # 다른 포맷으로 변경 가능
           utcOffset: "+09:00" ## 한국시간에 맞추기 위함
 
-      
+
       # Gradle build를 통해 만들어진 JAR를 beanstalk에 배포하기 위한 ZIP 파일로 만드는 것
       - name: Generate deployment package
         run: |
@@ -54,7 +54,7 @@ jobs:
           cp -r .ebextensions deploy/.ebextensions
           cp -r .platform deploy/.platform
           cd deploy && zip -r deploy.zip . # Procfile, .ebextensions, .playform 포함하여 zip 생성
-
+      
 
       # Beanstalk Deploy 플러그인 사용
       - name: Beanstalk Deploy
