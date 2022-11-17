@@ -1,6 +1,6 @@
 package product.config.redis;
 
-import product.dto.product.ProductResponseDetailDto;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -22,10 +22,13 @@ import java.time.Duration;
 @EnableRedisRepositories
 public class RedisConfig {
 
+    @Value("${spring.redis.host}")
+    private String host;
+    @Value("${spring.redis.port}")
+    private int port;
+
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        int port = 6379;
-        String host = "localhost";
         return new LettuceConnectionFactory(host, port);
     }
 
