@@ -14,11 +14,9 @@ public enum ExceptionType {
     LOGIN_FAIL_EXCEPTION(HttpStatus.UNAUTHORIZED, "유저 정보가 일치하지 않습니다."),
     ALREADY_EXISTS_EXCEPTION(HttpStatus.CONFLICT, "이미 값이 존재합니다."),
     ACCESS_DENIED_EXCEPTION(HttpStatus.FORBIDDEN, "접근 권한이 없습니다."),
-
     ORDER_FINISH_EXCEPTION(HttpStatus.BAD_REQUEST , "주문 완료된 상품은 취소가 불가능합니다."),
-
     NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "요청하신 자료를 찾을 수 없습니다."),
-
+    ALREADY_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "요청하신 자료를 찾을 수 없습니다."),
     OUT_OF_STOCK_EXCEPTION(HttpStatus.NOT_FOUND, "재고가 부족합니다.");
 
 

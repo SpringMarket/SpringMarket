@@ -13,14 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import product.dto.product.ProductCreateDto;
 import product.dto.product.ProductResponseDetailDto;
 import product.dto.product.ProductResponseDto;
-import product.entity.order.Order;
 import product.entity.product.*;
-import product.entity.user.User;
-import product.exception.ExceptionType;
-import product.exception.RequestException;
-import product.repository.order.OrderRepository;
 import product.repository.product.*;
-import product.repository.user.UserRepository;
 import product.service.RedisService;
 
 import java.time.Duration;
@@ -40,10 +34,6 @@ public class ProductService {
     private final StockRepository stockRepository;
     private final ViewRepository viewRepository;
 
-
-
-    /*@Value("${cloud.aws.s3.bucket}")
-    String bucket;*/
 
 
     // Warm UP -> Named Post Put !

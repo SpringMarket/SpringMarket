@@ -33,8 +33,8 @@ public class CartController {
     public Response addCart(@PathVariable Long productId) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        return success(cartService.addCart(productId, authentication));
+        cartService.addCart(productId, authentication);
+        return success();
     }
 
     // 카트에서 삭제
@@ -42,8 +42,8 @@ public class CartController {
     public Response deleteCart(@PathVariable Long productId) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        return success(cartService.deleteCart(productId, authentication));
+        cartService.deleteCart(productId, authentication);
+        return success();
     }
 
     // 카트 주문
@@ -51,7 +51,7 @@ public class CartController {
     public Response orderCart(@RequestBody List<OrderRequestDto> list) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        return success(cartService.orderCart(authentication, list));
+        cartService.orderCart(authentication, list);
+        return success();
     }
 }

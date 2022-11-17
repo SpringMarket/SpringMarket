@@ -45,10 +45,10 @@ public class OrderService {
                 .orElseThrow(() -> new RequestException(NOT_FOUND_EXCEPTION));
 
         Product product = productRepository.findByProductId(productId);
-        if (product == null) throw new RequestException(ExceptionType.NOT_FOUND_EXCEPTION);
+        if (product == null) throw new RequestException(NOT_FOUND_EXCEPTION);
 
         // 재고 부족 예외처리
-        if(product.getStock().getStock()< orderNum) throw new RequestException(ExceptionType.OUT_OF_STOCK_EXCEPTION);
+        if(product.getStock().getStock()< orderNum) throw new RequestException(OUT_OF_STOCK_EXCEPTION);
 
         // 상품 재고 차감
         product.getStock().order(orderNum);
@@ -78,7 +78,7 @@ public class OrderService {
                 .orElseThrow(() -> new RequestException(NOT_FOUND_EXCEPTION));
 
         Order order = orderRepository.findByOrderId(orderId);
-        if (order == null) throw new RequestException(ExceptionType.NOT_FOUND_EXCEPTION);
+        if (order == null) throw new RequestException(NOT_FOUND_EXCEPTION);
 
         // 로그인된 사용자와 주문 테이블에 저장된 사용자 일치여부 조회
         if (!user.equals(order.getUser())) {
