@@ -44,11 +44,6 @@ dependencies {
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
 
-    // Swagger
-    implementation 'io.springfox:springfox-boot-starter:3.0.0'
-
-    // AWS S3
-    implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.2'
 
     // REDIS
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
@@ -57,11 +52,11 @@ dependencies {
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
 
-    // JSON
-    implementation 'org.json:json:20220924'
-
     // AOP
     implementation 'org.springframework.boot:spring-boot-starter-aop'
+
+    // ACTUATOR
+//    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
 
 }
