@@ -11,7 +11,6 @@ import javax.persistence.Table;
 
 @Getter
 @NoArgsConstructor
-@Table(name = "refresh_token")
 @Entity
 public class RefreshToken {
 

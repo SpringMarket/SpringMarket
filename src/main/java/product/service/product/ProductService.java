@@ -106,12 +106,6 @@ public class ProductService {
     // 상품 데이터 생성 :: 더미
     public void create(ProductCreateDto pc){
 
-        Product product = Product.builder()
-                .title(pc.getTitle())
-                .content(pc.getContent())
-                .photo(pc.getPhoto())
-                .price(pc.getPrice())
-                .build();
 
         Category category = Category.builder() // 카테고리는 인덱스로 가져오기
                 .categoryId(1L)
@@ -121,7 +115,7 @@ public class ProductService {
         categoryRepository.save(category);
 
         ProductInfo productInfo = ProductInfo.builder()
-                .productInfoId(product.getProductId())
+                .productInfoId(1L)
                 .ten(10L)
                 .twenty(20L)
                 .thirty(30L)
@@ -131,23 +125,29 @@ public class ProductService {
         productInfoRepository.save(productInfo);
 
         Stock stock = Stock.builder()
-                .stock_id(product.getProductId())
+                .stock_id(1L)
                 .stock(10L)
                 .build();
 
         stockRepository.save(stock);
 
         View view = View.builder()
-                .view_id(product.getProductId())
+                .view_id(1L)
                 .view(50L)
                 .build();
 
         viewRepository.save(view);
 
-        product.setCategory(category);
-        product.setProductInfo(productInfo);
-        product.setView(view);
-        product.setStock(stock);
+        Product product = Product.builder()
+                .title(pc.getTitle())
+                .content(pc.getContent())
+                .photo(pc.getPhoto())
+                .price(pc.getPrice())
+                .category(category)
+                .productInfo(productInfo)
+                .view(view)
+                .stock(stock)
+                .build();
 
         productRepository.save(product);
 
