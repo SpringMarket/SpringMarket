@@ -54,5 +54,4 @@ public class ProductController {
         productService.create(productCreateDto, authentication);
         return success();
     }
-
 }
