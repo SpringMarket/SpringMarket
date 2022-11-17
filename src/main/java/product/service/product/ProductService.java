@@ -14,12 +14,16 @@ import product.dto.product.ProductCreateDto;
 import product.dto.product.ProductResponseDetailDto;
 import product.dto.product.ProductResponseDto;
 import product.entity.product.*;
+import product.exception.ExceptionType;
+import product.exception.RequestException;
 import product.repository.product.*;
 import product.service.RedisService;
 
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+
+import static product.exception.ExceptionType.*;
 
 
 @Slf4j
@@ -75,6 +79,7 @@ public class ProductService {
 
         log.info("Search Once Log Start....");
         Product product = productRepository.detail(id);
+        if (product == null ) throw new RequestException(NOT_FOUND_EXCEPTION);
 
         return ProductResponseDto.toDto(product);
     }
@@ -109,8 +114,8 @@ public class ProductService {
                 .build();
 
         Category category = Category.builder() // 카테고리는 인덱스로 가져오기
-                .categoryId(product.getProductId())
-                .category("Test")
+                .categoryId(1L)
+                .category("상의")
                 .build();
 
         categoryRepository.save(category);
