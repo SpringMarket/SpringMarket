@@ -99,7 +99,7 @@ public class ProductService {
 
 
     // 상품 데이터 생성 :: 더미
-    public void create(ProductCreateDto pc, Authentication authentication){
+    public void create(ProductCreateDto pc){
 
         Product product = Product.builder()
                 .title(pc.getTitle())

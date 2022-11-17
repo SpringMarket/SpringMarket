@@ -11,7 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
@@ -33,13 +33,6 @@ public class Order {
         this.orderTime = LocalDateTime.now();
     }
 
-    public String changeStatus(Order order){
-        if (LocalDateTime.now().isBefore(order.getOrderTime().plusDays(7))) {
-            this.orderStatus = "배송완료";
-        }
-        return orderStatus;
-    }
-
     @Column
     private String orderStatus;
 
@@ -52,6 +45,15 @@ public class Order {
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
+
+
+    public String changeStatus(Order order){
+        if (LocalDateTime.now().isBefore(order.getOrderTime().plusDays(7))) {
+            this.orderStatus = "배송완료";
+        }
+        return orderStatus;
+    }
+
 
     public Order(Product product, Long orderNum, User user) {
         this.orderNum = orderNum;

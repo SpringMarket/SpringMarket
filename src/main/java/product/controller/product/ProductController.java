@@ -50,8 +50,7 @@ public class ProductController {
     // 상품 데이터 생성 :: 더미
     @PostMapping("/create")
     public Response createProduct(@RequestBody ProductCreateDto productCreateDto) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        productService.create(productCreateDto, authentication);
+        productService.create(productCreateDto);
         return success();
     }
 }
