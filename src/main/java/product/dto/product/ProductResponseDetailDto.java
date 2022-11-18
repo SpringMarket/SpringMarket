@@ -22,15 +22,18 @@ public class ProductResponseDetailDto {
     private String createdTime;
     private Long categoryId;
 
-    public ProductResponseDetailDto(Product product) {
+    public ProductResponseDetailDto(Product product, Long stock, int view, Long categoryId) {
         this.productId = product.getProductId();
         this.title = product.getTitle();
         this.photo = product.getPhoto();
         this.price = product.getPrice();
-        this.stock = product.getStock().getStock();
-        this.view = product.getView().getView();
+//        this.stock = product.getStock().getStock();
+//        this.view = product.getView().getView();
+        this.stock = stock;
+        this.view = view;
         this.createdTime = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(product.getCreatedTime());
-        this.categoryId = product.getCategory().getCategoryId();
+//        this.categoryId = product.getCategory().getCategoryId();
+        this.categoryId = categoryId;
     }
 
     public static ProductResponseDetailDto toDto(Product product){
