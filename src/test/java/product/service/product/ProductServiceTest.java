@@ -88,7 +88,7 @@ class ProductServiceTest {
 
         View view = View.builder()
                 .view_id(1L)
-                .view(50L)
+                .view(50)
                 .build();
 
         viewRepository.save(view);
@@ -121,7 +121,7 @@ class ProductServiceTest {
         // GIVEN
         Pageable pageable = Pageable.ofSize(10);
         String category = null;
-        Boolean stock = true;
+        String stock = null;
         Long minPrice = null;
         Long maxPrice = null;
         String keyword = null;
@@ -141,7 +141,7 @@ class ProductServiceTest {
         // GIVEN
         Pageable pageable = Pageable.ofSize(10);
         String category = null;
-        Boolean stock = true; // Default 처리 필요
+        String stock = "1"; // Default 처리 필요
         Long minPrice = 10L;
         Long maxPrice = 1000000L;
         String keyword = "Test";

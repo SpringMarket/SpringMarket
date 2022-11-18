@@ -26,7 +26,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     QView qView = QView.view1;
 
     @Override
-    public Page<ProductResponseDetailDto> mainFilter(Pageable pageable, String category, Boolean stock,
+    public Page<ProductResponseDetailDto> mainFilter(Pageable pageable, String category, String stock,
                                                      Long minPrice, Long maxPrice, String keyword, String sorting) {
 
         // 데이터 수 줄여서 조회 테스트
@@ -75,14 +75,17 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .fetchOne();
     }
 
+    // 카테고리 null -> Default "아우터" return
+    // if (StringUtils.isNullOrEmpty(category)) QProduct.product.category.category.eq("아우터");
     private BooleanExpression categoryFilter(String category) {
         if (StringUtils.isNullOrEmpty(category)) return null;
         return QProduct.product.category.category.eq(category);
     }
 
-    private BooleanExpression isStock(Boolean stock) {
-        if (!stock) return null;
-        return QProduct.product.stock.stock.ne(0L);
+    private BooleanExpression isStock(String stock) {
+        if (StringUtils.isNullOrEmpty(stock)) return null;
+        if (stock.equals("1")) return null; // "1" : 품절상품 포함 -> null 리턴
+        return QProduct.product.stock.stock.ne(0L); // "1" : 품절상품 미포함 -> stock != 0 리턴
     }
 
     private BooleanExpression minPriceRange(Long minPrice) {

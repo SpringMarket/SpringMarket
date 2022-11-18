@@ -64,7 +64,7 @@ public class ProductService {
 
     // 상품 전체 조회
     @Transactional(readOnly = true)
-    public Page<ProductResponseDetailDto> findAllProduct(Pageable pageable, String category, Boolean stock, Long minPrice, Long maxPrice, String keyword, String sort) {
+    public Page<ProductResponseDetailDto> findAllProduct(Pageable pageable, String category, String stock, Long minPrice, Long maxPrice, String keyword, String sort) {
 
         log.info("Search All Log Start....");
 
