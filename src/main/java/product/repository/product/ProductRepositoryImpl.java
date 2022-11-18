@@ -35,8 +35,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .select(Projections.constructor(ProductResponseDetailDto.class, qProduct))
                 .where(categoryFilter(category),
                         isStock(stock),
-                        minPriceRange(minPrice),
                         maxPriceRange(maxPrice),
+                        minPriceRange(minPrice),
                         keywordContain(keyword))
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
@@ -89,12 +89,12 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     }
 
     private BooleanExpression minPriceRange(Long minPrice) {
-        if (minPrice != null) QProduct.product.price.goe(minPrice);
+        if (minPrice != null) return QProduct.product.price.goe(minPrice); // Price >= minPrice
         return null;
     }
 
     private BooleanExpression maxPriceRange(Long maxPrice) {
-        if (maxPrice != null) QProduct.product.price.loe(maxPrice);
+        if (maxPrice != null) return QProduct.product.price.loe(maxPrice); // Price <= maxPrice
         return null;
     }
 
