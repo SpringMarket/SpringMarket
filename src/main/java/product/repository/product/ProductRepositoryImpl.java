@@ -73,8 +73,10 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                         qStock.stock,
                         qView.view,
                         qCategory.categoryId))
+                .innerJoin(qProduct.category,qCategory)
                 .innerJoin(qProduct.view,qView)
                 .innerJoin(qProduct.stock,qStock)
+                .innerJoin(qProduct.productInfo, qProductInfo)
                 .where(categoryFilter(category),
                         isStock(stock),
                         minPriceRange(minPrice),
@@ -149,7 +151,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
     private OrderSpecifier<?> sorting(String sorting) {
 
-        if (StringUtils.isNullOrEmpty(sorting)) return QProduct.product.view.view.desc();
+        if (StringUtils.isNullOrEmpty(sorting)) return QView.view1.view.desc();
 
         switch (sorting) {
             case "조회순":
@@ -165,6 +167,6 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             case "40대 이상":
                 return QProductInfo.productInfo.over_forty.desc();
         }
-        return QProduct.product.view.view.desc();
+        return QView.view1.view.desc();
     }
 }
