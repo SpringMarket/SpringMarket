@@ -11,7 +11,6 @@ import product.dto.order.OrderRequestDto;
 import product.dto.product.ProductResponseDetailDto;
 import product.exception.RequestException;
 import product.repository.product.ProductRepository;
-import product.service.RedisService;
 import product.service.order.OrderService;
 
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ public class CartService {
 
     private final ProductRepository productRepository;
     private final OrderService orderService;
-    private final RedisService redisService;
+    private final CartRedisService cartRedisService;
     private final RedisTemplate<String, List<Long>> redisTemplate;
 
 
@@ -43,7 +42,7 @@ public class CartService {
         if(values.get(key) == null) {
             List<Long> list = new ArrayList<>();
             list.add(productId);
-            redisService.setCart(key, list);
+            cartRedisService.setCart(key, list);
         }
         else {
             List<Long> list = values.get(key);

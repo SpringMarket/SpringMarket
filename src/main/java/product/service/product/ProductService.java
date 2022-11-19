@@ -7,23 +7,20 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import product.dto.product.ProductCreateDto;
 import product.dto.product.ProductResponseDetailDto;
 import product.dto.product.ProductResponseDto;
 import product.entity.product.*;
-import product.exception.ExceptionType;
 import product.exception.RequestException;
 import product.repository.product.*;
-import product.service.RedisService;
 
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-import static product.exception.ExceptionType.*;
+import static product.exception.ExceptionType.NOT_FOUND_EXCEPTION;
 
 
 @Slf4j
@@ -31,7 +28,7 @@ import static product.exception.ExceptionType.*;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final RedisService redisService;
+    private final ProductRedisService productRedisService;
     private final RedisTemplate<String, String> redisTemplate;
     private final CategoryRepository categoryRepository;
     private final ProductInfoRepository productInfoRepository;
@@ -54,7 +51,7 @@ public class ProductService {
         }
 
         for (Product product : warmupProduct) {
-            redisService.setProduct("product::" + product.getProductId(), ProductResponseDto.toDto(product), Duration.ofDays(1));
+            productRedisService.setProduct("product::" + product.getProductId(), ProductResponseDto.toDto(product), Duration.ofDays(1));
         }
 
         log.info("..... Success!");
@@ -94,7 +91,7 @@ public class ProductService {
         ValueOperations<String, String> values = redisTemplate.opsForValue(); // Redis String 자료구조 저장소 선언
 
         if(values.get(key) == null) {
-            redisService.setView(key, String.valueOf(productRepository.getView(productId)), Duration.ofMinutes(35));
+            productRedisService.setView(key, String.valueOf(productRepository.getView(productId)), Duration.ofMinutes(35));
             values.increment(key);
         }
         else values.increment(key);
