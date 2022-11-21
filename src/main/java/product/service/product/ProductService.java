@@ -75,7 +75,7 @@ public class ProductService {
         log.info("Search Once Log Start....");
         Product product = productRepository.detail(id);
         if (product == null ) throw new RequestException(NOT_FOUND_EXCEPTION);
-
+        countView(id);
         return ProductDetailResponseDto.toDto(product);
     }
 
