@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderRequestDto {
-    Long orderNum;
     Long productId;
+    Long orderNum;
 }

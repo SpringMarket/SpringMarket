@@ -10,8 +10,8 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import product.dto.product.ProductCreateDto;
-import product.dto.product.ProductResponseDetailDto;
-import product.dto.product.ProductResponseDto;
+import product.dto.product.ProductMainResponseDto;
+import product.dto.product.ProductDetailResponseDto;
 import product.entity.product.*;
 import product.exception.RequestException;
 import product.repository.product.*;
@@ -32,8 +32,6 @@ public class ProductService {
     private final RedisTemplate<String, String> redisTemplate;
     private final CategoryRepository categoryRepository;
     private final ProductInfoRepository productInfoRepository;
-    private final StockRepository stockRepository;
-    private final ViewRepository viewRepository;
 
 
 
@@ -51,7 +49,7 @@ public class ProductService {
         }
 
         for (Product product : warmupProduct) {
-            productRedisService.setProduct("product::" + product.getProductId(), ProductResponseDto.toDto(product), Duration.ofDays(1));
+            productRedisService.setProduct("product::" + product.getProductId(), ProductDetailResponseDto.toDto(product), Duration.ofDays(1));
         }
 
         log.info("..... Success!");
@@ -61,7 +59,7 @@ public class ProductService {
 
     // 상품 전체 조회
     @Transactional(readOnly = true)
-    public Page<ProductResponseDetailDto> findAllProduct(Pageable pageable, String category, String stock, Long minPrice, Long maxPrice, String keyword, String sort) {
+    public Page<ProductMainResponseDto> findAllProduct(Pageable pageable, String category, String stock, Long minPrice, Long maxPrice, String keyword, String sort) {
 
         log.info("Search All Log Start....");
 
@@ -72,13 +70,13 @@ public class ProductService {
     // 상품 상세 조회 -> Cache Aside
     @Cacheable(value = "product", key = "#id") // [product::1], [name : "" , cre ...]
     @Transactional(readOnly = true)
-    public ProductResponseDto findProduct(Long id) {
+    public ProductDetailResponseDto findProduct(Long id) {
 
         log.info("Search Once Log Start....");
         Product product = productRepository.detail(id);
         if (product == null ) throw new RequestException(NOT_FOUND_EXCEPTION);
 
-        return ProductResponseDto.toDto(product);
+        return ProductDetailResponseDto.toDto(product);
     }
 
 
@@ -121,20 +119,6 @@ public class ProductService {
 
         productInfoRepository.save(productInfo);
 
-        Stock stock = Stock.builder()
-                .stock_id(1L)
-                .stock(10L)
-                .build();
-
-        stockRepository.save(stock);
-
-        View view = View.builder()
-                .view_id(1L)
-                .view(50)
-                .build();
-
-        viewRepository.save(view);
-
         Product product = Product.builder()
                 .title(pc.getTitle())
                 .content(pc.getContent())
@@ -142,8 +126,8 @@ public class ProductService {
                 .price(pc.getPrice())
                 .category(category)
                 .productInfo(productInfo)
-                .view(view)
-                .stock(stock)
+                .view(0)
+                .stock(100L)
                 .build();
 
         productRepository.save(product);

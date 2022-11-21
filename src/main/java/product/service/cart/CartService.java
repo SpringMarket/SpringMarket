@@ -8,7 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import product.dto.order.OrderRequestDto;
-import product.dto.product.ProductResponseDetailDto;
+import product.dto.product.ProductMainResponseDto;
 import product.exception.RequestException;
 import product.repository.product.ProductRepository;
 import product.service.order.OrderService;
@@ -68,17 +68,17 @@ public class CartService {
     }
 
     @Transactional(readOnly = true)
-    public List<ProductResponseDetailDto> showCart(Authentication authentication) {
+    public List<ProductMainResponseDto> showCart(Authentication authentication) {
         String key = "cart::" + authentication.getName();
 
         ValueOperations<String, List<Long>> values = redisTemplate.opsForValue();
-        List<ProductResponseDetailDto> dtos = new ArrayList<>();
+        List<ProductMainResponseDto> dtos = new ArrayList<>();
 
         if(values.get(key) == null) return null;
         else {
             List<Long> list = values.get(key);
             for (Long cart : list) {
-                ProductResponseDetailDto dto = ProductResponseDetailDto.toDto(productRepository.detail(cart));
+                ProductMainResponseDto dto = ProductMainResponseDto.toDto(productRepository.detail(cart));
                 dtos.add(dto);
             }
         }

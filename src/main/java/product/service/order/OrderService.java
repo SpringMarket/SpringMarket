@@ -38,10 +38,10 @@ public class OrderService {
         if (product == null) throw new RequestException(NOT_FOUND_EXCEPTION);
 
         // 재고 부족 예외처리
-        if(product.getStock().getStock()< orderNum) throw new RequestException(OUT_OF_STOCK_EXCEPTION);
+        if(product.getStock()< orderNum) throw new RequestException(OUT_OF_STOCK_EXCEPTION);
 
         // 상품 재고 차감
-        product.getStock().order(orderNum);
+        product.orderChangeStock(orderNum);
 
         // 상품 정보 변경
         product.getProductInfo().plusPreference(orderNum,user.getAge());
@@ -79,7 +79,7 @@ public class OrderService {
         }
 
         // 재고 수 변경
-        order.getProduct().getStock().cancel(order.getOrderNum());
+        order.getProduct().cancelChangeStock(order.getOrderNum());
 
         // 주문 취소로 status 변경
         order.cancel();

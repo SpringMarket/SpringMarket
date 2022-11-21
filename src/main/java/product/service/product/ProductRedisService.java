@@ -7,11 +7,10 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import product.dto.product.ProductResponseDto;
+import product.dto.product.ProductDetailResponseDto;
 import product.repository.product.ProductRepository;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -20,7 +19,7 @@ import java.util.Set;
 @Slf4j
 public class ProductRedisService {
     private final RedisTemplate<String, String> redisTemplate;
-    private final RedisTemplate<String, ProductResponseDto> redisTemplateDto;
+    private final RedisTemplate<String, ProductDetailResponseDto> redisTemplateDto;
     private final ProductRepository productRepository;
 
     public void setView(String key, String data, Duration duration) {
@@ -48,8 +47,8 @@ public class ProductRedisService {
         log.info("Update View !");
     }
 
-    public void setProduct(String key, ProductResponseDto data, Duration duration) {
-        ValueOperations<String, ProductResponseDto> values = redisTemplateDto.opsForValue();
+    public void setProduct(String key, ProductDetailResponseDto data, Duration duration) {
+        ValueOperations<String, ProductDetailResponseDto> values = redisTemplateDto.opsForValue();
         values.set(key, data, duration);
     }
 
