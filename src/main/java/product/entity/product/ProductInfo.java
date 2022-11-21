@@ -32,7 +32,7 @@ public class ProductInfo {
     private Long over_forty;
 
 
-    public void PlusPreference(Long orderNum, String age){
+    public void plusPreference(Long orderNum, String age){
         switch (age){
             case "10대":
                 ten += orderNum; break;
@@ -45,7 +45,7 @@ public class ProductInfo {
         }
     }
 
-    public void MinusPreference(Long orderNum, String age){
+    public void minusPreference(Long orderNum, String age){
         switch (age){
             case "10대":
                 ten -= orderNum; break;
