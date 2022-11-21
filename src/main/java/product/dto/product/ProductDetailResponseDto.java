@@ -12,21 +12,23 @@ import java.time.format.DateTimeFormatter;
 @AllArgsConstructor
 @NoArgsConstructor
 @NotBlank
-public class ProductResponseDto {
+public class ProductDetailResponseDto {
     private Long productId;
     private String title;
     private String content;
     private String photo;
     private Long price;
+    private Long stock;
     private String createdTime;
 
-    public static ProductResponseDto toDto(Product product){
-        return new ProductResponseDto(
+    public static ProductDetailResponseDto toDto(Product product){
+        return new ProductDetailResponseDto(
                 product.getProductId(),
                 product.getTitle(),
                 product.getContent(),
                 product.getPhoto(),
                 product.getPrice(),
+                product.getStock(),
                 DateTimeFormatter.ofPattern("yyyy-MM-dd").format(product.getCreatedTime())
         );
     }
