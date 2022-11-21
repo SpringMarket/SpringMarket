@@ -8,10 +8,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import product.dto.order.OrderRequestDto;
-import product.dto.product.ProductResponseDetailDto;
+import product.dto.product.ProductMainResponseDto;
 import product.exception.RequestException;
 import product.repository.product.ProductRepository;
-import product.service.RedisService;
 import product.service.order.OrderService;
 
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ public class CartService {
 
     private final ProductRepository productRepository;
     private final OrderService orderService;
-    private final RedisService redisService;
+    private final CartRedisService cartRedisService;
     private final RedisTemplate<String, List<Long>> redisTemplate;
 
 
@@ -43,7 +42,7 @@ public class CartService {
         if(values.get(key) == null) {
             List<Long> list = new ArrayList<>();
             list.add(productId);
-            redisService.setCart(key, list);
+            cartRedisService.setCart(key, list);
         }
         else {
             List<Long> list = values.get(key);
@@ -69,17 +68,17 @@ public class CartService {
     }
 
     @Transactional(readOnly = true)
-    public List<ProductResponseDetailDto> showCart(Authentication authentication) {
+    public List<ProductMainResponseDto> showCart(Authentication authentication) {
         String key = "cart::" + authentication.getName();
 
         ValueOperations<String, List<Long>> values = redisTemplate.opsForValue();
-        List<ProductResponseDetailDto> dtos = new ArrayList<>();
+        List<ProductMainResponseDto> dtos = new ArrayList<>();
 
         if(values.get(key) == null) return null;
         else {
             List<Long> list = values.get(key);
             for (Long cart : list) {
-                ProductResponseDetailDto dto = ProductResponseDetailDto.toDto(productRepository.detail(cart));
+                ProductMainResponseDto dto = ProductMainResponseDto.toDto(productRepository.detail(cart));
                 dtos.add(dto);
             }
         }
