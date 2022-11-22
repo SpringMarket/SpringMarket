@@ -18,7 +18,6 @@ public class ProductDetailResponseDto {
     private String content;
     private String photo;
     private Long price;
-    private Long stock;
     private String createdTime;
 
     public static ProductDetailResponseDto toDto(Product product){
@@ -28,7 +27,6 @@ public class ProductDetailResponseDto {
                 product.getContent(),
                 product.getPhoto(),
                 product.getPrice(),
-                product.getStock(),
                 DateTimeFormatter.ofPattern("yyyy-MM-dd").format(product.getCreatedTime())
         );
     }

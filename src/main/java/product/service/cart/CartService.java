@@ -22,7 +22,7 @@ import static product.exception.ExceptionType.NOT_FOUND_EXCEPTION;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class CartService {
+public class CartService { // Redis 테스트 코드 : 제윤
 
     private final ProductRepository productRepository;
     private final OrderService orderService;
@@ -77,6 +77,7 @@ public class CartService {
         if(values.get(key) == null) return null;
         else {
             List<Long> list = values.get(key);
+            assert list != null;
             for (Long cart : list) {
                 ProductMainResponseDto dto = ProductMainResponseDto.toDto(productRepository.detail(cart));
                 dtos.add(dto);
