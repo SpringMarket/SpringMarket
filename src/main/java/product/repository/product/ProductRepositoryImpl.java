@@ -81,9 +81,9 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     @Override
     public List<Product> warmup(Long categoryId) {
         return queryFactory.selectFrom(qProduct)
-                .where(qCategory.categoryId.eq(categoryId))
+                .where(qProduct.category.categoryId.eq(categoryId))
                 .orderBy(qProduct.view.desc())
-                .limit(60)
+                .limit(100)
                 .fetch();
     }
     @Override

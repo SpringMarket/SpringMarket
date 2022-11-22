@@ -7,9 +7,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import product.dto.product.ProductCreateDto;
 import product.dto.product.ProductMainResponseDto;
 import product.dto.product.ProductDetailResponseDto;
 import product.entity.product.*;
@@ -19,6 +19,8 @@ import product.repository.product.*;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static product.exception.ExceptionType.NOT_FOUND_EXCEPTION;
 
@@ -29,13 +31,11 @@ import static product.exception.ExceptionType.NOT_FOUND_EXCEPTION;
 public class ProductService {
     private final ProductRepository productRepository;
     private final ProductRedisService productRedisService;
-    private final RedisTemplate<String, String> redisTemplate;
-    private final CategoryRepository categoryRepository;
-    private final ProductInfoRepository productInfoRepository;
 
 
 
-    // Warm UP -> Named Post Put !
+    // Warm UP -> Named Post
+    // 테스트코드 : 제윤
     @Transactional
     public void warmup() {
 
@@ -55,9 +55,29 @@ public class ProductService {
         log.info("..... Success!");
     }
 
+    // Warm UP -> Ranking Board
+    @Transactional
+    public void warmupRank() {
+        for (long i=1; i<6; i++){
+            List<Product> list = productRepository.warmup(i);
+            for (int k = 0; k < 99; k++) {
+                productRedisService.setRankingBoard("ranking::"+i, ProductMainResponseDto.toDto(list.get(k)), list.get(k).getView());
+            }
+        }
+    }
+
+    // 랭킹보드 조회
+    public List<ProductMainResponseDto> getRankingList(Long categoryId) {
+        String key = "ranking::" + categoryId;
+        Set<ZSetOperations.TypedTuple<ProductMainResponseDto>> typedTuples = productRedisService.getRankingBoard(key);
+
+        if (typedTuples == null) throw new RequestException(NOT_FOUND_EXCEPTION);
+
+        return typedTuples.stream().map(ProductMainResponseDto::convertToResponseRankingDto).collect(Collectors.toList());
+    }
 
 
-    // 상품 전체 조회
+    // 상품 필터링 조회
     @Transactional(readOnly = true)
     public Page<ProductMainResponseDto> findAllProduct(Pageable pageable, String category, String stock, Long minPrice, Long maxPrice, String keyword, String sort) {
 
@@ -68,6 +88,7 @@ public class ProductService {
 
 
     // 상품 상세 조회 -> Cache Aside
+    // 테스트코드 : 제윤
     @Cacheable(value = "product", key = "#id") // [product::1], [name : "" , cre ...]
     @Transactional(readOnly = true)
     public ProductDetailResponseDto findProduct(Long id) {
@@ -81,56 +102,10 @@ public class ProductService {
 
 
     // 상품 조회수 추가
+    // 테스트코드 : 제윤
     public void countView(Long productId) {
         String key = "productView::" + productId;
-
-        log.info("View Start");  // productView::1 -> 1
-
-        ValueOperations<String, String> values = redisTemplate.opsForValue(); // Redis String 자료구조 저장소 선언
-
-        if(values.get(key) == null) {
-            productRedisService.setView(key, String.valueOf(productRepository.getView(productId)), Duration.ofMinutes(35));
-            values.increment(key);
-        }
-        else values.increment(key);
-
-        log.info("View" + values.get(key));
-    }
-
-
-    // 상품 데이터 생성 :: 더미
-    public void create(ProductCreateDto pc){
-
-
-        Category category = Category.builder() // 카테고리는 인덱스로 가져오기
-                .categoryId(1L)
-                .category("상의")
-                .build();
-
-        categoryRepository.save(category);
-
-        ProductInfo productInfo = ProductInfo.builder()
-                .productInfoId(1L)
-                .ten(10L)
-                .twenty(20L)
-                .thirty(30L)
-                .over_forty(40L)
-                .build();
-
-        productInfoRepository.save(productInfo);
-
-        Product product = Product.builder()
-                .title(pc.getTitle())
-                .content(pc.getContent())
-                .photo(pc.getPhoto())
-                .price(pc.getPrice())
-                .category(category)
-                .productInfo(productInfo)
-                .view(0)
-                .stock(100L)
-                .build();
-
-        productRepository.save(product);
-
+        log.info("View Increment");
+        productRedisService.incrementView(key, productId);
     }
 }

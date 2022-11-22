@@ -3,9 +3,12 @@ package product.dto.product;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.data.redis.core.ZSetOperations.TypedTuple;
 import product.entity.product.Product;
 
 import javax.validation.constraints.NotBlank;
+import java.util.Objects;
 
 @Data
 @NoArgsConstructor
@@ -31,5 +34,9 @@ public class ProductMainResponseDto {
                 product.getPhoto(),
                 product.getPrice()
         );
+    }
+
+    public static ProductMainResponseDto convertToResponseRankingDto(TypedTuple typedTuple){
+        return (ProductMainResponseDto) typedTuple.getValue();
     }
 }

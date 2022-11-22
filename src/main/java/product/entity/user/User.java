@@ -14,7 +14,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(indexes = @Index(name = "i_email", columnList = "email"))
+//@Table(indexes = @Index(name = "i_email", columnList = "email"))
 public class User {
 
     @Id

@@ -21,12 +21,29 @@ public class ProductController {
     private final ProductService productService;
     Logger log = LoggerFactory.getLogger("ACCESS");
 
-    // Warm UP
+
+    // Warm UP -> Named Post
     @GetMapping("/warmup")
     public Response warmup() {
         productService.warmup();
-        return success("Start ^__^ !!");
+        return success("SUCCESS ^__^ !!");
     }
+
+
+    // Warm UP -> Ranking Board
+    @GetMapping("/warmup/rank")
+    public Response warmupRank() {
+        productService.warmupRank();
+        return success("SUCCESS ^__^ !!");
+    }
+
+
+    // 랭킹보드 조회
+    @GetMapping("/rank/list/{categoryId}")
+    public Response getRankingList(@PathVariable Long categoryId) {
+        return success(productService.getRankingList(categoryId));
+    }
+
 
     // 메인 페이지
     // orderBy first(JPA) or last(Query DSL) 성능테스트
@@ -50,12 +67,5 @@ public class ProductController {
         // productService.countView(id);
         log.info(id+"번 상품 조회");
         return success(productService.findProduct(id));
-    }
-
-    // 상품 데이터 생성 :: 더미
-    @PostMapping("/create")
-    public Response createProduct(@RequestBody ProductCreateDto productCreateDto) {
-        productService.create(productCreateDto);
-        return success();
     }
 }
