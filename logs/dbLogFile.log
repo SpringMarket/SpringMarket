@@ -1,0 +1,609 @@
+12:23:11 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table orders 
+       add constraint FK787ibr3guwp6xobrpbofnv7le 
+       foreign key (product_id) 
+       references product (product_id) 
+       on delete cascade 
+12:23:12 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table orders 
+       add constraint FKel9kyl84ego2otj2accfd8mr7 
+       foreign key (user_id) 
+       references user (user_id) 
+       on delete cascade 
+12:23:12 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table product 
+       add constraint FK1mtsbur82frn64de7balymq9s 
+       foreign key (category_id) 
+       references category (category_id) 
+       on delete cascade 
+12:23:25 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table product 
+       add constraint FKqnw4m5cthkq3wu09058sse7g6 
+       foreign key (product_info_id) 
+       references product_info (product_info_id) 
+       on delete cascade 
+12:25:41 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table orders 
+       add constraint FK787ibr3guwp6xobrpbofnv7le 
+       foreign key (product_id) 
+       references product (product_id) 
+       on delete cascade 
+12:25:41 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table orders 
+       add constraint FKel9kyl84ego2otj2accfd8mr7 
+       foreign key (user_id) 
+       references user (user_id) 
+       on delete cascade 
+12:25:41 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table product 
+       add constraint FK1mtsbur82frn64de7balymq9s 
+       foreign key (category_id) 
+       references category (category_id) 
+       on delete cascade 
+12:25:54 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table product 
+       add constraint FKqnw4m5cthkq3wu09058sse7g6 
+       foreign key (product_info_id) 
+       references product_info (product_info_id) 
+       on delete cascade 
+12:27:37 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table orders 
+       add constraint FK787ibr3guwp6xobrpbofnv7le 
+       foreign key (product_id) 
+       references product (product_id) 
+       on delete cascade 
+12:27:38 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table orders 
+       add constraint FKel9kyl84ego2otj2accfd8mr7 
+       foreign key (user_id) 
+       references user (user_id) 
+       on delete cascade 
+12:27:38 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table product 
+       add constraint FK1mtsbur82frn64de7balymq9s 
+       foreign key (category_id) 
+       references category (category_id) 
+       on delete cascade 
+12:27:51 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table product 
+       add constraint FKqnw4m5cthkq3wu09058sse7g6 
+       foreign key (product_info_id) 
+       references product_info (product_info_id) 
+       on delete cascade 
+12:31:18 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table orders 
+       add constraint FK787ibr3guwp6xobrpbofnv7le 
+       foreign key (product_id) 
+       references product (product_id) 
+       on delete cascade 
+12:31:18 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table orders 
+       add constraint FKel9kyl84ego2otj2accfd8mr7 
+       foreign key (user_id) 
+       references user (user_id) 
+       on delete cascade 
+12:31:18 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table product 
+       add constraint FK1mtsbur82frn64de7balymq9s 
+       foreign key (category_id) 
+       references category (category_id) 
+       on delete cascade 
+12:31:33 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table product 
+       add constraint FKqnw4m5cthkq3wu09058sse7g6 
+       foreign key (product_info_id) 
+       references product_info (product_info_id) 
+       on delete cascade 
+12:34:40 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table orders 
+       add constraint FK787ibr3guwp6xobrpbofnv7le 
+       foreign key (product_id) 
+       references product (product_id) 
+       on delete cascade 
+12:34:40 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table orders 
+       add constraint FKel9kyl84ego2otj2accfd8mr7 
+       foreign key (user_id) 
+       references user (user_id) 
+       on delete cascade 
+12:34:40 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table product 
+       add constraint FK1mtsbur82frn64de7balymq9s 
+       foreign key (category_id) 
+       references category (category_id) 
+       on delete cascade 
+12:34:54 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table product 
+       add constraint FKqnw4m5cthkq3wu09058sse7g6 
+       foreign key (product_info_id) 
+       references product_info (product_info_id) 
+       on delete cascade 
+12:39:16 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table orders 
+       add constraint FK787ibr3guwp6xobrpbofnv7le 
+       foreign key (product_id) 
+       references product (product_id) 
+       on delete cascade 
+12:39:16 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table orders 
+       add constraint FKel9kyl84ego2otj2accfd8mr7 
+       foreign key (user_id) 
+       references user (user_id) 
+       on delete cascade 
+12:39:16 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table product 
+       add constraint FK1mtsbur82frn64de7balymq9s 
+       foreign key (category_id) 
+       references category (category_id) 
+       on delete cascade 
+12:39:31 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table product 
+       add constraint FKqnw4m5cthkq3wu09058sse7g6 
+       foreign key (product_info_id) 
+       references product_info (product_info_id) 
+       on delete cascade 
+12:39:58 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        product0_.product_id as product_1_2_,
+        product0_.category_id as category9_2_,
+        product0_.content as content2_2_,
+        product0_.created_time as created_3_2_,
+        product0_.photo as photo4_2_,
+        product0_.price as price5_2_,
+        product0_.product_info_id as product10_2_,
+        product0_.stock as stock6_2_,
+        product0_.title as title7_2_,
+        product0_.view as view8_2_ 
+    from
+        product product0_ 
+    where
+        product0_.category_id=? 
+    order by
+        product0_.view desc limit ? 
+12:41:59 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table orders 
+       add constraint FK787ibr3guwp6xobrpbofnv7le 
+       foreign key (product_id) 
+       references product (product_id) 
+       on delete cascade 
+12:41:59 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table orders 
+       add constraint FKel9kyl84ego2otj2accfd8mr7 
+       foreign key (user_id) 
+       references user (user_id) 
+       on delete cascade 
+12:41:59 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table product 
+       add constraint FK1mtsbur82frn64de7balymq9s 
+       foreign key (category_id) 
+       references category (category_id) 
+       on delete cascade 
+12:42:13 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table product 
+       add constraint FKqnw4m5cthkq3wu09058sse7g6 
+       foreign key (product_info_id) 
+       references product_info (product_info_id) 
+       on delete cascade 
+12:45:20 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table orders 
+       add constraint FK787ibr3guwp6xobrpbofnv7le 
+       foreign key (product_id) 
+       references product (product_id) 
+       on delete cascade 
+12:45:20 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table orders 
+       add constraint FKel9kyl84ego2otj2accfd8mr7 
+       foreign key (user_id) 
+       references user (user_id) 
+       on delete cascade 
+12:45:20 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table product 
+       add constraint FK1mtsbur82frn64de7balymq9s 
+       foreign key (category_id) 
+       references category (category_id) 
+       on delete cascade 
+12:45:36 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table product 
+       add constraint FKqnw4m5cthkq3wu09058sse7g6 
+       foreign key (product_info_id) 
+       references product_info (product_info_id) 
+       on delete cascade 
+14:08:16 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table orders 
+       add constraint FK787ibr3guwp6xobrpbofnv7le 
+       foreign key (product_id) 
+       references product (product_id) 
+       on delete cascade 
+14:08:16 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table orders 
+       add constraint FKel9kyl84ego2otj2accfd8mr7 
+       foreign key (user_id) 
+       references user (user_id) 
+       on delete cascade 
+14:08:16 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table product 
+       add constraint FK1mtsbur82frn64de7balymq9s 
+       foreign key (category_id) 
+       references category (category_id) 
+       on delete cascade 
+14:08:31 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table product 
+       add constraint FKqnw4m5cthkq3wu09058sse7g6 
+       foreign key (product_info_id) 
+       references product_info (product_info_id) 
+       on delete cascade 
+14:10:18 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table orders 
+       add constraint FK787ibr3guwp6xobrpbofnv7le 
+       foreign key (product_id) 
+       references product (product_id) 
+       on delete cascade 
+14:10:18 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table orders 
+       add constraint FKel9kyl84ego2otj2accfd8mr7 
+       foreign key (user_id) 
+       references user (user_id) 
+       on delete cascade 
+14:10:18 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table product 
+       add constraint FK1mtsbur82frn64de7balymq9s 
+       foreign key (category_id) 
+       references category (category_id) 
+       on delete cascade 
+14:10:33 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table product 
+       add constraint FKqnw4m5cthkq3wu09058sse7g6 
+       foreign key (product_info_id) 
+       references product_info (product_info_id) 
+       on delete cascade 
+14:13:25 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table orders 
+       add constraint FK787ibr3guwp6xobrpbofnv7le 
+       foreign key (product_id) 
+       references product (product_id) 
+       on delete cascade 
+14:13:25 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table orders 
+       add constraint FKel9kyl84ego2otj2accfd8mr7 
+       foreign key (user_id) 
+       references user (user_id) 
+       on delete cascade 
+14:13:25 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table product 
+       add constraint FK1mtsbur82frn64de7balymq9s 
+       foreign key (category_id) 
+       references category (category_id) 
+       on delete cascade 
+14:13:41 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table product 
+       add constraint FKqnw4m5cthkq3wu09058sse7g6 
+       foreign key (product_info_id) 
+       references product_info (product_info_id) 
+       on delete cascade 
+14:17:03 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table orders 
+       add constraint FK787ibr3guwp6xobrpbofnv7le 
+       foreign key (product_id) 
+       references product (product_id) 
+       on delete cascade 
+14:17:03 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table orders 
+       add constraint FKel9kyl84ego2otj2accfd8mr7 
+       foreign key (user_id) 
+       references user (user_id) 
+       on delete cascade 
+14:17:03 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table product 
+       add constraint FK1mtsbur82frn64de7balymq9s 
+       foreign key (category_id) 
+       references category (category_id) 
+       on delete cascade 
+14:17:19 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table product 
+       add constraint FKqnw4m5cthkq3wu09058sse7g6 
+       foreign key (product_info_id) 
+       references product_info (product_info_id) 
+       on delete cascade 
+14:18:32 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table orders 
+       add constraint FK787ibr3guwp6xobrpbofnv7le 
+       foreign key (product_id) 
+       references product (product_id) 
+       on delete cascade 
+14:18:33 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table orders 
+       add constraint FKel9kyl84ego2otj2accfd8mr7 
+       foreign key (user_id) 
+       references user (user_id) 
+       on delete cascade 
+14:18:33 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table product 
+       add constraint FK1mtsbur82frn64de7balymq9s 
+       foreign key (category_id) 
+       references category (category_id) 
+       on delete cascade 
+14:18:48 [main] DEBUG org.hibernate.SQL - 
+    
+    alter table product 
+       add constraint FKqnw4m5cthkq3wu09058sse7g6 
+       foreign key (product_info_id) 
+       references product_info (product_info_id) 
+       on delete cascade 
+14:20:14 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        product0_.product_id as product_1_2_,
+        product0_.category_id as category9_2_,
+        product0_.content as content2_2_,
+        product0_.created_time as created_3_2_,
+        product0_.photo as photo4_2_,
+        product0_.price as price5_2_,
+        product0_.product_info_id as product10_2_,
+        product0_.stock as stock6_2_,
+        product0_.title as title7_2_,
+        product0_.view as view8_2_ 
+    from
+        product product0_ 
+    where
+        product0_.category_id=? 
+    order by
+        product0_.view desc limit ? 
+14:20:16 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        product0_.product_id as product_1_2_,
+        product0_.category_id as category9_2_,
+        product0_.content as content2_2_,
+        product0_.created_time as created_3_2_,
+        product0_.photo as photo4_2_,
+        product0_.price as price5_2_,
+        product0_.product_info_id as product10_2_,
+        product0_.stock as stock6_2_,
+        product0_.title as title7_2_,
+        product0_.view as view8_2_ 
+    from
+        product product0_ 
+    where
+        product0_.category_id=? 
+    order by
+        product0_.view desc limit ? 
+14:20:17 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        product0_.product_id as product_1_2_,
+        product0_.category_id as category9_2_,
+        product0_.content as content2_2_,
+        product0_.created_time as created_3_2_,
+        product0_.photo as photo4_2_,
+        product0_.price as price5_2_,
+        product0_.product_info_id as product10_2_,
+        product0_.stock as stock6_2_,
+        product0_.title as title7_2_,
+        product0_.view as view8_2_ 
+    from
+        product product0_ 
+    where
+        product0_.category_id=? 
+    order by
+        product0_.view desc limit ? 
+14:20:18 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        product0_.product_id as product_1_2_,
+        product0_.category_id as category9_2_,
+        product0_.content as content2_2_,
+        product0_.created_time as created_3_2_,
+        product0_.photo as photo4_2_,
+        product0_.price as price5_2_,
+        product0_.product_info_id as product10_2_,
+        product0_.stock as stock6_2_,
+        product0_.title as title7_2_,
+        product0_.view as view8_2_ 
+    from
+        product product0_ 
+    where
+        product0_.category_id=? 
+    order by
+        product0_.view desc limit ? 
+14:20:18 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        product0_.product_id as product_1_2_,
+        product0_.category_id as category9_2_,
+        product0_.content as content2_2_,
+        product0_.created_time as created_3_2_,
+        product0_.photo as photo4_2_,
+        product0_.price as price5_2_,
+        product0_.product_info_id as product10_2_,
+        product0_.stock as stock6_2_,
+        product0_.title as title7_2_,
+        product0_.view as view8_2_ 
+    from
+        product product0_ 
+    where
+        product0_.category_id=? 
+    order by
+        product0_.view desc limit ? 
+14:23:02 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    select
+        product0_.product_id as product_1_2_,
+        product0_.category_id as category9_2_,
+        product0_.content as content2_2_,
+        product0_.created_time as created_3_2_,
+        product0_.photo as photo4_2_,
+        product0_.price as price5_2_,
+        product0_.product_info_id as product10_2_,
+        product0_.stock as stock6_2_,
+        product0_.title as title7_2_,
+        product0_.view as view8_2_ 
+    from
+        product product0_ 
+    where
+        product0_.category_id=? 
+    order by
+        product0_.view desc limit ? 
+14:23:03 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    select
+        product0_.product_id as product_1_2_,
+        product0_.category_id as category9_2_,
+        product0_.content as content2_2_,
+        product0_.created_time as created_3_2_,
+        product0_.photo as photo4_2_,
+        product0_.price as price5_2_,
+        product0_.product_info_id as product10_2_,
+        product0_.stock as stock6_2_,
+        product0_.title as title7_2_,
+        product0_.view as view8_2_ 
+    from
+        product product0_ 
+    where
+        product0_.category_id=? 
+    order by
+        product0_.view desc limit ? 
+14:23:03 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    select
+        product0_.product_id as product_1_2_,
+        product0_.category_id as category9_2_,
+        product0_.content as content2_2_,
+        product0_.created_time as created_3_2_,
+        product0_.photo as photo4_2_,
+        product0_.price as price5_2_,
+        product0_.product_info_id as product10_2_,
+        product0_.stock as stock6_2_,
+        product0_.title as title7_2_,
+        product0_.view as view8_2_ 
+    from
+        product product0_ 
+    where
+        product0_.category_id=? 
+    order by
+        product0_.view desc limit ? 
+14:23:04 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    select
+        product0_.product_id as product_1_2_,
+        product0_.category_id as category9_2_,
+        product0_.content as content2_2_,
+        product0_.created_time as created_3_2_,
+        product0_.photo as photo4_2_,
+        product0_.price as price5_2_,
+        product0_.product_info_id as product10_2_,
+        product0_.stock as stock6_2_,
+        product0_.title as title7_2_,
+        product0_.view as view8_2_ 
+    from
+        product product0_ 
+    where
+        product0_.category_id=? 
+    order by
+        product0_.view desc limit ? 
+14:23:05 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    select
+        product0_.product_id as product_1_2_,
+        product0_.category_id as category9_2_,
+        product0_.content as content2_2_,
+        product0_.created_time as created_3_2_,
+        product0_.photo as photo4_2_,
+        product0_.price as price5_2_,
+        product0_.product_info_id as product10_2_,
+        product0_.stock as stock6_2_,
+        product0_.title as title7_2_,
+        product0_.view as view8_2_ 
+    from
+        product product0_ 
+    where
+        product0_.category_id=? 
+    order by
+        product0_.view desc limit ? 
+14:33:48 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        product0_.product_id as product_1_2_,
+        product0_.category_id as category9_2_,
+        product0_.content as content2_2_,
+        product0_.created_time as created_3_2_,
+        product0_.photo as photo4_2_,
+        product0_.price as price5_2_,
+        product0_.product_info_id as product10_2_,
+        product0_.stock as stock6_2_,
+        product0_.title as title7_2_,
+        product0_.view as view8_2_ 
+    from
+        product product0_ 
+    where
+        product0_.product_id=? 
+14:33:48 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        product0_.view as col_0_0_ 
+    from
+        product product0_ 
+    where
+        product0_.product_id=? 
+14:34:39 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        product0_.product_id as product_1_2_,
+        product0_.category_id as category9_2_,
+        product0_.content as content2_2_,
+        product0_.created_time as created_3_2_,
+        product0_.photo as photo4_2_,
+        product0_.price as price5_2_,
+        product0_.product_info_id as product10_2_,
+        product0_.stock as stock6_2_,
+        product0_.title as title7_2_,
+        product0_.view as view8_2_ 
+    from
+        product product0_ 
+    inner join
+        category category1_ 
+            on product0_.category_id=category1_.category_id 
+    inner join
+        product_info productinf2_ 
+            on product0_.product_info_id=productinf2_.product_info_id 
+    where
+        category1_.category=? 
+    order by
+        product0_.view desc limit ? 
