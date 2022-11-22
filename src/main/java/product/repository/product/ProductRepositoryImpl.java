@@ -3,6 +3,8 @@ package product.repository.product;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberTemplate;
 import com.querydsl.core.util.StringUtils;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +56,23 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .orderBy(sorting(sorting))
                 .fetch();*/
 
-        // 데이터 수 줄여서 조회 테스트
+//        // 데이터 수 줄여서 조회 테스트
+//        List<ProductMainResponseDto> result = queryFactory.from(qProduct)
+//                .select(Projections.constructor(ProductMainResponseDto.class,
+//                        qProduct))
+//                .innerJoin(qProduct.category,qCategory)
+//                .innerJoin(qProduct.productInfo, qProductInfo)
+//                .where(categoryFilter(category),
+//                        isStock(stock),
+//                        minPriceRange(minPrice),
+//                        maxPriceRange(maxPrice),
+//                        keywordContain(keyword))
+//                .limit(pageable.getPageSize())
+//                .offset(pageable.getOffset())
+//                .orderBy(sorting(sorting))
+//                .fetch();
+
+        // full-text-search 적용
         List<ProductMainResponseDto> result = queryFactory.from(qProduct)
                 .select(Projections.constructor(ProductMainResponseDto.class,
                         qProduct))
@@ -64,7 +82,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                         isStock(stock),
                         minPriceRange(minPrice),
                         maxPriceRange(maxPrice),
-                        keywordContain(keyword))
+                        keywordMatch(keyword))
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
                 .orderBy(sorting(sorting))
@@ -72,6 +90,16 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
         return new PageImpl<>(result, pageable, result.size());
     }
+
+    // full-text-search 적용
+    private BooleanExpression keywordMatch(String keyword) {
+        if (StringUtils.isNullOrEmpty(keyword)) return null;
+        NumberTemplate booleanTemplate = Expressions.numberTemplate(Double.class,
+                "function('match',{0},{1})", QProduct.product.title, "+" + keyword + "*");
+        return booleanTemplate.gt(0);
+        //return QProduct.product.title.matches(keyword);
+    }
+
     @Override
     public Product detail(Long productId) {
         return queryFactory.selectFrom(qProduct)
