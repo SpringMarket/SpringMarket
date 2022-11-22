@@ -20,13 +20,14 @@ import static product.exception.ExceptionType.NOT_FOUND_EXCEPTION;
 public class CartRedisService {
 
     private final RedisTemplate<String, List<Long>> redisTemplate;
-    private final ValueOperations<String, List<Long>> values = redisTemplate.opsForValue();
 
     public void setCart(String key, List<Long> list) {
+        ValueOperations<String, List<Long>> values = redisTemplate.opsForValue();
         values.set(key, list);
     }
 
     public void addCart(String key, Long productId){
+        ValueOperations<String, List<Long>> values = redisTemplate.opsForValue();
         if(values.get(key) == null) {
             List<Long> list = new ArrayList<>();
             list.add(productId);
@@ -40,6 +41,7 @@ public class CartRedisService {
         }
     }
     public void deleteCart(String key, Long productId){
+        ValueOperations<String, List<Long>> values = redisTemplate.opsForValue();
         if(values.get(key) == null) throw new RequestException(NOT_FOUND_EXCEPTION);
         else {
             List<Long> list = values.get(key);
@@ -50,6 +52,7 @@ public class CartRedisService {
     }
 
     public List<Long> cartList(String key){
+        ValueOperations<String, List<Long>> values = redisTemplate.opsForValue();
         List<Long> list = new ArrayList<>();
 
         if(values.get(key) == null) return list;
