@@ -31,8 +31,6 @@ import static product.exception.ExceptionType.NOT_FOUND_EXCEPTION;
 public class ProductService {
     private final ProductRepository productRepository;
     private final ProductRedisService productRedisService;
-    private final RedisTemplate<String, String> redisTemplate;
-    private final RedisTemplate<String, ProductMainResponseDto> redisTemplateMainDto;
 
 
 
@@ -71,8 +69,7 @@ public class ProductService {
     // 랭킹보드 조회
     public List<ProductMainResponseDto> getRankingList(Long categoryId) {
         String key = "ranking::" + categoryId;
-        ZSetOperations<String, ProductMainResponseDto> stringStringZSetOperations = redisTemplateMainDto.opsForZSet();
-        Set<ZSetOperations.TypedTuple<ProductMainResponseDto>> typedTuples = stringStringZSetOperations.reverseRangeWithScores(key, 0, 99);
+        Set<ZSetOperations.TypedTuple<ProductMainResponseDto>> typedTuples = productRedisService.getRankingBoard(key);
 
         if (typedTuples == null) throw new RequestException(NOT_FOUND_EXCEPTION);
 
@@ -108,17 +105,7 @@ public class ProductService {
     // 테스트코드 : 제윤
     public void countView(Long productId) {
         String key = "productView::" + productId;
-
-        log.info("View Start");  // key : [productView::1] -> value : [1]
-
-        ValueOperations<String, String> values = redisTemplate.opsForValue(); // Redis String 자료구조 저장소 선언
-
-        if(values.get(key) == null) {
-            productRedisService.setView(key, String.valueOf(productRepository.getView(productId)), Duration.ofMinutes(35));
-            values.increment(key);
-        }
-        else values.increment(key);
-
-        log.info("View" + values.get(key));
+        log.info("View Increment");
+        productRedisService.incrementView(key, productId);
     }
 }

@@ -27,7 +27,6 @@ public class CartService { // Redis 테스트 코드 : 제윤
     private final ProductRepository productRepository;
     private final OrderService orderService;
     private final CartRedisService cartRedisService;
-    private final RedisTemplate<String, List<Long>> redisTemplate;
 
 
     // 장바구니에 추가
@@ -37,53 +36,29 @@ public class CartService { // Redis 테스트 코드 : 제윤
         if (productRepository.findByProductId(productId) == null) throw new RequestException(NOT_FOUND_EXCEPTION);
 
         String key = "cart::" + authentication.getName(); // key : [cart:jeyun@naver.com] value : [1,2,3,4]
-        ValueOperations<String, List<Long>> values = redisTemplate.opsForValue();
+        cartRedisService.addCart(key, productId);
 
-        if(values.get(key) == null) {
-            List<Long> list = new ArrayList<>();
-            list.add(productId);
-            cartRedisService.setCart(key, list);
-        }
-        else {
-            List<Long> list = values.get(key);
-            if (list.contains(productId)) throw new RequestException(ALREADY_EXIST_EXCEPTION);
-            list.add(productId);
-            values.set(key, list);
-        }
     }
 
     @Transactional
     public void deleteCart(Long productId, Authentication authentication){
 
         String key = "cart::" + authentication.getName();
-        ValueOperations<String, List<Long>> values = redisTemplate.opsForValue();
-
-        if(values.get(key) == null) throw new RequestException(NOT_FOUND_EXCEPTION);
-        else {
-            List<Long> list = values.get(key);
-            if (!list.contains(productId)) throw new RequestException(NOT_FOUND_EXCEPTION);
-            list.remove(productId);
-            values.set(key, list);
-        }
+        cartRedisService.deleteCart(key, productId);
     }
 
     @Transactional(readOnly = true)
     public List<ProductMainResponseDto> showCart(Authentication authentication) {
         String key = "cart::" + authentication.getName();
 
-        ValueOperations<String, List<Long>> values = redisTemplate.opsForValue();
-        List<ProductMainResponseDto> dtos = new ArrayList<>();
+        List<ProductMainResponseDto> productMainResponseDtos = new ArrayList<>();
+        List<Long> list = cartRedisService.cartList(key);
 
-        if(values.get(key) == null) return null;
-        else {
-            List<Long> list = values.get(key);
-            assert list != null;
-            for (Long cart : list) {
-                ProductMainResponseDto dto = ProductMainResponseDto.toDto(productRepository.detail(cart));
-                dtos.add(dto);
-            }
+        for (Long cart : list) {
+            ProductMainResponseDto dto = ProductMainResponseDto.toDto(productRepository.detail(cart));
+            productMainResponseDtos.add(dto);
         }
-        return dtos;
+        return productMainResponseDtos;
     }
 
     @Transactional
@@ -92,13 +67,11 @@ public class CartService { // Redis 테스트 코드 : 제윤
         if (list == null) throw new RequestException(NOT_FOUND_EXCEPTION);
 
         String key = "cart::" + authentication.getName();
-        ValueOperations<String, List<Long>> values = redisTemplate.opsForValue();
-        List<Long> productList = values.get(key);
 
-        if (productList == null) throw new RequestException(NOT_FOUND_EXCEPTION);
+        List<Long> cartList = cartRedisService.cartList(key);
 
         for (OrderRequestDto order : list) {
-            if (!productList.contains(order.getProductId())) throw new RequestException(NOT_FOUND_EXCEPTION);
+            if (!cartList.contains(order.getProductId())) throw new RequestException(NOT_FOUND_EXCEPTION);
             orderService.orderProduct(order.getProductId(), order.getOrderNum(), authentication);
         }
     }
