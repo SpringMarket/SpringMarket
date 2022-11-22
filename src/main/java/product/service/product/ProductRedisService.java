@@ -30,6 +30,16 @@ public class ProductRedisService {
         values.set(key, data, duration);
     }
 
+    public void incrementView(String key, Long productId) {
+        ValueOperations<String, String> values = redisTemplate.opsForValue();
+        // key : [productView::1] -> value : [1]
+        if(values.get(key) == null) {
+            setView(key, String.valueOf(productRepository.getView(productId)), Duration.ofMinutes(35));
+            values.increment(key);
+        }
+        else values.increment(key);
+    }
+
     @Scheduled(cron = "0 0/10 * * * ?")
     @Transactional
     public void UpdateViewRDS() {
@@ -60,10 +70,9 @@ public class ProductRedisService {
         values.add(key, data, score);
     }
 
-    public ZSetOperations<String, ProductMainResponseDto> getRankingBoard(String key, double start, double end) {
-        ZSetOperations<String, ProductMainResponseDto> values = redisTemplateMainDto.opsForZSet();
-        values.reverseRange(key, 0, 99);
-        return values;
+    public Set<ZSetOperations.TypedTuple<ProductMainResponseDto>> getRankingBoard(String key) {
+        ZSetOperations<String, ProductMainResponseDto> stringStringZSetOperations = redisTemplateMainDto.opsForZSet();
+        return stringStringZSetOperations.reverseRangeWithScores(key, 0, 99);
     }
 }
 
