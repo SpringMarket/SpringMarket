@@ -12,16 +12,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import product.config.jwt.JwtAccessDeniedHandler;
 import product.config.jwt.JwtAuthenticationEntryPoint;
 import product.config.jwt.TokenProvider;
 import product.config.log.AccessLogFilter;
+import product.dto.user.LoginRequestDto;
+import product.dto.user.SignUpRequestDto;
 import product.service.user.AuthService;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -54,19 +59,19 @@ class AuthControllerTest {
     @Test
     @DisplayName("회원 가입 성공")
     void signup() throws Exception {
-
+        // given
         String content = "{" +
                 "    \"email\": \"suyoung@naver.com\"," +
                 "    \"password\":\"1234\"," +
                 "    \"age\":\"20대\"" +
                 "}";
-        /*SignUpRequestDto signUpRequestDto = new SignUpRequestDto("suyoung@naver.com","1234","20대");
-        String jsonContent = mapper.writeValueAsString(signUpRequestDto);*/
-
+        
+        // when
         mvc.perform(post("/api/signup")
                         .content(content)
                         .contentType("application/json")
                         .characterEncoding("UTF-8"))
+        // then
                 .andExpect(status().isOk())
                 .andExpect(content().string("{" +
                         "\"result\":true," +
@@ -102,7 +107,22 @@ class AuthControllerTest {
         // then
         assertThat(level).isEqualTo(Level.INFO);
         assertThat(message).isEqualTo("suyoung@naver.com 님이 가입하셨습니다.");
+    }
 
+    @Test
+    @DisplayName("회원 가입 verify")
+    void signupVerify() throws Exception {
+
+        // given
+        SignUpRequestDto signUpRequestDto = new SignUpRequestDto("suyoung@naver.com","1234","20대");
+        String content = mapper.writeValueAsString(signUpRequestDto);
+        // when
+        mvc.perform(post("/api/signup")
+                        .content(content)
+                        .contentType("application/json")
+                        .characterEncoding("UTF-8"));
+        // then
+        verify(authService,times(1)).signup(signUpRequestDto);
     }
 
     @Test
@@ -249,18 +269,16 @@ class AuthControllerTest {
     @DisplayName("로그인 성공")
     void login() throws Exception {
         // given
-        /*LoginRequestDto loginRequestDto = new LoginRequestDto("suyoung@naver.com","1234");
-        String jsonContent = mapper.writeValueAsString(loginRequestDto);*/
-
         String content = "{" +
                 "    \"email\": \"suyoung@naver.com\"," +
                 "    \"password\":\"1234\"" +
                 "}";
-        // then
+        // when
         mvc.perform(post("/api/login")
                         .content(content)
                         .contentType("application/json")
                         .characterEncoding("UTF-8"))
+        // then        
                 .andExpect(status().isOk());
     }
 
@@ -295,6 +313,25 @@ class AuthControllerTest {
     }
 
     @Test
+    @DisplayName("로그인 verify")
+    void loginVerify() throws Exception {
+
+        // given
+        LoginRequestDto loginRequestDto = new LoginRequestDto("suyoung@naver.com","1234");
+        String content = mapper.writeValueAsString(loginRequestDto);
+        // when
+        MvcResult mvcResult =  mvc.perform(post("/api/login")
+                .content(content)
+                .contentType("application/json")
+                .characterEncoding("UTF-8"))
+                .andReturn();
+        MockHttpServletResponse response = mvcResult.getResponse();
+        // then
+        verify(authService,times(1)).login(loginRequestDto, response);
+    }
+
+
+    @Test
     @DisplayName("로그인 이메일 형식오류")
     void loginEmailError() throws Exception {
         // given
@@ -316,7 +353,7 @@ class AuthControllerTest {
     void loginEmailNull() throws Exception {
         // given
         String content = "{" +
-                "    \"password\":\" \"" +
+                "    \"password\":\"1234\"" +
                 "}";
         // then
         mvc.perform(post("/api/login")
@@ -324,7 +361,7 @@ class AuthControllerTest {
                         .contentType("application/json")
                         .characterEncoding("UTF-8"))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().json("{\"result\":false,\"httpStatus\":\"BAD_REQUEST\",\"check\":{\"msg\":\"아이디를 입력해주세요.\"}}"));
+                .andExpect(content().json("{\"result\":false,\"httpStatus\":\"BAD_REQUEST\",\"check\":{\"msg\":\"이메일을 입력해주세요.\"}}"));
     }
 
     @Test
@@ -333,7 +370,7 @@ class AuthControllerTest {
         // given
         String content = "{" +
                 "    \"email\": \"\"," +
-                "    \"password\":\" \"" +
+                "    \"password\":\"1234\"" +
                 "}";
         // then
         mvc.perform(post("/api/login")
@@ -393,9 +430,5 @@ class AuthControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().json("{\"result\":false,\"httpStatus\":\"BAD_REQUEST\",\"check\":{\"msg\":\"비밀번호를 입력해주세요.\"}}"));
     }
-
-
-
-
 
 }
