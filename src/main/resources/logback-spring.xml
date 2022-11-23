@@ -13,11 +13,11 @@
             <maxFileSize>10MB</maxFileSize>
             <!-- keep 3 days' worth of history capped at 1GB total size -->
             <maxHistory>3</maxHistory>
-            <totalSizeCap>1GB</totalSizeCap>
+            <totalSizeCap>100MB</totalSizeCap>
         </rollingPolicy>
 
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n</pattern>
+            <pattern>%d{MM/dd HH:mm:ss} [%thread] %-5level %logger{35} - %msg %n</pattern>
         </encoder>
     </appender>
 
@@ -32,11 +32,11 @@
             <maxFileSize>10MB</maxFileSize>
             <!-- keep 3 days' worth of history capped at 1GB total size -->
             <maxHistory>3</maxHistory>
-            <totalSizeCap>1GB</totalSizeCap>
+            <totalSizeCap>100MB</totalSizeCap>
         </rollingPolicy>
 
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <pattern>%d{HH:mm:ss} [%thread] %-5level %logger{35} - %msg %n</pattern>
+            <pattern>%d{MM/dd HH:mm:ss} [%thread] %-5level %logger{35} - %msg %n</pattern>
         </encoder>
     </appender>
 
