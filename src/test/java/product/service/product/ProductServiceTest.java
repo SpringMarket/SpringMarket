@@ -1,6 +1,9 @@
 package product.service.product;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
@@ -9,13 +12,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import product.dto.product.ProductResponseDetailDto;
-import product.entity.product.*;
-import product.entity.order.Order;
-import product.entity.user.Authority;
-import product.entity.user.User;
-import product.repository.product.*;
+import product.dto.product.ProductMainResponseDto;
+import product.entity.product.Category;
+import product.entity.product.Product;
+import product.entity.product.ProductInfo;
 import product.repository.order.OrderRepository;
+import product.repository.product.CategoryRepository;
+import product.repository.product.ProductInfoRepository;
+import product.repository.product.ProductRepository;
 import product.repository.user.UserRepository;
 
 import java.util.List;
@@ -46,11 +50,11 @@ class ProductServiceTest {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
-    StockRepository stockRepository;
-
-    @Autowired
-    ViewRepository viewRepository;
+//    @Autowired
+//    StockRepository stockRepository;
+//
+//    @Autowired
+//    ViewRepository viewRepository;
 
     @BeforeAll
     void setUp(){
@@ -79,24 +83,24 @@ class ProductServiceTest {
 
         productInfoRepository.save(productInfo);
 
-        Stock stock = Stock.builder()
-                .stock_id(1L)
-                .stock(10L)
-                .build();
-
-        stockRepository.save(stock);
-
-        View view = View.builder()
-                .view_id(1L)
-                .view(50)
-                .build();
-
-        viewRepository.save(view);
+//        Stock stock = Stock.builder()
+//                .stock_id(1L)
+//                .stock(10L)
+//                .build();
+//
+//        stockRepository.save(stock);
+//
+//        View view = View.builder()
+//                .view_id(1L)
+//                .view(50)
+//                .build();
+//
+//        viewRepository.save(view);
 
         product.setCategory(category);
         product.setProductInfo(productInfo);
-        product.setView(view);
-        product.setStock(stock);
+//        product.setView(view);
+//        product.setStock(stock);
 
         productRepository.save(product);
     }
@@ -128,7 +132,7 @@ class ProductServiceTest {
         String sort = null;
 
         // WHEN
-        Page<ProductResponseDetailDto> list = productRepository.mainFilter(pageable, category, stock, minPrice, maxPrice, keyword, sort);
+        Page<ProductMainResponseDto> list = productRepository.mainFilter(pageable, category, stock, minPrice, maxPrice, keyword, sort);
 
         // THEN
         assertThat(list.getTotalElements()).isEqualTo(1);
@@ -148,7 +152,7 @@ class ProductServiceTest {
         String sort = "조회순";
 
         // WHEN
-        Page<ProductResponseDetailDto> list = productRepository.mainFilter(pageable, category, stock, minPrice, maxPrice, keyword, sort);
+        Page<ProductMainResponseDto> list = productRepository.mainFilter(pageable, category, stock, minPrice, maxPrice, keyword, sort);
 
         // THEN
         assertThat(list.getTotalElements()).isEqualTo(1);
