@@ -1,7 +1,6 @@
 package product.controller.user;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,7 +33,7 @@ public class AuthController {
     @PostMapping("/signup")
     public Response signup(@Valid @RequestBody SignUpRequestDto signUpRequestDto) {
         authService.signup(signUpRequestDto);
-        log.info(signUpRequestDto.getEmail() + " 님이 가입하셨습니다");
+        log.info(signUpRequestDto.getEmail() + " 님이 가입하셨습니다.");
         return success();
     }
 
@@ -47,7 +46,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public Response login(@Valid @RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
-        log.info(loginRequestDto.getEmail() + " 님이 로그인하셨습니다");
+        log.info(loginRequestDto.getEmail() + " 님이 로그인하셨습니다.");
         return success(authService.login(loginRequestDto, response));
     }
 
