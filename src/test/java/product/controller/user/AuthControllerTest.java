@@ -316,7 +316,7 @@ class AuthControllerTest {
     void loginEmailNull() throws Exception {
         // given
         String content = "{" +
-                "    \"password\":\" \"" +
+                "    \"password\":\"1234\"" +
                 "}";
         // then
         mvc.perform(post("/api/login")
@@ -324,7 +324,7 @@ class AuthControllerTest {
                         .contentType("application/json")
                         .characterEncoding("UTF-8"))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().json("{\"result\":false,\"httpStatus\":\"BAD_REQUEST\",\"check\":{\"msg\":\"아이디를 입력해주세요.\"}}"));
+                .andExpect(content().json("{\"result\":false,\"httpStatus\":\"BAD_REQUEST\",\"check\":{\"msg\":\"이메일을 입력해주세요.\"}}"));
     }
 
     @Test
@@ -333,7 +333,7 @@ class AuthControllerTest {
         // given
         String content = "{" +
                 "    \"email\": \"\"," +
-                "    \"password\":\" \"" +
+                "    \"password\":\"1234\"" +
                 "}";
         // then
         mvc.perform(post("/api/login")
@@ -393,9 +393,5 @@ class AuthControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().json("{\"result\":false,\"httpStatus\":\"BAD_REQUEST\",\"check\":{\"msg\":\"비밀번호를 입력해주세요.\"}}"));
     }
-
-
-
-
 
 }
