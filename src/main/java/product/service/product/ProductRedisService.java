@@ -72,7 +72,7 @@ public class ProductRedisService {
         else values.increment(key);
     }
 
-    @Scheduled(cron = "0 0/10 * * * ?")
+    @Scheduled(cron = "0 0/100 * * * ?")
     @Transactional
     public void UpdateViewRDS() {
         Set<String> redisKeys = redisTemplate.keys("productView*");
