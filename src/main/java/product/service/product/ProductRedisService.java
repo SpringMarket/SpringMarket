@@ -2,17 +2,21 @@ package product.service.product;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import product.dto.product.ProductDetailResponseDto;
 import product.dto.product.ProductMainResponseDto;
+import product.entity.product.Product;
 import product.repository.product.ProductRepository;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -24,6 +28,34 @@ public class ProductRedisService {
     private final RedisTemplate<String, ProductDetailResponseDto> redisTemplateDetailDto;
     private final RedisTemplate<String, ProductMainResponseDto> redisTemplateMainDto;
     private final ProductRepository productRepository;
+
+
+    public void warmupPipeLine(List<Product> list) {
+        RedisSerializer keySerializer = redisTemplateDetailDto.getStringSerializer();
+        RedisSerializer valueSerializer = redisTemplateDetailDto.getValueSerializer();
+
+        redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
+            list.forEach(i -> {
+                String key = "Product::"+i.getProductId();
+                connection.listCommands().rPush(keySerializer.serialize(key),
+                        valueSerializer.serialize(i));
+            });
+            return null;
+        });
+    }
+
+    public void warmupRankingPipeLine(List<Product> list, Long categoryId){
+        RedisSerializer keySerializer = redisTemplateMainDto.getStringSerializer();
+        RedisSerializer valueSerializer = redisTemplateMainDto.getValueSerializer();
+
+        redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
+            list.forEach(i -> {
+                connection.zSetCommands().zAdd(keySerializer.serialize("Ranking::"+categoryId),
+                        i.getView(), valueSerializer.serialize(ProductMainResponseDto.toDto(i)));
+            });
+            return null;
+        });
+    }
 
     public void setView(String key, String data, Duration duration) {
         ValueOperations<String, String> values = redisTemplate.opsForValue();
@@ -64,6 +96,7 @@ public class ProductRedisService {
         ValueOperations<String, ProductDetailResponseDto> values = redisTemplateDetailDto.opsForValue();
         values.set(key, data, duration);
     }
+
 
     public void setRankingBoard(String key, ProductMainResponseDto data, double score) {
         ZSetOperations<String, ProductMainResponseDto> values = redisTemplateMainDto.opsForZSet();

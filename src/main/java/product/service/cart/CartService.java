@@ -2,8 +2,6 @@ package product.service.cart;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +14,6 @@ import product.service.order.OrderService;
 import java.util.ArrayList;
 import java.util.List;
 
-import static product.exception.ExceptionType.ALREADY_EXIST_EXCEPTION;
 import static product.exception.ExceptionType.NOT_FOUND_EXCEPTION;
 
 @Slf4j
@@ -28,6 +25,12 @@ public class CartService { // Redis 테스트 코드 : 제윤
     private final OrderService orderService;
     private final CartRedisService cartRedisService;
 
+    // 장바구니 추가 테스트
+    @Transactional
+    public void addCartTest(Long productId){
+        String key = "cart::Test"; // key : [cart:jeyun@naver.com] value : [1,2,3,4]
+        cartRedisService.addCart(key, productId);
+    }
 
     // 장바구니에 추가
     @Transactional
@@ -37,7 +40,6 @@ public class CartService { // Redis 테스트 코드 : 제윤
 
         String key = "cart::" + authentication.getName(); // key : [cart:jeyun@naver.com] value : [1,2,3,4]
         cartRedisService.addCart(key, productId);
-
     }
 
     @Transactional

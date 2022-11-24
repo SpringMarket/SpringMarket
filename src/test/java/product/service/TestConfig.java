@@ -1,4 +1,4 @@
-package product.service.product;
+package product.service;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.boot.test.context.TestConfiguration;

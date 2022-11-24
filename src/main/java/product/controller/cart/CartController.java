@@ -28,6 +28,13 @@ public class CartController {
         return success(cartService.showCart(authentication));
     }
 
+    // 카트에 추가 테스트
+    @GetMapping("/add/{productId}/test")
+    public Response addCartTest(@PathVariable Long productId) {
+        cartService.addCartTest(productId);
+        return success();
+    }
+
     // 카트에 추가
     @GetMapping("/add/{productId}")
     public Response addCart(@PathVariable Long productId) {
