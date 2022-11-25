@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
+import product.dto.product.ProductDetailResponseDto;
 import product.dto.product.ProductMainResponseDto;
 import product.entity.product.*;
 
@@ -34,63 +35,22 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
         // 커버링 인덱스 적용
        List<Long> ids = queryFactory.from(qProduct)
-                .select(qProduct.productId)
-                .innerJoin(qProduct.category,qCategory)
-                .where(categoryFilter(category),
+               .select(qProduct.productId)
+               .innerJoin(qProduct.category,qCategory)
+               .innerJoin(qProduct.productInfo, qProductInfo)
+               .where(categoryFilter(category),
                         isStock(stock),
                         minPriceRange(minPrice),
                         maxPriceRange(maxPrice),
                         keywordMatch(keyword))
+              .orderBy(sorting(sorting))
                .limit(pageable.getPageSize())
                .offset(pageable.getOffset())
-                .fetch();
+               .fetch();
 
         if (CollectionUtils.isEmpty(ids)) {
             return new PageImpl<>(new ArrayList<>(), pageable, 0);
         }
-
-/*         List<ProductResponseDetailDto> result = queryFactory.from(qProduct)
-                .select(Projections.constructor(ProductResponseDetailDto.class,
-                        qProduct))
-                .innerJoin(qProduct.category,qCategory)
-                .innerJoin(qProduct.productInfo, qProductInfo)
-                .where(qProduct.productId.in(ids))
-                .limit(pageable.getPageSize())
-                .offset(pageable.getOffset())
-                .orderBy(sorting(sorting))
-                .fetch();*/
-
-//        // 데이터 수 줄여서 조회 테스트
-//        List<ProductMainResponseDto> result = queryFactory.from(qProduct)
-//                .select(Projections.constructor(ProductMainResponseDto.class,
-//                        qProduct))
-//                .innerJoin(qProduct.category,qCategory)
-//                .innerJoin(qProduct.productInfo, qProductInfo)
-//                .where(categoryFilter(category),
-//                        isStock(stock),
-//                        minPriceRange(minPrice),
-//                        maxPriceRange(maxPrice),
-//                        keywordContain(keyword))
-//                .limit(pageable.getPageSize())
-//                .offset(pageable.getOffset())
-//                .orderBy(sorting(sorting))
-//                .fetch();
-
-//        // full-text-search 적용
-//        List<ProductMainResponseDto> result = queryFactory.from(qProduct)
-//                .select(Projections.constructor(ProductMainResponseDto.class,
-//                        qProduct))
-//                .innerJoin(qProduct.category,qCategory)
-//                .innerJoin(qProduct.productInfo, qProductInfo)
-//                .where(categoryFilter(category),
-//                        isStock(stock),
-//                        minPriceRange(minPrice),
-//                        maxPriceRange(maxPrice),
-//                        keywordMatch(keyword))
-//                .limit(pageable.getPageSize())
-//                .offset(pageable.getOffset())
-//                .orderBy(sorting(sorting))
-//                .fetch();
 
         List<ProductMainResponseDto> result = queryFactory.from(qProduct)
                 .select(Projections.constructor(ProductMainResponseDto.class,
@@ -104,24 +64,19 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         return new PageImpl<>(result, pageable, result.size());
     }
 
-    // full-text-search 적용
-    private BooleanExpression keywordMatch(String keyword) {
-        if (StringUtils.isNullOrEmpty(keyword)) return null;
-        NumberTemplate booleanTemplate = Expressions.numberTemplate(Double.class,
-                "function('match',{0},{1})", QProduct.product.title, "+" + keyword + "*");
-        return booleanTemplate.gt(0);
-        //return QProduct.product.title.matches(keyword);
-    }
-
     @Override
-    public Product detail(Long productId) {
-        return queryFactory.selectFrom(qProduct)
+    public ProductDetailResponseDto detail(Long productId) {
+        return queryFactory.from(qProduct)
+                .select(Projections.constructor(ProductDetailResponseDto.class,
+                        qProduct.productId,qProduct.title,qProduct.content,qProduct.photo,qProduct.price,qProduct.createdTime))
                 .where(qProduct.productId.eq(productId))
                 .fetchOne();
     }
     @Override
-    public List<Product> warmup(Long categoryId) {
-        return queryFactory.selectFrom(qProduct)
+    public List<ProductMainResponseDto> warmup(Long categoryId) {
+        return queryFactory.from(qProduct)
+                .select(Projections.constructor(ProductMainResponseDto.class,
+                        qProduct.productId,qProduct.title,qProduct.photo,qProduct.price))
                 .where(qProduct.category.categoryId.eq(categoryId))
                 .orderBy(qProduct.view.desc())
                 .limit(100)
@@ -165,6 +120,15 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         return null;
     }
 
+    // full-text-search 적용
+    private BooleanExpression keywordMatch(String keyword) {
+        if (StringUtils.isNullOrEmpty(keyword)) return null;
+        NumberTemplate booleanTemplate = Expressions.numberTemplate(Double.class,
+                "function('match',{0},{1})", QProduct.product.title, "+" + keyword + "*");
+        return booleanTemplate.gt(0);
+        //return QProduct.product.title.matches(keyword);
+    }
+
     private BooleanExpression keywordContain(String keyword) {
         if (StringUtils.isNullOrEmpty(keyword)) return null;
         return QProduct.product.title.contains(keyword);
@@ -190,4 +154,49 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         }
         return qProduct.view.desc();
     }
+
+    // 성능 테스트용
+
+    /*@Override
+    public Page<ProductMainResponseDto> mainFilter(Pageable pageable, String category, String stock,
+                                                   Long minPrice, Long maxPrice, String keyword, String sorting) {
+
+
+
+        // 데이터 수 줄여서 조회 테스트
+        List<ProductMainResponseDto> result = queryFactory.from(qProduct)
+                .select(Projections.constructor(ProductMainResponseDto.class,
+                        qProduct))
+                .innerJoin(qProduct.category,qCategory)
+                .innerJoin(qProduct.productInfo, qProductInfo)
+                .where(categoryFilter(category),
+                        isStock(stock),
+                        minPriceRange(minPrice),
+                        maxPriceRange(maxPrice),
+                        keywordContain(keyword))
+                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset())
+                .orderBy(sorting(sorting))
+                .fetch();
+
+        // full-text-search 적용
+        List<ProductMainResponseDto> result = queryFactory.from(qProduct)
+                .select(Projections.constructor(ProductMainResponseDto.class,
+                        qProduct))
+                .innerJoin(qProduct.category,qCategory)
+                .innerJoin(qProduct.productInfo, qProductInfo)
+                .where(categoryFilter(category),
+                        isStock(stock),
+                        minPriceRange(minPrice),
+                        maxPriceRange(maxPrice),
+                        keywordMatch(keyword))
+                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset())
+                .orderBy(sorting(sorting))
+                .fetch();
+
+
+        return new PageImpl<>(result, pageable, result.size());
+    }*/
+
 }
