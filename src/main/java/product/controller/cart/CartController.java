@@ -14,13 +14,13 @@ import static product.response.Response.success;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/cart")
+@RequestMapping("/api")
 public class CartController {
 
     private final CartService cartService;
 
     // 카트 조회
-    @GetMapping("/show")
+    @GetMapping("/cart/list")
     public Response showCart() {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -28,15 +28,9 @@ public class CartController {
         return success(cartService.showCart(authentication));
     }
 
-    // 카트에 추가 테스트
-    @GetMapping("/add/{productId}/test")
-    public Response addCartTest(@PathVariable Long productId) {
-        cartService.addCartTest(productId);
-        return success();
-    }
 
     // 카트에 추가
-    @GetMapping("/add/{productId}")
+    @GetMapping("/cart/{productId}")
     public Response addCart(@PathVariable Long productId) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -45,7 +39,7 @@ public class CartController {
     }
 
     // 카트에서 삭제
-    @DeleteMapping("/delete/{productId}")
+    @DeleteMapping("/cart/{productId}")
     public Response deleteCart(@PathVariable Long productId) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -54,7 +48,7 @@ public class CartController {
     }
 
     // 카트 주문
-    @PostMapping("/order")
+    @PostMapping("/cart/order")
     public Response orderCart(@RequestBody List<OrderRequestDto> list) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

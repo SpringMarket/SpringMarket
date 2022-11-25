@@ -16,7 +16,7 @@ import static product.response.Response.success;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/product")
+@RequestMapping("/api")
 public class OrderController {
 
     private final OrderService orderService;
@@ -33,7 +33,7 @@ public class OrderController {
     }
 
     // 주문 목록 조회
-    @GetMapping("/list")
+    @GetMapping("/order/list")
     public Response myPage(@PageableDefault(size = 10) Pageable pageable) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -42,7 +42,7 @@ public class OrderController {
     }
 
     // 주문 취소
-    @PatchMapping("/{orderId}")
+    @PatchMapping("/order/{orderId}")
     public Response cancel(@PathVariable Long orderId) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

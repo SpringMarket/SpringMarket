@@ -25,12 +25,6 @@ public class CartService { // Redis 테스트 코드 : 제윤
     private final OrderService orderService;
     private final CartRedisService cartRedisService;
 
-    // 장바구니 추가 테스트
-    @Transactional
-    public void addCartTest(Long productId){
-        String key = "cart::Test"; // key : [cart:jeyun@naver.com] value : [1,2,3,4]
-        cartRedisService.addCart(key, productId);
-    }
 
     // 장바구니에 추가
     @Transactional

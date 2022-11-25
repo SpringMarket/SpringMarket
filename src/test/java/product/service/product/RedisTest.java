@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.test.context.ContextConfiguration;
 import product.service.RedisTestContainer;
@@ -26,7 +27,7 @@ public class RedisTest extends RedisTestContainer {
     private RedisTemplate<String, String> redisTemplate;
 
     @BeforeAll
-    public void Set_PipeLine(){
+    public void Set_String_PipeLine(){
 
         ArrayList<String> list = new ArrayList<>();
         list.add("T");
@@ -41,6 +42,27 @@ public class RedisTest extends RedisTestContainer {
             list.forEach(i -> {
                 connection.stringCommands().set(keySerializer.serialize("Test::"+i),
                         valueSerializer.serialize(i));
+            });
+            return null;
+        });
+    }
+
+    @BeforeAll
+    public void Set_ZSet_PipeLine(){
+
+        ArrayList<String> list = new ArrayList<>();
+        list.add("1");
+        list.add("2");
+        list.add("3");
+        list.add("4");
+
+        RedisSerializer keySerializer = redisTemplate.getStringSerializer();
+        RedisSerializer valueSerializer = redisTemplate.getValueSerializer();
+
+        redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
+            list.forEach(i -> {
+                connection.zSetCommands().zAdd(keySerializer.serialize("ZSet"),
+                        Math.random()*10 ,valueSerializer.serialize(i));
             });
             return null;
         });
@@ -62,6 +84,12 @@ public class RedisTest extends RedisTestContainer {
         assertEquals(values.get(("Test::E")), "E");
         assertEquals(values.get(("Test::S")), "S");
         assertEquals(values.get(("Test::T!")), "T!");
+    }
+
+    @Test
+    public void PipeLine_ZSet_Test() {
+        ZSetOperations<String, String> values = redisTemplate.opsForZSet();
+        assertEquals(values.size("ZSet"), 4);
     }
 }
 
