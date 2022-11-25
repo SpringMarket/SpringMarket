@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">우리 로고</a>
+  </div>
+  <th:block th:if="${email != null}">
+    <button onclick="location.href='/api/mypage'" type="button" class="btn btn-dark">
+      마이페이지 🙋
+    </button>
+  </th:block>
+  <!--<th:block th:unless="${email != null}">
+    <button type="button" class="btn btn-dark" onclick="location.href='/login' ">로그인 ⌨️</button>
+  </th:block>-->
+</nav>
+
+<section class="py-5" id="products">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            <div class="d-flex" th:if="${response.stock != 0}">
+                <div>
+                    <h4 class="product name" th:text="${response.title}"></h4>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col brand" th:text="|가격 ${response.price}|"></div>
+                            <div class="col brand" th:text="|재고 ${response.stock}|"></div>
+
+                            <!-- Force next columns to break to new line at md breakpoint and up -->
+                            <div class="w-100 d-none d-md-block"></div>
+
+                            <div class="col brand brand_last" th:text="|내용 ${response.content}|"></div>
+                            <div class="col brand brand_last" th:text="|조회수 ${response.view}|"></div>
+                            <div class="col brand brand_last" th:text="|생성일자 ${response.createdTime}|"></div>
+                            <div class="col brand brand_last" th:text="|카테고리 ${response.categoryId}|"></div>
+
+                            <div class="w-100 d-none d-md-block"></div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!--ajax	-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script th:inline="javascript">
+    $(document).ready(function () {
+        getProduct()
+    })
+    function getProduct(product_id){
+        console.log(data);
+
+        $.ajax({
+            type:"GET",
+            url:`api/product/${product_id}`,
+            contentType: 'application/json; charset=utf-8',
+            data: {},
+            success: function(response){
+                console.log('success')
+                window.location.reload();
+            },
+            error: function(){
+                console.log('Failed')
+            }
+    });
+}
+
+</script>
+
+</body>
+</html>
