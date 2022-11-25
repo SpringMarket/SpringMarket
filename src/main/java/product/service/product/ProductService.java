@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import product.dto.product.ProductDetailResponseDto;
 import product.dto.product.ProductMainResponseDto;
+import product.entity.product.Product;
 import product.exception.RequestException;
 import product.repository.product.ProductRepository;
 
@@ -26,6 +27,7 @@ import static product.exception.ExceptionType.NOT_FOUND_EXCEPTION;
 public class ProductService {
     private final ProductRepository productRepository;
     private final ProductRedisService productRedisService;
+
 
     // 랭킹보드 조회
     public List<ProductMainResponseDto> getRankingList(Long categoryId) {

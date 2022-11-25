@@ -1,6 +1,0 @@
-16:35:36 [http-nio-8080-exec-2] INFO  ACCESS - {"remoteHost":"0:0:0:0:0:0:0:1","method":"GET""url":"http://localhost:8080/api/warmup/pipe","status":"200","elapsed":1366}
-16:48:21 [http-nio-8080-exec-2] INFO  ACCESS - {"remoteHost":"0:0:0:0:0:0:0:1","method":"GET""url":"http://localhost:8080/api/warmup/pipe","status":"200","elapsed":27408}
-17:21:46 [http-nio-8080-exec-10] INFO  ACCESS - {"remoteHost":"0:0:0:0:0:0:0:1","method":"GET""url":"http://localhost:8080/api/warmup/pipe/none","status":"200","elapsed":1261}
-17:22:10 [http-nio-8080-exec-7] INFO  ACCESS - {"remoteHost":"0:0:0:0:0:0:0:1","method":"GET""url":"http://localhost:8080/api/warmup/pipe/none","status":"200","elapsed":13}
-17:23:10 [http-nio-8080-exec-2] INFO  ACCESS - {"remoteHost":"0:0:0:0:0:0:0:1","method":"GET""url":"http://localhost:8080/api/warmup/pipe/none","status":"200","elapsed":9}
-17:23:42 [http-nio-8080-exec-6] INFO  ACCESS - {"remoteHost":"0:0:0:0:0:0:0:1","method":"GET""url":"http://localhost:8080/api/warmup/pipe","status":"200","elapsed":53}

@@ -19,6 +19,27 @@ public class ProductController {
     Logger log = LoggerFactory.getLogger("ACCESS");
 
 
+    @GetMapping("/warmup/pipe")
+    public Response warmupRankingPipeLine() {
+        productService.warmupRankingPipeLine();
+        return success("SUCCESS ^__^ !!");
+    }
+
+    // Warm UP -> Named Post
+    @GetMapping("/warmup")
+    public Response warmup() {
+        productService.warmup();
+        return success("SUCCESS ^__^ !!");
+    }
+
+
+    // Warm UP -> Ranking Board
+    @GetMapping("/warmup/rank")
+    public Response warmupRank() {
+        productService.warmupRank();
+        return success("SUCCESS ^__^ !!");
+    }
+
     // 랭킹보드 조회
     @GetMapping("/rank/list/{categoryId}")
     public Response getRankingList(@PathVariable Long categoryId) {
