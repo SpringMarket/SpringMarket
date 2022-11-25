@@ -5,16 +5,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import product.dto.product.ProductMainResponseDto;
 import product.dto.product.ProductDetailResponseDto;
-import product.entity.product.*;
+import product.dto.product.ProductMainResponseDto;
+import product.entity.product.Product;
 import product.exception.RequestException;
-import product.repository.product.*;
+import product.repository.product.ProductRepository;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -33,6 +31,16 @@ public class ProductService {
     private final ProductRedisService productRedisService;
 
 
+    @Transactional
+    public void warmupRankingPipeLine(){
+
+        log.info("Warm Up PipeLine Start....");
+
+        for (long k =1; k<6; k++) {
+            List<Product> list = productRepository.warmup(k);
+            productRedisService.warmupRankingPipeLine(list, k);
+        }
+    }
 
     // Warm UP -> Named Post
     // 테스트코드 : 제윤
@@ -47,11 +55,9 @@ public class ProductService {
             List<Product> list = productRepository.warmup(k);
             warmupProduct.addAll(list);
         }
-
         for (Product product : warmupProduct) {
             productRedisService.setProduct("product::" + product.getProductId(), ProductDetailResponseDto.toDto(product), Duration.ofDays(1));
         }
-
         log.info("..... Success!");
     }
 

@@ -4,8 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.stereotype.Service;
-import product.dto.product.ProductMainResponseDto;
+import org.springframework.stereotype.Repository;
 import product.exception.RequestException;
 
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ import static product.exception.ExceptionType.ALREADY_EXIST_EXCEPTION;
 import static product.exception.ExceptionType.NOT_FOUND_EXCEPTION;
 
 @RequiredArgsConstructor
-@Service
+@Repository
 @Slf4j
 public class CartRedisService {
 
@@ -56,7 +55,7 @@ public class CartRedisService {
         List<Long> list = new ArrayList<>();
 
         if(values.get(key) == null) return list;
-        else return list = values.get(key);
+        else return values.get(key);
     }
 }
 
