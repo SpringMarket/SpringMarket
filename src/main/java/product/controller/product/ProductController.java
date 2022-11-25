@@ -18,8 +18,15 @@ public class ProductController {
     private final ProductService productService;
     Logger log = LoggerFactory.getLogger("ACCESS");
 
-    // 메인 페이지
+    // 랭킹보드 조회
+    @GetMapping("/rank/list/{categoryId}")
+    public Response getRankingList(@PathVariable Long categoryId) {
+        return success(productService.getRankingList(categoryId));
+    }
+
+
     // orderBy first(JPA) or last(Query DSL) 성능테스트
+    // 메인 페이지
     @GetMapping("/products")
     public Response findAllProduct(@PageableDefault(size = 15) Pageable pageable,
                                    @RequestParam(value = "category", required = false) String category,
