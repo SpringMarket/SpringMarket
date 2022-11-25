@@ -103,10 +103,9 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
     // WarmUp -> Return Product Category Top 100
     @Override
-    public List<ProductMainResponseDto> warmup(Long categoryId) {
+    public List<Product> warmup(Long categoryId) {
         return queryFactory.from(qProduct)
-                .select(Projections.constructor(ProductMainResponseDto.class,
-                        qProduct.productId,qProduct.title,qProduct.photo,qProduct.price))
+                .select(qProduct)
                 .where(qProduct.category.categoryId.eq(categoryId))
                 .orderBy(qProduct.view.desc())
                 .limit(100)

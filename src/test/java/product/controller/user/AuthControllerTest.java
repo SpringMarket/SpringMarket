@@ -26,7 +26,8 @@ import product.service.user.AuthService;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -45,15 +46,15 @@ class AuthControllerTest {
     @Autowired
     private ObjectMapper mapper;
     @MockBean
-    protected AuthService authService;
+    private AuthService authService;
     @MockBean
-    protected TokenProvider tokenProvider;
+    private TokenProvider tokenProvider;
     @MockBean
-    protected JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     @MockBean
-    protected JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private JwtAccessDeniedHandler jwtAccessDeniedHandler;
     @MockBean
-    protected AccessLogFilter accessLogFilter;
+    private AccessLogFilter accessLogFilter;
 
 
     @Test
@@ -65,7 +66,7 @@ class AuthControllerTest {
                 "    \"password\":\"1234\"," +
                 "    \"age\":\"20대\"" +
                 "}";
-        
+
         // when
         mvc.perform(post("/api/signup")
                         .content(content)
@@ -278,7 +279,7 @@ class AuthControllerTest {
                         .content(content)
                         .contentType("application/json")
                         .characterEncoding("UTF-8"))
-        // then        
+        // then
                 .andExpect(status().isOk());
     }
 
