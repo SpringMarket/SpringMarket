@@ -12,7 +12,9 @@ public interface ProductRepositoryCustom {
     //Page<Product> mainFilter(Pageable pageable, String category, Boolean stock, List<Long> price, String age, String keyword);
     Page<ProductMainResponseDto> mainFilter(Pageable pageable, String category, String stock, Long minPrice, Long maxPrice, String keyword, String sort);
     ProductDetailResponseDto detail(Long productId);
-    List<ProductMainResponseDto> warmup(Long categoryId);
+    ProductMainResponseDto detail_2(Long productId);
+    List<ProductDetailResponseDto> warmupDetail(Long categoryId);
+    List<Product> warmup(Long categoryId);
     void addView(Long productId, int viewCnt);
     Integer getView(Long productId);
 }

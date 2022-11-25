@@ -1,3 +1,4 @@
+
 package product.service.product;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -21,6 +22,7 @@ import product.repository.product.CategoryRepository;
 import product.repository.product.ProductInfoRepository;
 import product.repository.product.ProductRepository;
 import product.repository.user.UserRepository;
+import product.service.TestConfig;
 
 import java.util.List;
 

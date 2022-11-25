@@ -40,7 +40,6 @@ public class ProductController {
         return success("SUCCESS ^__^ !!");
     }
 
-
     // 랭킹보드 조회
     @GetMapping("/rank/list/{categoryId}")
     public Response getRankingList(@PathVariable Long categoryId) {

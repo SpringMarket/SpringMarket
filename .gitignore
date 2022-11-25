@@ -1,6 +1,9 @@
 HELP.md
 .gradle
 logs/
+accessLongFile.**
+dbLongFile.**
+errorLongFile.**
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/

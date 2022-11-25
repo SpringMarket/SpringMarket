@@ -51,8 +51,7 @@ public class CartService { // Redis 테스트 코드 : 제윤
         List<Long> list = cartRedisService.cartList(key);
 
         for (Long cart : list) {
-            ProductMainResponseDto dto = ProductMainResponseDto.toDto(productRepository.detail(cart));
-            productMainResponseDtos.add(dto);
+            productMainResponseDtos.add(productRepository.detail_2(cart));
         }
         return productMainResponseDtos;
     }

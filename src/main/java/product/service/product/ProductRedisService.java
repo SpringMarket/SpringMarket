@@ -30,7 +30,8 @@ public class ProductRedisService {
     private final ProductRepository productRepository;
 
 
-    public void warmupPipeLine(List<Product> list) {
+    // Named Post PipeLine
+    public void warmupPipeLine(List<ProductDetailResponseDto> list) {
         RedisSerializer keySerializer = redisTemplateDetailDto.getStringSerializer();
         RedisSerializer valueSerializer = redisTemplateDetailDto.getValueSerializer();
 
@@ -44,6 +45,7 @@ public class ProductRedisService {
         });
     }
 
+    // Ranking Board PipeLine
     public void warmupRankingPipeLine(List<Product> list, Long categoryId){
         RedisSerializer keySerializer = redisTemplateMainDto.getStringSerializer();
         RedisSerializer valueSerializer = redisTemplateMainDto.getValueSerializer();
@@ -57,11 +59,19 @@ public class ProductRedisService {
         });
     }
 
+    // 랭킹보드 조회
+    public Set<ZSetOperations.TypedTuple<ProductMainResponseDto>> getRankingBoard(String key) {
+        ZSetOperations<String, ProductMainResponseDto> stringStringZSetOperations = redisTemplateMainDto.opsForZSet();
+        return stringStringZSetOperations.reverseRangeWithScores(key, 0, 99);
+    }
+
+    // 상품 조회수 Key-Value Setting
     public void setView(String key, String data, Duration duration) {
         ValueOperations<String, String> values = redisTemplate.opsForValue();
         values.set(key, data, duration);
     }
 
+    // 상품 조회수 증가
     public void incrementView(String key, Long productId) {
         ValueOperations<String, String> values = redisTemplate.opsForValue();
         // key : [productView::1] -> value : [1]
@@ -72,6 +82,7 @@ public class ProductRedisService {
         else values.increment(key);
     }
 
+    // 상품 조회수 DB Update
     @Scheduled(cron = "0 0/100 * * * ?")
     @Transactional
     public void UpdateViewRDS() {
@@ -92,20 +103,16 @@ public class ProductRedisService {
         log.info("Update View !");
     }
 
+    // 상품 상세페이지 캐싱 -> NonePipeLine
     public void setProduct(String key, ProductDetailResponseDto data, Duration duration) {
         ValueOperations<String, ProductDetailResponseDto> values = redisTemplateDetailDto.opsForValue();
         values.set(key, data, duration);
     }
 
-
+    // 랭킹보드 캐싱 -> NonePipeLine
     public void setRankingBoard(String key, ProductMainResponseDto data, double score) {
         ZSetOperations<String, ProductMainResponseDto> values = redisTemplateMainDto.opsForZSet();
         values.add(key, data, score);
-    }
-
-    public Set<ZSetOperations.TypedTuple<ProductMainResponseDto>> getRankingBoard(String key) {
-        ZSetOperations<String, ProductMainResponseDto> stringStringZSetOperations = redisTemplateMainDto.opsForZSet();
-        return stringStringZSetOperations.reverseRangeWithScores(key, 0, 99);
     }
 }
 
