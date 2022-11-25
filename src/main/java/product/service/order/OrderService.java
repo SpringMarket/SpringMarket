@@ -26,6 +26,7 @@ public class OrderService {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
 
+
     // 상품 주문
     @Transactional
     public void orderProduct(Long productId, Long orderNum, Authentication authentication) {

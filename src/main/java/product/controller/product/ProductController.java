@@ -5,10 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import product.dto.product.ProductCreateDto;
 import product.response.Response;
 import product.service.product.ProductService;
 
@@ -20,22 +17,6 @@ import static product.response.Response.success;
 public class ProductController {
     private final ProductService productService;
     Logger log = LoggerFactory.getLogger("ACCESS");
-
-
-    // Warm UP -> Named Post
-    @GetMapping("/warmup")
-    public Response warmup() {
-        productService.warmup();
-        return success("SUCCESS ^__^ !!");
-    }
-
-
-    // Warm UP -> Ranking Board
-    @GetMapping("/warmup/rank")
-    public Response warmupRank() {
-        productService.warmupRank();
-        return success("SUCCESS ^__^ !!");
-    }
 
 
     // 랭킹보드 조회
