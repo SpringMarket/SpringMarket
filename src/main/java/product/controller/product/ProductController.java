@@ -5,10 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import product.dto.product.ProductCreateDto;
 import product.response.Response;
 import product.service.product.ProductService;
 
@@ -21,23 +18,6 @@ public class ProductController {
     private final ProductService productService;
     Logger log = LoggerFactory.getLogger("ACCESS");
 
-
-    // Warm UP -> Named Post
-    @GetMapping("/warmup")
-    public Response warmup() {
-        productService.warmup();
-        return success("SUCCESS ^__^ !!");
-    }
-
-
-    // Warm UP -> Ranking Board
-    @GetMapping("/warmup/rank")
-    public Response warmupRank() {
-        productService.warmupRank();
-        return success("SUCCESS ^__^ !!");
-    }
-
-
     // 랭킹보드 조회
     @GetMapping("/rank/list/{categoryId}")
     public Response getRankingList(@PathVariable Long categoryId) {
@@ -45,8 +25,8 @@ public class ProductController {
     }
 
 
-    // 메인 페이지
     // orderBy first(JPA) or last(Query DSL) 성능테스트
+    // 메인 페이지
     @GetMapping("/products")
     public Response findAllProduct(@PageableDefault(size = 15) Pageable pageable,
                                    @RequestParam(value = "category", required = false) String category,
