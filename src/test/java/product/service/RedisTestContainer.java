@@ -18,8 +18,6 @@ public abstract class RedisTestContainer {
                     .withReuse(true);
 
             REDIS_CONTAINER.start();
-//            System.setProperty("spring.redis.host", REDIS_CONTAINER.getHost());
-//            System.setProperty("spring.redis.port", REDIS_CONTAINER.getMappedPort(6379).toString());
         }
 
         @DynamicPropertySource

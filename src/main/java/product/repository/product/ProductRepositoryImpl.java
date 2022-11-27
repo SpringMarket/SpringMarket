@@ -45,7 +45,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                         minPriceRange(minPrice),
                         maxPriceRange(maxPrice),
                         keywordMatch(keyword))
-              .orderBy(sorting(sorting))
+               .orderBy(sorting(sorting))
                .limit(pageable.getPageSize())
                .offset(pageable.getOffset())
                .fetch();
