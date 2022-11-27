@@ -32,8 +32,8 @@ public class ProductRedisService {
 
     // Named Post PipeLine
     public void warmupPipeLine(List<ProductDetailResponseDto> list) {
-        RedisSerializer keySerializer = redisTemplateDetailDto.getStringSerializer();
-        RedisSerializer valueSerializer = redisTemplateDetailDto.getValueSerializer();
+        RedisSerializer keySerializer = redisTemplate.getStringSerializer();
+        RedisSerializer valueSerializer = redisTemplate.getValueSerializer();
 
         redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
             list.forEach(i -> {
@@ -47,8 +47,8 @@ public class ProductRedisService {
 
     // Ranking Board PipeLine
     public void warmupRankingPipeLine(List<Product> list, Long categoryId){
-        RedisSerializer keySerializer = redisTemplateMainDto.getStringSerializer();
-        RedisSerializer valueSerializer = redisTemplateMainDto.getValueSerializer();
+        RedisSerializer keySerializer = redisTemplate.getStringSerializer();
+        RedisSerializer valueSerializer = redisTemplate.getValueSerializer();
 
         redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
             list.forEach(i -> {
@@ -61,8 +61,8 @@ public class ProductRedisService {
 
     // 랭킹보드 조회
     public Set<ZSetOperations.TypedTuple<ProductMainResponseDto>> getRankingBoard(String key) {
-        ZSetOperations<String, ProductMainResponseDto> stringStringZSetOperations = redisTemplateMainDto.opsForZSet();
-        return stringStringZSetOperations.reverseRangeWithScores(key, 0, 99);
+        ZSetOperations<String, ProductMainResponseDto> ZSetOperations = redisTemplateMainDto.opsForZSet();
+        return ZSetOperations.reverseRangeWithScores(key, 0, 99);
     }
 
     // 상품 조회수 Key-Value Setting
@@ -90,7 +90,7 @@ public class ProductRedisService {
 
         log.info("Starting View Update !");
 
-        assert redisKeys != null;
+        if (redisKeys == null) return;
 
         for (String data : redisKeys) {
             Long productId = Long.parseLong(data.split("::")[1]);

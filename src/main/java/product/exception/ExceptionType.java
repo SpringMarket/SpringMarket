@@ -16,7 +16,7 @@ public enum ExceptionType {
     ACCESS_DENIED_EXCEPTION(HttpStatus.FORBIDDEN, "접근 권한이 없습니다."),
     ORDER_FINISH_EXCEPTION(HttpStatus.BAD_REQUEST , "주문 완료된 상품은 취소가 불가능합니다."),
     NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "요청하신 자료를 찾을 수 없습니다."),
-    ALREADY_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "요청하신 자료를 찾을 수 없습니다."),
+    ALREADY_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "이미 존재하는 데이터입니다."),
     OUT_OF_STOCK_EXCEPTION(HttpStatus.NOT_FOUND, "재고가 부족합니다.");
 
 

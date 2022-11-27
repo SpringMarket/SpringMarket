@@ -41,14 +41,6 @@ public class RedisConfig {
         return redisTemplate;
     }
 
-//    @Bean
-//    public ObjectMapper objectMapper() {
-//        ObjectMapper mapper = new ObjectMapper();
-//        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-//        mapper.registerModules(new JavaTimeModule(), new Jdk8Module());
-//        return mapper;
-//    }
-
     @Bean
     public CacheManager userCacheManager(RedisConnectionFactory connectionFactory) {
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
