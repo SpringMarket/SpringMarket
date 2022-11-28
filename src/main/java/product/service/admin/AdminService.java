@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import product.dto.product.ProductDetailResponseDto;
 import product.dto.product.ProductMainResponseDto;
+import product.dto.product.ProductRankResponseDto;
 import product.entity.product.Product;
 import product.repository.product.ProductRepository;
 import product.service.product.ProductRedisService;
@@ -43,7 +44,7 @@ public class AdminService {
         log.info("Warm Up Ranking Board PipeLine Start....");
 
         for (long k =1; k<6; k++) {
-            List<Product> list = productRepository.warmup(k);
+            List<ProductRankResponseDto> list = productRepository.warmupMain(k);
             productRedisService.warmupRankingPipeLine(list, k);
             list.clear();
         }

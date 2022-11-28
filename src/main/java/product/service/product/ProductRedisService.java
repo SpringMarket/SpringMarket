@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import product.dto.product.ProductDetailResponseDto;
 import product.dto.product.ProductMainResponseDto;
+import product.dto.product.ProductRankResponseDto;
 import product.entity.product.Product;
 import product.repository.product.ProductRepository;
 
@@ -27,6 +28,7 @@ public class ProductRedisService {
     private final RedisTemplate<String, String> redisTemplate;
     private final RedisTemplate<String, ProductDetailResponseDto> redisTemplateDetailDto;
     private final RedisTemplate<String, ProductMainResponseDto> redisTemplateMainDto;
+    private final RedisTemplate<String, ProductRankResponseDto> redisTemplateRankDto;
     private final ProductRepository productRepository;
 
 
@@ -46,22 +48,22 @@ public class ProductRedisService {
     }
 
     // Ranking Board PipeLine
-    public void warmupRankingPipeLine(List<Product> list, Long categoryId){
-        RedisSerializer keySerializer = redisTemplateMainDto.getStringSerializer();
-        RedisSerializer valueSerializer = redisTemplateMainDto.getValueSerializer();
+    public void warmupRankingPipeLine(List<ProductRankResponseDto> list, Long categoryId){
+        RedisSerializer keySerializer = redisTemplateRankDto.getStringSerializer();
+        RedisSerializer valueSerializer = redisTemplateRankDto.getValueSerializer();
 
         redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
             list.forEach(i -> {
                 connection.zSetCommands().zAdd(keySerializer.serialize("Ranking::"+categoryId),
-                        i.getView(), valueSerializer.serialize(ProductMainResponseDto.toDto(i)));
+                        i.getView(), valueSerializer.serialize(i));
             });
             return null;
         });
     }
 
     // 랭킹보드 조회
-    public Set<ZSetOperations.TypedTuple<ProductMainResponseDto>> getRankingBoard(String key) {
-        ZSetOperations<String, ProductMainResponseDto> ZSetOperations = redisTemplateMainDto.opsForZSet();
+    public Set<ZSetOperations.TypedTuple<ProductRankResponseDto>> getRankingBoard(String key) {
+        ZSetOperations<String, ProductRankResponseDto> ZSetOperations = redisTemplateRankDto.opsForZSet();
         return ZSetOperations.reverseRangeWithScores(key, 0, 99);
     }
 

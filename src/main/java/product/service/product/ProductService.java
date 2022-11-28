@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import product.dto.product.ProductDetailResponseDto;
 import product.dto.product.ProductMainResponseDto;
+import product.dto.product.ProductRankResponseDto;
 import product.entity.product.Product;
 import product.exception.RequestException;
 import product.repository.product.ProductRepository;
@@ -30,13 +31,13 @@ public class ProductService {
 
 
     // 랭킹보드 조회
-    public List<ProductMainResponseDto> getRankingList(Long categoryId) {
+    public List<ProductRankResponseDto> getRankingList(Long categoryId) {
         String key = "ranking::" + categoryId;
-        Set<ZSetOperations.TypedTuple<ProductMainResponseDto>> typedTuples = productRedisService.getRankingBoard(key);
+        Set<ZSetOperations.TypedTuple<ProductRankResponseDto>> typedTuples = productRedisService.getRankingBoard(key);
 
         if (typedTuples == null) throw new RequestException(NOT_FOUND_EXCEPTION);
 
-        return typedTuples.stream().map(ProductMainResponseDto::convertToResponseRankingDto).collect(Collectors.toList());
+        return typedTuples.stream().map(ProductRankResponseDto::convertToResponseRankingDto).collect(Collectors.toList());
     }
 
 
