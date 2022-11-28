@@ -26,15 +26,13 @@ public class AdminService {
 
     // WarmUp -> Named Post PipeLine
     @Transactional
-    public void warmupPipeLine(){
+    public void warmupPipeLine(Long categoryId){
 
         log.info("Warm Up Named Post PipeLine Start....");
 
-        for (long k =1; k<6; k++) {
-            List<ProductDetailResponseDto> list = productRepository.warmupDetail(k);
-            productRedisService.warmupPipeLine(list);
-            list.clear();
-        }
+        List<ProductDetailResponseDto> list = productRepository.warmupDetail(categoryId);
+        productRedisService.warmupPipeLine(list);
+
     }
 
     // WarmUp -> Ranking Board PipeLine
