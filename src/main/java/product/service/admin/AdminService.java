@@ -32,7 +32,6 @@ public class AdminService {
 
         List<ProductDetailResponseDto> list = productRepository.warmupDetail(categoryId);
         productRedisService.warmupPipeLine(list);
-
     }
 
     // WarmUp -> Ranking Board PipeLine
