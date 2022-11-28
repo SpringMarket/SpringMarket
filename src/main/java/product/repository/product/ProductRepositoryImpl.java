@@ -40,13 +40,13 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
        List<Long> ids = queryFactory.from(qProduct)
                .select(qProduct.productId)
                .innerJoin(qProduct.category,qCategory)
-               .innerJoin(qProduct.productInfo, qProductInfo)
+//               .innerJoin(qProduct.productInfo, qProductInfo)
                .where(categoryFilter(category),
                         isStock(stock),
                         minPriceRange(minPrice),
                         maxPriceRange(maxPrice),
                         keywordMatch(keyword))
-               .orderBy(sorting(sorting))
+//               .orderBy(sorting(sorting))
                .limit(pageable.getPageSize())
                .offset(pageable.getOffset())
                .fetch();

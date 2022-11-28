@@ -3,7 +3,9 @@ package product.controller.product;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import product.response.Response;
@@ -37,8 +39,12 @@ public class ProductController {
                                    @RequestParam(value = "sorting", required = false) String sorting
     )
     {
-        log.info("category: "+category+ " stock: "+stock+" minPrice: "+minPrice+" maxPrice: "+maxPrice+" keyword; "+keyword+" sorting: "+sorting);
-        return success(productService.findAllProduct(pageable, category, stock, minPrice, maxPrice, keyword, sorting));
+        log.info("category: "+category+ " stock: "+stock+" minPrice: "+minPrice+" maxPrice: "+maxPrice+" keyword: "+keyword+" sorting: "+sorting);
+        Pageable pageable1 = PageRequest.of(pageable.getPageNumber(),pageable.getPageSize(),Sort.by("view").descending());
+        if(sorting.equals("날짜순")){
+            pageable1 = PageRequest.of(pageable.getPageNumber(),pageable.getPageSize(),Sort.by("createdTime").descending());
+        }
+        return success(productService.findAllProduct(pageable1, category, stock, minPrice, maxPrice, keyword, sorting));
     }
 
     // 상세 페이지
