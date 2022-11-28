@@ -2,6 +2,7 @@ package product.controller.admin;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import product.response.Response;
@@ -11,7 +12,7 @@ import static product.response.Response.success;
 
 @Slf4j
 @RequiredArgsConstructor
-@Service
+@Controller
 public class AdminController {
 
     private final AdminService adminService;
