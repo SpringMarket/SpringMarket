@@ -75,8 +75,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     @Override
     public ProductDetailResponseDto detail(Long productId) {
         return queryFactory.from(qProduct)
-                .select(Projections.constructor(ProductDetailResponseDto.class,
-                        qProduct.productId,qProduct.title,qProduct.content,qProduct.photo,qProduct.price,qProduct.createdTime))
+                .select(Projections.constructor(ProductDetailResponseDto.class, qProduct))
                 .where(qProduct.productId.eq(productId))
                 .fetchOne();
     }
