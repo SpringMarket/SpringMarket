@@ -21,13 +21,13 @@ public class ProductDetailResponseDto {
     private Long price;
     private String createdTime;
 
-    public ProductDetailResponseDto(Long productId, String title, String content, String photo, Long price, LocalDateTime createdTime) {
-        this.productId = productId;
-        this.title = title;
-        this.content = content;
-        this.photo = photo;
-        this.price = price;
-        this.createdTime = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(createdTime);
+    public ProductDetailResponseDto(Product product) {
+        this.productId = product.getProductId();
+        this.title = product.getTitle();
+        this.content = product.getContent();
+        this.photo = product.getPhoto();
+        this.price = product.getPrice();
+        this.createdTime = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(product.getCreatedTime());
     }
 
     public static ProductDetailResponseDto toDto(Product product){
