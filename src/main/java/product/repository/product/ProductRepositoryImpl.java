@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 import product.dto.product.ProductDetailResponseDto;
 import product.dto.product.ProductMainResponseDto;
+import product.dto.product.ProductRankResponseDto;
 import product.entity.product.*;
 
 
@@ -93,8 +94,19 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     // WarmUp -> Return ProductDetailResponseDto Category Top 100
     @Override
     public List<ProductDetailResponseDto> warmupDetail(Long categoryId) {
-        return queryFactory.selectFrom(qProduct)
+        return queryFactory.from(qProduct)
                 .select(Projections.constructor(ProductDetailResponseDto.class, qProduct))
+                .where(qProduct.category.categoryId.eq(categoryId))
+                .orderBy(qProduct.view.desc())
+                .limit(100)
+                .fetch();
+    }
+
+    // WarmUp -> Return ProductDetailResponseDto Category Top 100
+    @Override
+    public List<ProductRankResponseDto> warmupMain(Long categoryId) {
+        return queryFactory.from(qProduct)
+                .select(Projections.constructor(ProductRankResponseDto.class, qProduct))
                 .where(qProduct.category.categoryId.eq(categoryId))
                 .orderBy(qProduct.view.desc())
                 .limit(100)

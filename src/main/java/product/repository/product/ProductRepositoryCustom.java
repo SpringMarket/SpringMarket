@@ -2,6 +2,7 @@ package product.repository.product;
 
 import product.dto.product.ProductDetailResponseDto;
 import product.dto.product.ProductMainResponseDto;
+import product.dto.product.ProductRankResponseDto;
 import product.entity.product.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +15,7 @@ public interface ProductRepositoryCustom {
     ProductDetailResponseDto detail(Long productId);
     ProductMainResponseDto detail_2(Long productId);
     List<ProductDetailResponseDto> warmupDetail(Long categoryId);
+    List<ProductRankResponseDto> warmupMain(Long categoryId);
     List<Product> warmup(Long categoryId);
     void addView(Long productId, int viewCnt);
     Integer getView(Long productId);
