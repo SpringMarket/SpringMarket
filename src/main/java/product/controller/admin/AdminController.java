@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import product.response.Response;
 import product.service.admin.AdminService;
 
@@ -18,9 +19,9 @@ public class AdminController {
     private final AdminService adminService;
 
     // Warm UP -> Ranking Board PipeLine
-    @GetMapping("/warmup/rank/pipe")
-    public Response warmupRankingPipeLine() {
-        adminService.warmupRankingPipeLine();
+    @GetMapping("/warmup/rank/pipe/{categoryId}")
+    public Response warmupRankingPipeLine(@PathVariable Long categoryId) {
+        adminService.warmupRankingPipeLine(categoryId);
         return success("SUCCESS ^__^ !!");
     }
 
