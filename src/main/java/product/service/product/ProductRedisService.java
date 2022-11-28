@@ -40,7 +40,7 @@ public class ProductRedisService {
         redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
             list.forEach(i -> {
                 String key = "product::"+i.getProductId();
-                connection.listCommands().rPush(keySerializer.serialize(key),
+                connection.set(keySerializer.serialize(key), //stringCommands 수정
                         valueSerializer.serialize(i));
             });
             return null;
