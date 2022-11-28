@@ -39,16 +39,14 @@ public class AdminService {
 
     // WarmUp -> Ranking Board PipeLine
     @Transactional
-    public void warmupRankingPipeLine(){
+    public void warmupRankingPipeLine(Long categoryId){
 
         log.info("Warm Up Ranking Board PipeLine Start....");
 
-        for (long k =1; k<6; k++) {
-            List<ProductRankResponseDto> list = productRepository.warmupMain(k);
-            productRedisService.warmupRankingPipeLine(list, k);
-            list.clear();
-        }
+        List<ProductRankResponseDto> list = productRepository.warmupMain(categoryId);
+        productRedisService.warmupRankingPipeLine(list, categoryId);
     }
+
 
     // Warm UP -> Named Post << None PipeLine >>
     @Transactional
