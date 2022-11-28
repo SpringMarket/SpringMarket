@@ -32,8 +32,8 @@ public class ProductRedisService {
 
     // Named Post PipeLine
     public void warmupPipeLine(List<ProductDetailResponseDto> list) {
-        RedisSerializer keySerializer = redisTemplate.getStringSerializer();
-        RedisSerializer valueSerializer = redisTemplate.getValueSerializer();
+        RedisSerializer keySerializer = redisTemplateDetailDto.getStringSerializer();
+        RedisSerializer valueSerializer = redisTemplateDetailDto.getValueSerializer();
 
         redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
             list.forEach(i -> {
@@ -47,8 +47,8 @@ public class ProductRedisService {
 
     // Ranking Board PipeLine
     public void warmupRankingPipeLine(List<Product> list, Long categoryId){
-        RedisSerializer keySerializer = redisTemplate.getStringSerializer();
-        RedisSerializer valueSerializer = redisTemplate.getValueSerializer();
+        RedisSerializer keySerializer = redisTemplateMainDto.getStringSerializer();
+        RedisSerializer valueSerializer = redisTemplateMainDto.getValueSerializer();
 
         redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
             list.forEach(i -> {
