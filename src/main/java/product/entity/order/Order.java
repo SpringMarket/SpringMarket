@@ -64,6 +64,6 @@ public class Order {
     }
 
     public void cancel(){
-        this.orderStatus = "주문 취소";
+        this.orderStatus = "주문취소";
     }
 }
