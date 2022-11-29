@@ -106,7 +106,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     public List<ProductRankResponseDto> warmupMain(Long categoryId) {
         return queryFactory.from(qProduct)
                 .select(Projections.constructor(ProductRankResponseDto.class, qProduct))
-                .where(qProduct.category.categoryId.eq(categoryId))
+                .innerJoin(qProduct.category,qCategory)
                 .orderBy(qProduct.view.desc())
                 .limit(100)
                 .fetch();
@@ -117,7 +117,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     public List<Product> warmup(Long categoryId) {
         return queryFactory.from(qProduct)
                 .select(qProduct)
-                .where(qProduct.category.categoryId.eq(categoryId))
+                .innerJoin(qProduct.category,qCategory)
                 .orderBy(qProduct.view.desc())
                 .limit(100)
                 .fetch();
