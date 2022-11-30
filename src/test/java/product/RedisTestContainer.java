@@ -1,4 +1,4 @@
-package product.service;
+package product;
 // RedisTestContainer
 
 import org.springframework.test.context.DynamicPropertyRegistry;

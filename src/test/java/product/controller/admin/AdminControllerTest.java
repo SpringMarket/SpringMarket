@@ -97,7 +97,7 @@ class AdminControllerTest {
         mvc.perform(get("/warmup/pipe"));
 
         // then
-        verify(adminService,times(1)).warmupPipeLine();
+        verify(adminService,times(1)).warmupPipeLine(1L);
     }
 
     @Test
@@ -118,7 +118,7 @@ class AdminControllerTest {
         mvc.perform(get("/warmup/rank/pipe"));
 
         // then
-        verify(adminService,times(1)).warmupRankingPipeLine();
+        verify(adminService,times(1)).warmupRankingPipeLine(1L);
     }
 
 

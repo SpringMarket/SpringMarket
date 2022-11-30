@@ -5,14 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-import product.dto.product.ProductDetailResponseDto;
-import product.entity.product.Category;
-import product.entity.product.Product;
-import product.entity.product.ProductInfo;
-import product.service.RedisTestContainer;
+import product.RedisTestContainer;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -56,14 +50,23 @@ class CartServiceTest extends RedisTestContainer {
 //    }
 
     @BeforeAll
-    void flushall() {
+    void flushallBefore() {
         Objects.requireNonNull(redisTemplate.keys("*"))
                 .forEach(k-> {redisTemplate.delete(k);
         });
     }
 
+    @AfterAll
+    void flushallAfter() {
+        Objects.requireNonNull(redisTemplate.keys("*"))
+                .forEach(k-> {redisTemplate.delete(k);
+                });
+    }
+
+
+
     @Test
-    @DisplayName("카트에 상품 추가")
+    @DisplayName("카트에 상품 추가 -> Default")
     void addCart() {
 
         // GIVEN
@@ -84,7 +87,17 @@ class CartServiceTest extends RedisTestContainer {
     }
 
     @Test
-    @DisplayName("카트에 상품 삭제")
+    @DisplayName("카트에 상품 추가 -> Already Exist Data")
+    void addCartAlreadyExistData(){}
+
+    @Test
+    @DisplayName("카트에 상품 추가 -> Not Exist Data")
+    void addCartNotExistData(){}
+
+
+
+    @Test
+    @DisplayName("카트 상품 삭제 -> Default")
     void deleteCart() {
         ValueOperations<String, List<Long>> values = redisTemplate.opsForValue();
         List<Long> list = values.get("cart::Test");
@@ -98,7 +111,17 @@ class CartServiceTest extends RedisTestContainer {
     }
 
     @Test
-    @DisplayName("카트에 담긴 상품 리스트")
+    @DisplayName("카트 상품 삭제 -> Not Exist Redis Key")
+    void deleteCartNotExistKey(){}
+
+    @Test
+    @DisplayName("카트 상품 삭제 -> Not Exist Data")
+    void deleteCartNotExistData(){}
+
+
+
+    @Test
+    @DisplayName("카트 조회 -> Default")
     void showCart() {
 
         String key = "cart::Test";
@@ -110,7 +133,20 @@ class CartServiceTest extends RedisTestContainer {
     }
 
     @Test
-    @DisplayName("카트에 담긴  상품 주문")
-    void orderCart() {
-    }
+    @DisplayName("카트 조회 -> Not Exist Redis Key")
+    void showCartNotExistKey(){}
+
+
+
+    @Test
+    @DisplayName("카트에 담긴 상품 주문 -> Default")
+    void orderCart() {}
+
+    @Test
+    @DisplayName("카트에 담긴 상품 주문 -> 주문 요청이 존재하지 않음")
+    void orderCartNotExistRequest() {}
+
+    @Test
+    @DisplayName("카트에 담긴 상품 주문 -> 카트에 든 상품과 요청이 일치하지 않음")
+    void orderCartNotMatchCart() {}
 }

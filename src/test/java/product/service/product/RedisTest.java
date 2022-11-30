@@ -16,7 +16,7 @@ import product.dto.product.ProductDetailResponseDto;
 import product.entity.product.Category;
 import product.entity.product.Product;
 import product.entity.product.ProductInfo;
-import product.service.RedisTestContainer;
+import product.RedisTestContainer;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
