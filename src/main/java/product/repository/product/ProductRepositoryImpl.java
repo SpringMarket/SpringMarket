@@ -36,22 +36,35 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     public Page<ProductMainResponseDto> mainFilter(Pageable pageable, String category, String stock,
                                                    Long minPrice, Long maxPrice, String keyword, String sorting) {
 
+        List<Long> ids = new ArrayList<>();
         // 커버링 인덱스
-       List<Long> ids = queryFactory.from(qProduct)
-               .select(qProduct.productId)
-               .innerJoin(qProduct.category,qCategory)
-//               .innerJoin(qProduct.productInfo, qProductInfo)
-               .where(categoryFilter(category),
-                        isStock(stock),
-                        minPriceRange(minPrice),
-                        maxPriceRange(maxPrice),
-                        keywordMatch(keyword))
-//               .orderBy(sorting(sorting))
-               .limit(pageable.getPageSize())
-               .offset(pageable.getOffset())
-               .fetch();
-
-       // Null -> 공백 반환
+       if(sorting.equals("조회순")) {
+           ids = queryFactory.from(qProduct)
+                   .select(qProduct.productId)
+                   .innerJoin(qProduct.category, qCategory)
+                   .where(categoryFilter(category),
+                           isStock(stock),
+                           minPriceRange(minPrice),
+                           maxPriceRange(maxPrice),
+                           keywordMatch(keyword))
+                   .limit(pageable.getPageSize())
+                   .offset(pageable.getOffset())
+                   .fetch();
+       }else{
+           ids = queryFactory.from(qProduct)
+                   .select(qProduct.productId)
+                   .innerJoin(qProduct.category,qCategory)
+                   .where(categoryFilter(category),
+                           isStock(stock),
+                           minPriceRange(minPrice),
+                           maxPriceRange(maxPrice),
+                           keywordMatch(keyword))
+                   .orderBy(qProduct.productId.desc())
+                   .limit(pageable.getPageSize())
+                   .offset(pageable.getOffset())
+                   .fetch();
+       }
+      // Null -> 공백 반환
         if (CollectionUtils.isEmpty(ids)) {
             return new PageImpl<>(new ArrayList<>(), pageable, 0);
         }
@@ -185,23 +198,9 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     // 정렬
     private OrderSpecifier<?> sorting(String sorting) {
 
-        if (StringUtils.isNullOrEmpty(sorting)) return qProduct.view.desc();
+        if (!sorting.equals("조회순")) return qProduct.productId.desc();
 
-        switch (sorting) {
-            case "조회순":
-                return QProduct.product.view.desc();
-            case "날짜순":
-                return QProduct.product.createdTime.desc();
-            case "10대":
-                return QProductInfo.productInfo.ten.desc();
-            case "20대":
-                return QProductInfo.productInfo.twenty.desc();
-            case "30대":
-                return QProductInfo.productInfo.thirty.desc();
-            case "40대 이상":
-                return QProductInfo.productInfo.over_forty.desc();
-        }
-        return qProduct.view.desc();
+        return qProduct.view.asc();
     }
 
 
@@ -247,6 +246,30 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
 
         return new PageImpl<>(result, pageable, result.size());
-    }*/
+    }
+    // 정렬
+    private OrderSpecifier<?> sorting(String sorting) {
+
+        if (StringUtils.isNullOrEmpty(sorting)) return qProduct.view.desc();
+
+        switch (sorting) {
+            case "조회순":
+                return QProduct.product.view.desc();
+            case "날짜순":
+                return QProduct.product.createdTime.desc();
+            case "10대":
+                return QProductInfo.productInfo.ten.desc();
+            case "20대":
+                return QProductInfo.productInfo.twenty.desc();
+            case "30대":
+                return QProductInfo.productInfo.thirty.desc();
+            case "40대 이상":
+                return QProductInfo.productInfo.over_forty.desc();
+        }
+
+
+        return qProduct.view.desc();
+    }
+    */
 
 }

@@ -40,11 +40,8 @@ public class ProductController {
     )
     {
         log.info("category: "+category+ " stock: "+stock+" minPrice: "+minPrice+" maxPrice: "+maxPrice+" keyword: "+keyword+" sorting: "+sorting);
-        Pageable pageable1 = PageRequest.of(pageable.getPageNumber(),pageable.getPageSize(),Sort.by("view").descending());
-        if(sorting.equals("날짜순")){
-            pageable1 = PageRequest.of(pageable.getPageNumber(),pageable.getPageSize(),Sort.by("createdTime").descending());
-        }
-        return success(productService.findAllProduct(pageable1, category, stock, minPrice, maxPrice, keyword, sorting));
+
+        return success(productService.findAllProduct(pageable, category, stock, minPrice, maxPrice, keyword, sorting));
     }
 
     // 상세 페이지
