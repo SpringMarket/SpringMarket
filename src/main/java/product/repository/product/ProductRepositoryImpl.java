@@ -84,7 +84,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
 
 
-    // 상세 조회 -> ProductDetailResponseDto
+    // 상세 조회 -> return ProductDetailResponseDto
     @Override
     public ProductDetailResponseDto detail(Long productId) {
         return queryFactory.from(qProduct)
@@ -93,22 +93,21 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .fetchOne();
     }
 
-    // 상세 조회 -> ProductMainResponseDto
+    // 상세 조회 -> return ProductMainResponseDto
     @Override
-    public ProductMainResponseDto detail_2(Long productId) {
+    public ProductMainResponseDto detailMain(Long productId) {
         return queryFactory.from(qProduct)
-                .select(Projections.constructor(ProductMainResponseDto.class,
-                        qProduct.productId,qProduct.title,qProduct.photo,qProduct.price))
+                .select(Projections.constructor(ProductMainResponseDto.class, qProduct))
                 .where(qProduct.productId.eq(productId))
                 .fetchOne();
     }
 
     // WarmUp -> Return ProductDetailResponseDto Category Top 100
     @Override
-    public List<ProductDetailResponseDto> warmupDetail(Long categoryId) {
+    public List<ProductDetailResponseDto> warmupNamedPost(Long categoryId) {
         return queryFactory.from(qProduct)
                 .select(Projections.constructor(ProductDetailResponseDto.class, qProduct))
-                .where(qProduct.category.categoryId.eq(categoryId))
+                .innerJoin(qProduct.category,qCategory)
                 .orderBy(qProduct.view.desc())
                 .limit(100)
                 .fetch();
@@ -116,7 +115,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
     // WarmUp -> Return ProductDetailResponseDto Category Top 100
     @Override
-    public List<ProductRankResponseDto> warmupMain(Long categoryId) {
+    public List<ProductRankResponseDto> warmupRankingBoard(Long categoryId) {
         return queryFactory.from(qProduct)
                 .select(Projections.constructor(ProductRankResponseDto.class, qProduct))
                 .innerJoin(qProduct.category,qCategory)

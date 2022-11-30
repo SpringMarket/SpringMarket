@@ -30,7 +30,7 @@ public class AdminService {
 
         log.info("Warm Up Named Post PipeLine Start....");
 
-        List<ProductDetailResponseDto> list = productRepository.warmupDetail(categoryId);
+        List<ProductDetailResponseDto> list = productRepository.warmupNamedPost(categoryId);
         adminRedisService.warmupPipeLine(list);
     }
 
@@ -40,7 +40,7 @@ public class AdminService {
 
         log.info("Warm Up Ranking Board PipeLine Start....");
 
-        List<ProductRankResponseDto> list = productRepository.warmupMain(categoryId);
+        List<ProductRankResponseDto> list = productRepository.warmupRankingBoard(categoryId);
         adminRedisService.warmupRankingPipeLine(list, categoryId);
     }
 
