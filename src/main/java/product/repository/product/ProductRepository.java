@@ -11,5 +11,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, Product
 
     @Lock(LockModeType.PESSIMISTIC_READ)
     Product findByProductId(Long productId);
+
+    Product findByTitle(String title);
 }
 

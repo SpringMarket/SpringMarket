@@ -1,19 +1,26 @@
 package product;
 
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
-@SpringBootTest
-@Testcontainers
+
 public class MysqlTestContainer {
 
-    @Container
-    private static final MySQLContainer<?> MY_SQL_CONTAINER = new MySQLContainer<>("mysql:8.0.24")
-            .withInitScript("schema.sql");
+    static final String MY_SQL_IMAGE = "mysql:8.0.28";
+    static MySQLContainer<?> MY_SQL_CONTAINER;
+
+    static {
+        MY_SQL_CONTAINER = new MySQLContainer<>(MY_SQL_IMAGE)
+                .withExposedPorts(3306)
+                .withReuse(true);
+
+        MY_SQL_CONTAINER.start();
+    }
+
+
+//    private static final MySQLContainer<?> MY_SQL_CONTAINER = new MySQLContainer<>(MY_SQL_IMAGE)
+//            .withInitScript("schema.sql");
 
     @DynamicPropertySource
     public static void properties(DynamicPropertyRegistry registry) {
