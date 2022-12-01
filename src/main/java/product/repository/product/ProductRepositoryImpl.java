@@ -21,6 +21,7 @@ import product.entity.product.*;
 
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -56,8 +57,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             if (CollectionUtils.isEmpty(indexDtos)) {
                 return new PageImpl<>(new ArrayList<>(), pageable, 0);
             }
-            List<Long> productIds = new ArrayList<>();
-            List<Integer> views = new ArrayList<>();
+            List<Long> productIds = new LinkedList<>();
+            List<Integer> views = new LinkedList<>();
             for (ProductIndexDto indexDto : indexDtos) {
                 productIds.add(indexDto.getProductId());
                 views.add(indexDto.getView());
