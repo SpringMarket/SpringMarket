@@ -54,7 +54,7 @@ class ProductServiceTest extends MysqlTestContainer {
                 .stock(10L)
                 .view(3)
                 .createdTime(LocalDateTime.now())
-                .category(category)
+                .categoryId(1L)
                 .productInfo(productInfo)
                 .build();
 

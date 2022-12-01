@@ -40,13 +40,13 @@ public class AdminRedisService {
     }
 
     // Ranking Board PipeLine
-    public void warmupRankingPipeLine(List<ProductRankResponseDto> list, Long categoryId){
+    public void warmupRankingPipeLine(List<ProductRankResponseDto> dtos, Long categoryId, int preference){
         RedisSerializer keySerializer = redisTemplateRankDto.getStringSerializer();
         RedisSerializer valueSerializer = redisTemplateRankDto.getValueSerializer();
 
         redisTemplateRankDto.executePipelined((RedisCallback<Object>) connection -> {
-            list.forEach(i -> {
-                connection.zSetCommands().zAdd(keySerializer.serialize("Ranking::"+categoryId),
+            dtos.forEach(i -> {
+                connection.zSetCommands().zAdd(keySerializer.serialize("Ranking::"+categoryId+"::"+preference),
                         i.getView(), valueSerializer.serialize(i));
             });
             return null;
