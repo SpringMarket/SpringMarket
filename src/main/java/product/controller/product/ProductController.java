@@ -31,7 +31,7 @@ public class ProductController {
     // 메인 페이지
     @GetMapping("/products")
     public Response findAllProduct(@PageableDefault(size = 15) Pageable pageable,
-                                   @RequestParam(value = "category", required = false) String category,
+                                   @RequestParam(value = "categoryId", required = false) Long categoryId,
                                    @RequestParam(value = "stock", required = false) String stock,
                                    @RequestParam(value = "minPrice", required = false) Long minPrice,
                                    @RequestParam(value = "maxPrice", required = false) Long maxPrice,
@@ -39,9 +39,9 @@ public class ProductController {
                                    @RequestParam(value = "sorting", required = false) String sorting
     )
     {
-        log.info("category: "+category+ " stock: "+stock+" minPrice: "+minPrice+" maxPrice: "+maxPrice+" keyword: "+keyword+" sorting: "+sorting);
+        log.info("categoryId: "+categoryId+ " stock: "+stock+" minPrice: "+minPrice+" maxPrice: "+maxPrice+" keyword: "+keyword+" sorting: "+sorting);
 
-        return success(productService.findAllProduct(pageable, category, stock, minPrice, maxPrice, keyword, sorting));
+        return success(productService.findAllProduct(pageable, categoryId, stock, minPrice, maxPrice, keyword, sorting));
     }
 
     // 상세 페이지
