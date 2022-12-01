@@ -49,7 +49,7 @@ class ProductControllerTest {
     @Test
     @DisplayName("RankingList")
     void RankingList() throws Exception {
-        mvc.perform(get("/api/rank/list/{categoryId}",1L))
+        mvc.perform(get("/api/rank/list/1/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{" +
                         "\"result\":true," +
@@ -57,15 +57,15 @@ class ProductControllerTest {
                         "\"check\":{}}"));
     }
 
-//    @Test
-//    @DisplayName("RankingList verify")
-//    void RankingListVerify() throws Exception {
-//        // when
-//        mvc.perform(get("/api/rank/list/{categoryId}",1L));
-//        // then
-//        verify(productService,times(1)).getRankingList(1L);
-//        //assertThat(productService.getRankingList(1L)).isNotNull();
-//    }
+    @Test
+    @DisplayName("RankingList verify")
+    void RankingListVerify() throws Exception {
+        // when
+        mvc.perform(get("/api/rank/list/1/1"));
+        // then
+        verify(productService,times(1)).getRankingList(1L,1L);
+        //assertThat(productService.getRankingList(1L)).isNotNull();
+    }
 
     @Test
     @DisplayName("메인페이지")
@@ -99,7 +99,7 @@ class ProductControllerTest {
         log.addAppender(listAppender);
 
         // when
-        mvc.perform(get("/api/products?category=상의&stock=1&maxPrice=100000&minPrice=50000&sorting=20대&page=1"));
+        mvc.perform(get("/api/products?categoryId=1&stock=1&maxPrice=100000&minPrice=50000&sorting=20대&page=1"));
 
         List<ILoggingEvent> testLogs = listAppender.list;
         Level level = testLogs.get(0).getLevel();
@@ -107,28 +107,29 @@ class ProductControllerTest {
 
         // then
         assertThat(level).isEqualTo(Level.INFO);
-        assertThat(message).isEqualTo("category: 상의 stock: 1 minPrice: 50000 maxPrice: 100000 keyword: null sorting: 20대");
+        assertThat(message).isEqualTo("categoryId: 1 stock: 1 minPrice: 50000 maxPrice: 100000 keyword: null sorting: 20대");
     }
 
     @Test
     @DisplayName("메인페이지 verify")
     void findAllProductVerify() throws Exception {
         Pageable pageable = PageRequest.of(0,15);
-        String category = "상의";
+        Long categoryId = 1L;
         String stock = "1";
         Long minPrice = 50000L;
         Long maxPrice = 100000L;
         String keyword = "겨울";
         String sorting = "조회순";
-        mvc.perform(get("/api/products?category={category}" +
+        mvc.perform(get("/api/products" +
+                        "?categoryId={categoryId}" +
                         "&stock={stock}" +
                         "&minPrice={minPrice}" +
                         "&maxPrice={maxPrice}" +
                         "&keyword={keyword}" +
                         "&sorting={sorting}",
-                category,stock,minPrice,maxPrice,keyword,sorting));
+                categoryId,stock,minPrice,maxPrice,keyword,sorting));
 
-        verify(productService,times(1)).findAllProduct(pageable,category,stock,minPrice,maxPrice,keyword,sorting);
+        verify(productService,times(1)).findAllProduct(pageable,categoryId,stock,minPrice,maxPrice,keyword,sorting);
     }
 
     @Test

@@ -82,7 +82,7 @@ class AdminControllerTest {
     @Test
     @DisplayName("warmupPipeLine")
     void warmupPipeLine() throws Exception {
-        mvc.perform(get("/warmup/pipe"))
+        mvc.perform(get("/warmup/pipe/{categoryId}",1L))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{" +
                         "\"result\":true," +
@@ -94,7 +94,7 @@ class AdminControllerTest {
     @DisplayName("warmupPipeLine verify")
     void warmupPipeLineVerify() throws Exception {
         // when
-        mvc.perform(get("/warmup/pipe"));
+        mvc.perform(get("/warmup/pipe/{categoryId}",1L));
 
         // then
         verify(adminService,times(1)).warmupPipeLine(1L);
@@ -103,7 +103,7 @@ class AdminControllerTest {
     @Test
     @DisplayName("warmupRankingPipeLine")
     void warmupRankingPipeLine() throws Exception {
-        mvc.perform(get("/warmup/rank/pipe"))
+        mvc.perform(get("/warmup/rank/pipe/{categoryId}",1L))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{" +
                         "\"result\":true," +
@@ -115,7 +115,7 @@ class AdminControllerTest {
     @DisplayName("warmupRankingPipeLine verify")
     void warmupRankingPipeLineVerify() throws Exception {
         // when
-        mvc.perform(get("/warmup/rank/pipe"));
+        mvc.perform(get("/warmup/rank/pipe/{categoryId}",1l));
 
         // then
         verify(adminService,times(1)).warmupRankingPipeLine(1L);
