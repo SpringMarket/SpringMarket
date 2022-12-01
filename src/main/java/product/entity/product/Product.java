@@ -55,10 +55,8 @@ public class Product {
     public void cancelChangeStock(Long orderNum) { this.stock += orderNum;}
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Category category;
+    @Column(nullable = false)
+    private Long categoryId;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_info_id", nullable = false)

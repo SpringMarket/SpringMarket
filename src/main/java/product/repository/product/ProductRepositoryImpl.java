@@ -14,12 +14,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 import product.dto.product.ProductDetailResponseDto;
+import product.dto.product.ProductIndexDto;
 import product.dto.product.ProductMainResponseDto;
 import product.dto.product.ProductRankResponseDto;
 import product.entity.product.*;
 
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -33,45 +35,82 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
     // 필터링 조회
     @Override
-    public Page<ProductMainResponseDto> mainFilter(Pageable pageable, String category, String stock,
+    public Page<ProductMainResponseDto> mainFilter(Pageable pageable, Long categoryId, String stock,
                                                    Long minPrice, Long maxPrice, String keyword, String sorting) {
 
-        // 커버링 인덱스
-       List<Long> ids = queryFactory.from(qProduct)
-               .select(qProduct.productId)
-               .innerJoin(qProduct.category,qCategory)
-               .innerJoin(qProduct.productInfo, qProductInfo)
-               .where(categoryFilter(category),
-                        isStock(stock),
-                        minPriceRange(minPrice),
-                        maxPriceRange(maxPrice),
-                        keywordMatch(keyword))
-               .orderBy(sorting(sorting))
-               .limit(pageable.getPageSize())
-               .offset(pageable.getOffset())
-               .fetch();
+        List<Long> ids = new ArrayList<>();
 
-       // Null -> 공백 반환
-        if (CollectionUtils.isEmpty(ids)) {
-            return new PageImpl<>(new ArrayList<>(), pageable, 0);
+        if(sorting.equals("조회순")) {
+            List<ProductIndexDto> indexDtos = queryFactory.from(qProduct)
+                    .select(Projections.constructor(ProductIndexDto.class,
+                            qProduct.productId, qProduct.view))
+                    .where(keywordMatch(keyword),
+                            categoryFilter(categoryId),
+                            minPriceRange(minPrice),
+                            maxPriceRange(maxPrice),
+                            isStock(stock))
+                    .limit(pageable.getPageSize())
+                    .offset(pageable.getOffset())
+                    .fetch();
+
+            // Null -> 공백 반환
+            if (CollectionUtils.isEmpty(indexDtos)) {
+                return new PageImpl<>(new ArrayList<>(), pageable, 0);
+            }
+            List<Long> productIds = new LinkedList<>();
+            List<Integer> views = new LinkedList<>();
+            for (ProductIndexDto indexDto : indexDtos) {
+                productIds.add(indexDto.getProductId());
+                views.add(indexDto.getView());
+            }
+
+            ids = queryFactory.from(qProduct)
+                    .select(qProduct.productId)
+                    .where(qProduct.view.in(views),
+                            qProduct.productId.in(productIds))
+                    .orderBy(qProduct.view.asc())
+                    .limit(pageable.getPageSize())
+                    .offset(pageable.getOffset())
+                    .fetch();
+        }else{
+            List<Long> productIds = queryFactory.from(qProduct)
+                    .select(qProduct.productId)
+                    .where(keywordMatch(keyword),
+                            categoryFilter(categoryId),
+                            minPriceRange(minPrice),
+                            maxPriceRange(maxPrice),
+                            isStock(stock))
+                    .limit(pageable.getPageSize())
+                    .offset(pageable.getOffset())
+                    .fetch();
+
+            // Null -> 공백 반환
+            if (CollectionUtils.isEmpty(productIds)) {
+                return new PageImpl<>(new ArrayList<>(), pageable, 0);
+            }
+            ids = queryFactory.from(qProduct)
+                    .select(qProduct.productId)
+                    .where(qProduct.productId.in(productIds))
+                    .orderBy(qProduct.productId.desc())
+                    .limit(pageable.getPageSize())
+                    .offset(pageable.getOffset())
+                    .fetch();
         }
 
-        // 메인 쿼리
         List<ProductMainResponseDto> result = queryFactory.from(qProduct)
                 .select(Projections.constructor(ProductMainResponseDto.class,
                         qProduct))
-                //.innerJoin(qProduct.category,qCategory)
-                .innerJoin(qProduct.productInfo, qProductInfo)
                 .where(qProduct.productId.in(ids))
                 .orderBy(sorting(sorting))
+                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset())
                 .fetch();
-
         return new PageImpl<>(result, pageable, result.size());
-    } // -> 종료
+    }
 
 
 
-    // 상세 조회 -> ProductDetailResponseDto
+    // 상세 조회 -> return ProductDetailResponseDto
     @Override
     public ProductDetailResponseDto detail(Long productId) {
         return queryFactory.from(qProduct)
@@ -80,22 +119,21 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .fetchOne();
     }
 
-    // 상세 조회 -> ProductMainResponseDto
+    // 상세 조회 -> return ProductMainResponseDto
     @Override
-    public ProductMainResponseDto detail_2(Long productId) {
+    public ProductMainResponseDto detailMain(Long productId) {
         return queryFactory.from(qProduct)
-                .select(Projections.constructor(ProductMainResponseDto.class,
-                        qProduct.productId,qProduct.title,qProduct.photo,qProduct.price))
+                .select(Projections.constructor(ProductMainResponseDto.class, qProduct))
                 .where(qProduct.productId.eq(productId))
                 .fetchOne();
     }
 
     // WarmUp -> Return ProductDetailResponseDto Category Top 100
     @Override
-    public List<ProductDetailResponseDto> warmupDetail(Long categoryId) {
+    public List<ProductDetailResponseDto> warmupNamedPost(Long categoryId) {
         return queryFactory.from(qProduct)
                 .select(Projections.constructor(ProductDetailResponseDto.class, qProduct))
-                .where(qProduct.category.categoryId.eq(categoryId))
+                .where(qProduct.categoryId.eq(categoryId))
                 .orderBy(qProduct.view.desc())
                 .limit(100)
                 .fetch();
@@ -103,10 +141,10 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
     // WarmUp -> Return ProductDetailResponseDto Category Top 100
     @Override
-    public List<ProductRankResponseDto> warmupMain(Long categoryId) {
+    public List<ProductRankResponseDto> warmupRankingBoard(Long categoryId) {
         return queryFactory.from(qProduct)
                 .select(Projections.constructor(ProductRankResponseDto.class, qProduct))
-                .where(qProduct.category.categoryId.eq(categoryId))
+                .where(qProduct.categoryId.eq(categoryId))
                 .orderBy(qProduct.view.desc())
                 .limit(100)
                 .fetch();
@@ -117,7 +155,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     public List<Product> warmup(Long categoryId) {
         return queryFactory.from(qProduct)
                 .select(qProduct)
-                .where(qProduct.category.categoryId.eq(categoryId))
+                .where(qProduct.categoryId.eq(categoryId))
                 .orderBy(qProduct.view.desc())
                 .limit(100)
                 .fetch();
@@ -143,9 +181,9 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     }
 
     // 카테고리 Filter
-    private BooleanExpression categoryFilter(String category) {
-        if (StringUtils.isNullOrEmpty(category)) return QCategory.category1.category.eq("아우터");
-        return QCategory.category1.category.eq(category);
+    private BooleanExpression categoryFilter(Long categoryId) {
+        if (categoryId != null) return qProduct.categoryId.eq(categoryId);
+        return null;
     }
 
     // 재고 Filter
@@ -185,23 +223,9 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     // 정렬
     private OrderSpecifier<?> sorting(String sorting) {
 
-        if (StringUtils.isNullOrEmpty(sorting)) return qProduct.view.desc();
+        if (!sorting.equals("조회순")) return qProduct.productId.desc();
 
-        switch (sorting) {
-            case "조회순":
-                return QProduct.product.view.desc();
-            case "날짜순":
-                return QProduct.product.createdTime.desc();
-            case "10대":
-                return QProductInfo.productInfo.ten.desc();
-            case "20대":
-                return QProductInfo.productInfo.twenty.desc();
-            case "30대":
-                return QProductInfo.productInfo.thirty.desc();
-            case "40대 이상":
-                return QProductInfo.productInfo.over_forty.desc();
-        }
-        return qProduct.view.desc();
+        return qProduct.view.asc();
     }
 
 
@@ -247,6 +271,30 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
 
         return new PageImpl<>(result, pageable, result.size());
-    }*/
+    }
+    // 정렬
+    private OrderSpecifier<?> sorting(String sorting) {
+
+        if (StringUtils.isNullOrEmpty(sorting)) return qProduct.view.desc();
+
+        switch (sorting) {
+            case "조회순":
+                return QProduct.product.view.desc();
+            case "날짜순":
+                return QProduct.product.createdTime.desc();
+            case "10대":
+                return QProductInfo.productInfo.ten.desc();
+            case "20대":
+                return QProductInfo.productInfo.twenty.desc();
+            case "30대":
+                return QProductInfo.productInfo.thirty.desc();
+            case "40대 이상":
+                return QProductInfo.productInfo.over_forty.desc();
+        }
+
+
+        return qProduct.view.desc();
+    }
+    */
 
 }

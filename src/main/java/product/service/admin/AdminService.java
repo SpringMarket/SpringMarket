@@ -20,7 +20,7 @@ import java.util.List;
 @Service
 public class AdminService {
 
-    private final ProductRedisService productRedisService;
+    private final AdminRedisService adminRedisService;
     private final ProductRepository productRepository;
 
 
@@ -30,9 +30,8 @@ public class AdminService {
 
         log.info("Warm Up Named Post PipeLine Start....");
 
-        List<ProductDetailResponseDto> list = productRepository.warmupDetail(categoryId);
-        productRedisService.warmupPipeLine(list);
-
+        List<ProductDetailResponseDto> list = productRepository.warmupNamedPost(categoryId);
+        adminRedisService.warmupPipeLine(list);
     }
 
     // WarmUp -> Ranking Board PipeLine
@@ -41,8 +40,8 @@ public class AdminService {
 
         log.info("Warm Up Ranking Board PipeLine Start....");
 
-        List<ProductRankResponseDto> list = productRepository.warmupMain(categoryId);
-        productRedisService.warmupRankingPipeLine(list, categoryId);
+        List<ProductRankResponseDto> list = productRepository.warmupRankingBoard(categoryId);
+        adminRedisService.warmupRankingPipeLine(list, categoryId);
     }
 
 
@@ -56,7 +55,7 @@ public class AdminService {
             warmupProduct.addAll(list);
         }
         for (Product product : warmupProduct) {
-            productRedisService.setProduct("product::" + product.getProductId(), ProductDetailResponseDto.toDto(product), Duration.ofDays(1));
+            adminRedisService.setProduct("product::" + product.getProductId(), ProductDetailResponseDto.toDto(product), Duration.ofDays(1));
         }
     }
 
@@ -66,7 +65,7 @@ public class AdminService {
         for (long i=1; i<6; i++){
             List<Product> list = productRepository.warmup(i);
             for (int k = 0; k < 99; k++) {
-                productRedisService.setRankingBoard("ranking::"+i, ProductMainResponseDto.toDto(list.get(k)), list.get(k).getView());
+                adminRedisService.setRankingBoard("ranking::"+i, ProductMainResponseDto.toDto(list.get(k)), list.get(k).getView());
             }
         }
     }

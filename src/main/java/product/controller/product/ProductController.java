@@ -3,7 +3,9 @@ package product.controller.product;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import product.response.Response;
@@ -29,7 +31,7 @@ public class ProductController {
     // 메인 페이지
     @GetMapping("/products")
     public Response findAllProduct(@PageableDefault(size = 15) Pageable pageable,
-                                   @RequestParam(value = "category", required = false) String category,
+                                   @RequestParam(value = "categoryId", required = false) Long categoryId,
                                    @RequestParam(value = "stock", required = false) String stock,
                                    @RequestParam(value = "minPrice", required = false) Long minPrice,
                                    @RequestParam(value = "maxPrice", required = false) Long maxPrice,
@@ -37,8 +39,9 @@ public class ProductController {
                                    @RequestParam(value = "sorting", required = false) String sorting
     )
     {
-        log.info("category: "+category+ " stock: "+stock+" minPrice: "+minPrice+" maxPrice: "+maxPrice+" keyword; "+keyword+" sorting: "+sorting);
-        return success(productService.findAllProduct(pageable, category, stock, minPrice, maxPrice, keyword, sorting));
+        log.info("categoryId: "+categoryId+ " stock: "+stock+" minPrice: "+minPrice+" maxPrice: "+maxPrice+" keyword: "+keyword+" sorting: "+sorting);
+
+        return success(productService.findAllProduct(pageable, categoryId, stock, minPrice, maxPrice, keyword, sorting));
     }
 
     // 상세 페이지

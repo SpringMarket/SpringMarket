@@ -28,6 +28,4 @@ public class RestApiExceptionHandler {
         return new ResponseEntity<>(Response.failure(HttpStatus.BAD_REQUEST, msg),
                 HttpStatus.BAD_REQUEST);
     }
-
-
 }

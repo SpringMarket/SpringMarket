@@ -43,11 +43,11 @@ public class ProductService {
 
     // 상품 필터링 조회
     @Transactional(readOnly = true)
-    public Page<ProductMainResponseDto> findAllProduct(Pageable pageable, String category, String stock, Long minPrice, Long maxPrice, String keyword, String sort) {
+    public Page<ProductMainResponseDto> findAllProduct(Pageable pageable, Long categoryId, String stock, Long minPrice, Long maxPrice, String keyword, String sort) {
 
         log.info("Search All Log Start....");
 
-        return productRepository.mainFilter(pageable, category,  stock, minPrice, maxPrice, keyword, sort);
+        return productRepository.mainFilter(pageable, categoryId,  stock, minPrice, maxPrice, keyword, sort);
     }
 
 
