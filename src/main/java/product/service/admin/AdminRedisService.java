@@ -46,7 +46,7 @@ public class AdminRedisService {
 
         redisTemplateRankDto.executePipelined((RedisCallback<Object>) connection -> {
             dtos.forEach(i -> {
-                connection.zSetCommands().zAdd(keySerializer.serialize("Ranking::"+categoryId+"::"+preference),
+                connection.zSetCommands().zAdd(keySerializer.serialize("Ranking::" + categoryId + "::" + preference),
                         i.getView(), valueSerializer.serialize(i));
             });
             return null;
