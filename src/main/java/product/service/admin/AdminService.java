@@ -8,6 +8,7 @@ import product.dto.product.ProductDetailResponseDto;
 import product.dto.product.ProductMainResponseDto;
 import product.dto.product.ProductRankResponseDto;
 import product.entity.product.Product;
+import product.repository.admin.AdminQueryRepository;
 import product.repository.product.ProductRepository;
 import product.service.product.ProductRedisService;
 
@@ -21,7 +22,7 @@ import java.util.List;
 public class AdminService {
 
     private final AdminRedisService adminRedisService;
-    private final ProductRepository productRepository;
+    private final AdminQueryRepository adminQueryRepository;
 
 
     // WarmUp -> Named Post PipeLine
@@ -30,7 +31,7 @@ public class AdminService {
 
         log.info("Warm Up Named Post PipeLine Start....");
 
-        List<ProductDetailResponseDto> list = productRepository.warmupNamedPost(categoryId);
+        List<ProductDetailResponseDto> list = adminQueryRepository.warmupNamedPost(categoryId);
         adminRedisService.warmupPipeLine(list);
     }
 
@@ -40,8 +41,12 @@ public class AdminService {
 
         log.info("Warm Up Ranking Board PipeLine Start....");
 
-        List<ProductRankResponseDto> list = productRepository.warmupRankingBoard(categoryId);
-        adminRedisService.warmupRankingPipeLine(list, categoryId);
+        List<Long> list = adminQueryRepository.warmupRankingBoardIds(categoryId);
+
+        for (int i=1; i<=5; i++){
+            List<ProductRankResponseDto> dtos = adminQueryRepository.setPreference(list, i);
+            adminRedisService.warmupRankingPipeLine(dtos, categoryId, i);
+        }
     }
 
 
@@ -51,7 +56,7 @@ public class AdminService {
         List<Product> warmupProduct = new ArrayList<>();
 
         for (long k =1; k<6; k++) {
-            List<Product> list = productRepository.warmup(k);
+            List<Product> list = adminQueryRepository.warmup(k);
             warmupProduct.addAll(list);
         }
         for (Product product : warmupProduct) {
@@ -63,7 +68,7 @@ public class AdminService {
     @Transactional
     public void warmupRank() {
         for (long i=1; i<6; i++){
-            List<Product> list = productRepository.warmup(i);
+            List<Product> list = adminQueryRepository.warmup(i);
             for (int k = 0; k < 99; k++) {
                 adminRedisService.setRankingBoard("ranking::"+i, ProductMainResponseDto.toDto(list.get(k)), list.get(k).getView());
             }

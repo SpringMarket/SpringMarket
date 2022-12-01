@@ -31,8 +31,8 @@ public class ProductService {
 
 
     // 랭킹보드 조회
-    public List<ProductRankResponseDto> getRankingList(Long categoryId) {
-        String key = "Ranking::" + categoryId;
+    public List<ProductRankResponseDto> getRankingList(Long categoryId, Long preferId) {
+        String key = "Ranking::" + categoryId + "::" + preferId;
         Set<ZSetOperations.TypedTuple<ProductRankResponseDto>> typedTuples = productRedisService.getRankingBoard(key);
 
         if (typedTuples == null) throw new RequestException(NOT_FOUND_EXCEPTION);
