@@ -57,15 +57,15 @@ class ProductControllerTest {
                         "\"check\":{}}"));
     }
 
-    @Test
-    @DisplayName("RankingList verify")
-    void RankingListVerify() throws Exception {
-        // when
-        mvc.perform(get("/api/rank/list/{categoryId}",1L));
-        // then
-        verify(productService,times(1)).getRankingList(1L);
-        //assertThat(productService.getRankingList(1L)).isNotNull();
-    }
+//    @Test
+//    @DisplayName("RankingList verify")
+//    void RankingListVerify() throws Exception {
+//        // when
+//        mvc.perform(get("/api/rank/list/{categoryId}",1L));
+//        // then
+//        verify(productService,times(1)).getRankingList(1L);
+//        //assertThat(productService.getRankingList(1L)).isNotNull();
+//    }
 
     @Test
     @DisplayName("메인페이지")

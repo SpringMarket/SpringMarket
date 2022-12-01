@@ -21,9 +21,9 @@ public class ProductController {
     Logger log = LoggerFactory.getLogger("ACCESS");
 
     // 랭킹보드 조회
-    @GetMapping("/rank/list/{categoryId}")
-    public Response getRankingList(@PathVariable Long categoryId) {
-        return success(productService.getRankingList(categoryId));
+    @GetMapping("/rank/list/{categoryId}/{preferId}")
+    public Response getRankingList(@PathVariable Long categoryId, @PathVariable Long preferId) {
+        return success(productService.getRankingList(categoryId, preferId));
     }
 
 
