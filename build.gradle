@@ -15,10 +15,28 @@ plugins {
 jacoco {
     toolVersion = '0.8.5'
 }
+
 tasks.withType(Test) {
     jacoco.includeNoLocationClasses = true
     jacoco.excludes = ['jdk.internal.*']
+    useJUnitPlatform()
 }
+
+tasks.jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            element = "CLASS"
+
+            limit {
+                counter = "Line"
+                value = "COVEREDRATIO"
+                minimum = "0.00".toBigDecimal()
+            }
+        }
+    }
+}
+
+
 
 group = ''
 version = '0.0.1-SNAPSHOT'
