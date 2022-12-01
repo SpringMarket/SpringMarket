@@ -41,11 +41,11 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             List<ProductIndexDto> indexDtos = queryFactory.from(qProduct)
                     .select(Projections.constructor(ProductIndexDto.class,
                             qProduct.productId, qProduct.view))
-                    .where(keywordMatch(keyword),
-                            categoryFilter(categoryId),
+                    .where(categoryFilter(categoryId),
+                            isStock(stock),
                             minPriceRange(minPrice),
                             maxPriceRange(maxPrice),
-                            isStock(stock))
+                            keywordMatch(keyword))
                     .limit(pageable.getPageSize())
                     .offset(pageable.getOffset())
                     .fetch();
@@ -74,11 +74,11 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         }else{
             List<Long> productIds = queryFactory.from(qProduct)
                     .select(qProduct.productId)
-                    .where(keywordMatch(keyword),
-                            categoryFilter(categoryId),
+                    .where(categoryFilter(categoryId),
+                            isStock(stock),
                             minPriceRange(minPrice),
                             maxPriceRange(maxPrice),
-                            isStock(stock))
+                            keywordMatch(keyword))
                     .limit(pageable.getPageSize())
                     .offset(pageable.getOffset())
                     .fetch();

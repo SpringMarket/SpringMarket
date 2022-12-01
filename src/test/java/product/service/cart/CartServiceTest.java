@@ -48,22 +48,12 @@ class CartServiceTest extends RedisTestContainer {
 //                .productInfo(productInfo)
 //                .build();
 //    }
-
-    @BeforeAll
-    void flushallBefore() {
-        Objects.requireNonNull(redisTemplate.keys("*"))
-                .forEach(k-> {redisTemplate.delete(k);
-        });
-    }
-
     @AfterAll
     void flushallAfter() {
         Objects.requireNonNull(redisTemplate.keys("*"))
                 .forEach(k-> {redisTemplate.delete(k);
                 });
     }
-
-
 
     @Test
     @DisplayName("카트에 상품 추가 -> Default")
