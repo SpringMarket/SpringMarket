@@ -29,9 +29,6 @@ import java.util.List;
 public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private final JPAQueryFactory queryFactory;
     QProduct qProduct = QProduct.product;
-    QCategory qCategory = QCategory.category1;
-    QProductInfo qProductInfo = QProductInfo.productInfo;
-
 
     // 필터링 조회
     @Override
@@ -53,10 +50,12 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                     .offset(pageable.getOffset())
                     .fetch();
 
+
             // Null -> 공백 반환
             if (CollectionUtils.isEmpty(indexDtos)) {
                 return new PageImpl<>(new ArrayList<>(), pageable, 0);
             }
+
             List<Long> productIds = new LinkedList<>();
             List<Integer> views = new LinkedList<>();
             for (ProductIndexDto indexDto : indexDtos) {
@@ -110,6 +109,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
 
 
+
     // 상세 조회 -> return ProductDetailResponseDto
     @Override
     public ProductDetailResponseDto detail(Long productId) {
@@ -126,39 +126,6 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .select(Projections.constructor(ProductMainResponseDto.class, qProduct))
                 .where(qProduct.productId.eq(productId))
                 .fetchOne();
-    }
-
-    // WarmUp -> Return ProductDetailResponseDto Category Top 100
-    @Override
-    public List<ProductDetailResponseDto> warmupNamedPost(Long categoryId) {
-        return queryFactory.from(qProduct)
-                .select(Projections.constructor(ProductDetailResponseDto.class, qProduct))
-                .where(qProduct.categoryId.eq(categoryId))
-                .orderBy(qProduct.view.desc())
-                .limit(100)
-                .fetch();
-    }
-
-    // WarmUp -> Return ProductDetailResponseDto Category Top 100
-    @Override
-    public List<ProductRankResponseDto> warmupRankingBoard(Long categoryId) {
-        return queryFactory.from(qProduct)
-                .select(Projections.constructor(ProductRankResponseDto.class, qProduct))
-                .where(qProduct.categoryId.eq(categoryId))
-                .orderBy(qProduct.view.desc())
-                .limit(100)
-                .fetch();
-    }
-
-    // WarmUp -> Return Product Category Top 100
-    @Override
-    public List<Product> warmup(Long categoryId) {
-        return queryFactory.from(qProduct)
-                .select(qProduct)
-                .where(qProduct.categoryId.eq(categoryId))
-                .orderBy(qProduct.view.desc())
-                .limit(100)
-                .fetch();
     }
 
     // 조회수 Update Query
@@ -179,6 +146,10 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .where(qProduct.productId.eq(productId))
                 .fetchOne();
     }
+
+
+    /*  FILTER (｡•̀ᴗ-)✧ */
+
 
     // 카테고리 Filter
     private BooleanExpression categoryFilter(Long categoryId) {
@@ -224,9 +195,10 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private OrderSpecifier<?> sorting(String sorting) {
 
         if (!sorting.equals("조회순")) return qProduct.productId.desc();
-
         return qProduct.view.asc();
     }
+
+
 
 
 /*         --------------성능 테스트--------------         */
