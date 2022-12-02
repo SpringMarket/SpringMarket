@@ -19,8 +19,7 @@ import product.service.order.OrderService;
 
 import java.util.Date;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -63,7 +62,6 @@ class OrderControllerTest {
                         .characterEncoding("UTF-8")
                         .header("Authorization","Bearer "+accessToken("suyoung@naver.com")))
                 .andExpect(status().isOk());
-
     }
 
     @Test
@@ -77,6 +75,21 @@ class OrderControllerTest {
                 .build();
         userRepository.save(user);
         mvc.perform(get("/api/order/list")
+                        .header("Authorization","Bearer "+accessToken("suyoung@naver.com")))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("주문 취소")
+    void orderCancel() throws Exception {
+        User user = User.builder()
+                .email("suyoung@naver.com")
+                .password("1234")
+                .age("20대")
+                .authority(Authority.ROLE_USER)
+                .build();
+        userRepository.save(user);
+        mvc.perform(patch("/api/order/20")
                         .header("Authorization","Bearer "+accessToken("suyoung@naver.com")))
                 .andExpect(status().isOk());
     }

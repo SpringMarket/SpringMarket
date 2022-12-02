@@ -43,7 +43,7 @@ public class AdminService {
 
         List<Long> list = adminQueryRepository.warmupRankingBoardIds(categoryId);
 
-        for (int i=1; i<=5; i++){
+        for (int i=1; i<5; i++){
             List<ProductRankResponseDto> dtos = adminQueryRepository.setPreference(list, i);
             adminRedisService.warmupRankingPipeLine(dtos, categoryId, i);
         }
