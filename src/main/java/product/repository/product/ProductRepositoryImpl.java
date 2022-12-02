@@ -14,12 +14,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 import product.dto.product.ProductDetailResponseDto;
-import product.dto.product.ProductIndexDto;
 import product.dto.product.ProductMainResponseDto;
 import product.entity.product.QProduct;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -45,22 +43,27 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 //                        keywordMatch(keyword))
 //                            keywordContain(keyword))
                 .orderBy(sorting(sorting))
-                .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
 
         // Null -> 공백 반환
         if (CollectionUtils.isEmpty(ids)) {
             return new PageImpl<>(new ArrayList<>(), pageable, 0);
         }
+        /*long size = queryFactory.from(qProduct)
+                .select(qProduct.productId)
+                .where(categoryFilter(categoryId),
+                        isStock(stock),
+                        minPriceRange(minPrice),
+                        maxPriceRange(maxPrice),
+                        keywordContain(keyword)).fetch().size();*/
 
         List<ProductMainResponseDto> result = queryFactory.from(qProduct)
                 .select(Projections.constructor(ProductMainResponseDto.class,
                         qProduct))
                 .where(qProduct.productId.in(ids))
                 .orderBy(sorting(sorting))
-                .limit(pageable.getPageSize())
-                .offset(pageable.getOffset())
                 .fetch();
 
         return new PageImpl<>(result, pageable, result.size());
