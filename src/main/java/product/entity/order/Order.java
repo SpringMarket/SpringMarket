@@ -55,15 +55,22 @@ public class Order {
         return orderStatus;
     }
 
+    public void cancel(){
+        this.orderStatus = "주문취소";
+    }
 
-    public Order(Product product, Long orderNum, User user) {
+    public Order(Long orderNum, String orderStatus, Product product, User user) {
         this.orderNum = orderNum;
-        this.orderStatus = "배송중";
+        this.orderStatus = orderStatus;
         this.product = product;
         this.user = user;
     }
 
-    public void cancel(){
-        this.orderStatus = "주문취소";
+    public Order(Long orderNum, String orderStatus, Product product, User user, Long orderId) {
+        this.orderId = orderId;
+        this.orderNum = orderNum;
+        this.orderStatus = orderStatus;
+        this.product = product;
+        this.user = user;
     }
 }

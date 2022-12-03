@@ -47,8 +47,9 @@ public class OrderService {
         // 상품 정보 변경
         product.getProductInfo().plusPreference(orderNum,user.getAge());
 
+        Order order = new Order(orderNum, "배송중", product, user);
         // 주문 데이터 저장
-        orderRepository.save(new Order(product,orderNum, user));
+        orderRepository.save(order);
     }
 
     // 주문 목록 조회
@@ -91,7 +92,7 @@ public class OrderService {
 
     private User getUser(Authentication authentication) {
         return userRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new RequestException(NOT_FOUND_EXCEPTION));
+                .orElseThrow(() -> new RequestException(NOT_FOUND_USER_EXCEPTION));
     }
 
 }

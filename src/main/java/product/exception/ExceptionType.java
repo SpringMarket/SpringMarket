@@ -17,6 +17,7 @@ public enum ExceptionType {
     ORDER_FINISH_EXCEPTION(HttpStatus.BAD_REQUEST , "주문 완료된 상품은 취소가 불가능합니다."),
     NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "요청하신 자료를 찾을 수 없습니다."),
     NOT_FOUND_KEY_EXCEPTION(HttpStatus.NOT_FOUND, "요청하신 키를 찾을 수 없습니다."),
+    NOT_FOUND_USER_EXCEPTION(HttpStatus.NOT_FOUND, "요청하신 유저를 찾을 수 없습니다."),
     ALREADY_EXIST_EXCEPTION(HttpStatus.BAD_REQUEST, "이미 존재하는 데이터입니다."),
     OVER_EXIST_EXCEPTION(HttpStatus.BAD_REQUEST, "최대 요청 개수를 초과하였습니다."),
     OUT_OF_STOCK_EXCEPTION(HttpStatus.BAD_REQUEST, "재고가 부족합니다.");

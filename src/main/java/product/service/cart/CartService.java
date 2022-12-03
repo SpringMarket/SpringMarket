@@ -61,15 +61,14 @@ public class CartService { // Redis 테스트 코드 : 제윤
     public void orderCart(Authentication authentication, List<OrderRequestDto> list) {
 
         if (list.size() == 0) throw new RequestException(NOT_FOUND_EXCEPTION);
-        if (list.size() > 10) throw new RequestException(OVER_EXIST_EXCEPTION);
 
         String key = "cart::" + authentication.getName();
 
         List<Long> cartList = cartRedisService.cartList(key);
 
         for (OrderRequestDto order : list) {
-            if (!cartList.contains(order.getProductId())) throw new RequestException(NOT_FOUND_EXCEPTION);
-            orderService.orderProduct(order.getProductId(), order.getOrderNum(), authentication);
+            if (cartList.contains(order.getProductId())) orderService.orderProduct(order.getProductId(), order.getOrderNum(), authentication);
+            else throw new RequestException(NOT_FOUND_EXCEPTION);
         }
     }
 }

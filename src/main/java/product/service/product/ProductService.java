@@ -11,7 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import product.dto.product.ProductDetailResponseDto;
 import product.dto.product.ProductMainResponseDto;
 import product.dto.product.ProductRankResponseDto;
+import product.entity.product.Category;
 import product.entity.product.Product;
+import product.entity.product.ProductInfo;
 import product.exception.RequestException;
 import product.repository.product.ProductRepository;
 
@@ -62,7 +64,6 @@ public class ProductService {
         countView(id);
         return product;
     }
-
 
     // 상품 조회수 추가
     public void countView(Long productId) {
