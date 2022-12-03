@@ -14,14 +14,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 import product.dto.product.ProductDetailResponseDto;
-import product.dto.product.ProductIndexDto;
 import product.dto.product.ProductMainResponseDto;
-import product.dto.product.ProductRankResponseDto;
-import product.entity.product.*;
-
+import product.entity.product.QProduct;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -35,79 +31,43 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     public Page<ProductMainResponseDto> mainFilter(Pageable pageable, Long categoryId, String stock,
                                                    Long minPrice, Long maxPrice, String keyword, String sorting) {
 
-        List<Long> ids = new ArrayList<>();
+        if(sorting==null) sorting = "조회순";
 
-        if(sorting.equals("조회순")) {
-            List<ProductIndexDto> indexDtos = queryFactory.from(qProduct)
-                    .select(Projections.constructor(ProductIndexDto.class,
-                            qProduct.productId, qProduct.view))
-                    .where(categoryFilter(categoryId),
-                            isStock(stock),
-                            minPriceRange(minPrice),
-                            maxPriceRange(maxPrice),
-                            keywordMatch(keyword))
-                    .limit(pageable.getPageSize())
-                    .offset(pageable.getOffset())
-                    .fetch();
+        List<Long> ids = queryFactory.from(qProduct)
+                .select(qProduct.productId)
+                .where(categoryFilter(categoryId),
+                        isStock(stock),
+                        minPriceRange(minPrice),
+                        maxPriceRange(maxPrice),
+                        keywordContain(keyword))
+//                        keywordMatch(keyword))
+//                            keywordContain(keyword))
+                .orderBy(sorting(sorting))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
 
-
-            // Null -> 공백 반환
-            if (CollectionUtils.isEmpty(indexDtos)) {
-                return new PageImpl<>(new ArrayList<>(), pageable, 0);
-            }
-
-            List<Long> productIds = new LinkedList<>();
-            List<Integer> views = new LinkedList<>();
-            for (ProductIndexDto indexDto : indexDtos) {
-                productIds.add(indexDto.getProductId());
-                views.add(indexDto.getView());
-            }
-
-            ids = queryFactory.from(qProduct)
-                    .select(qProduct.productId)
-                    .where(qProduct.view.in(views),
-                            qProduct.productId.in(productIds))
-                    .orderBy(qProduct.view.asc())
-                    .limit(pageable.getPageSize())
-                    .offset(pageable.getOffset())
-                    .fetch();
-        }else{
-            List<Long> productIds = queryFactory.from(qProduct)
-                    .select(qProduct.productId)
-                    .where(categoryFilter(categoryId),
-                            isStock(stock),
-                            minPriceRange(minPrice),
-                            maxPriceRange(maxPrice),
-                            keywordMatch(keyword))
-                    .limit(pageable.getPageSize())
-                    .offset(pageable.getOffset())
-                    .fetch();
-
-            // Null -> 공백 반환
-            if (CollectionUtils.isEmpty(productIds)) {
-                return new PageImpl<>(new ArrayList<>(), pageable, 0);
-            }
-            ids = queryFactory.from(qProduct)
-                    .select(qProduct.productId)
-                    .where(qProduct.productId.in(productIds))
-                    .orderBy(qProduct.productId.desc())
-                    .limit(pageable.getPageSize())
-                    .offset(pageable.getOffset())
-                    .fetch();
+        // Null -> 공백 반환
+        if (CollectionUtils.isEmpty(ids)) {
+            return new PageImpl<>(new ArrayList<>(), pageable, 0);
         }
+        /*long size = queryFactory.from(qProduct)
+                .select(qProduct.productId)
+                .where(categoryFilter(categoryId),
+                        isStock(stock),
+                        minPriceRange(minPrice),
+                        maxPriceRange(maxPrice),
+                        keywordContain(keyword)).fetch().size();*/
 
         List<ProductMainResponseDto> result = queryFactory.from(qProduct)
                 .select(Projections.constructor(ProductMainResponseDto.class,
                         qProduct))
                 .where(qProduct.productId.in(ids))
                 .orderBy(sorting(sorting))
-                .limit(pageable.getPageSize())
-                .offset(pageable.getOffset())
                 .fetch();
+
         return new PageImpl<>(result, pageable, result.size());
     }
-
-
 
 
     // 상세 조회 -> return ProductDetailResponseDto
@@ -150,6 +110,12 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
     /*  FILTER (｡•̀ᴗ-)✧ */
 
+    // 조회순
+    private BooleanExpression viewIndex(String sorting) {
+        if (StringUtils.isNullOrEmpty(sorting)) return qProduct.view.loe(0);
+        if (sorting.equals("조회순")) return qProduct.view.loe(0);
+        return null;
+    }
 
     // 카테고리 Filter
     private BooleanExpression categoryFilter(Long categoryId) {
@@ -161,18 +127,18 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private BooleanExpression isStock(String stock) {
         if (StringUtils.isNullOrEmpty(stock)) return null;
         if (stock.equals("1")) return null; // "1" : 품절상품 포함 -> null 리턴
-        return QProduct.product.stock.ne(0L); // "1" : 품절상품 미포함 -> stock != 0 리턴
+        return qProduct.stock.ne(0L); // "1" : 품절상품 미포함 -> stock != 0 리턴
     }
 
     // 최소 금액 Filter
     private BooleanExpression minPriceRange(Long minPrice) {
-        if (minPrice != null) return QProduct.product.price.goe(minPrice);
+        if (minPrice != null) return qProduct.price.goe(minPrice);
         return null;
     }
 
     // 최대 금액 Filter
     private BooleanExpression maxPriceRange(Long maxPrice) {
-        if (maxPrice != null) return QProduct.product.price.loe(maxPrice);
+        if (maxPrice != null) return qProduct.price.loe(maxPrice);
         return null;
     }
 
@@ -188,12 +154,12 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     // 키워드 Filter
     private BooleanExpression keywordContain(String keyword) {
         if (StringUtils.isNullOrEmpty(keyword)) return null;
-        return QProduct.product.title.contains(keyword);
+        return qProduct.title.contains(keyword);
     }
 
     // 정렬
     private OrderSpecifier<?> sorting(String sorting) {
-
+        if (StringUtils.isNullOrEmpty(sorting)) return qProduct.view.asc();
         if (!sorting.equals("조회순")) return qProduct.productId.desc();
         return qProduct.view.asc();
     }
