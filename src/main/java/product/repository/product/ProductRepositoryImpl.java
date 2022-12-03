@@ -79,13 +79,16 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .fetchOne();
     }
 
-    // 상세 조회 -> return ProductMainResponseDto
+    // 카트 조회 -> return ProductMainResponseDto
     @Override
-    public ProductMainResponseDto detailMain(Long productId) {
+    public List<ProductMainResponseDto> cartList(List<Long> ids, Pageable pageable) {
         return queryFactory.from(qProduct)
                 .select(Projections.constructor(ProductMainResponseDto.class, qProduct))
-                .where(qProduct.productId.eq(productId))
-                .fetchOne();
+                .where(qProduct.productId.in(ids))
+                .orderBy(sorting("조회순"))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
     }
 
     // 조회수 Update Query
