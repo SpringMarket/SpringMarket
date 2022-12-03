@@ -18,6 +18,10 @@ public class ProductRankResponseDto {
     private String photo;
     private Long price;
     private int view;
+    private Long ten;
+    private Long twenty;
+    private Long thirty;
+    private Long over_forty;
 
     public ProductRankResponseDto(Product product) {
         this.productId = product.getProductId();
@@ -25,6 +29,10 @@ public class ProductRankResponseDto {
         this.photo = product.getPhoto();
         this.price = product.getPrice();
         this.view = product.getView();
+        this.ten = product.getProductInfo().getTen();
+        this.twenty = product.getProductInfo().getTwenty();
+        this.thirty = product.getProductInfo().getThirty();
+        this.over_forty = product.getProductInfo().getOver_forty();
     }
 
     public static ProductRankResponseDto convertToResponseRankingDto(ZSetOperations.TypedTuple typedTuple){

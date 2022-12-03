@@ -41,12 +41,9 @@ public class AdminService {
 
         log.info("Warm Up Ranking Board PipeLine Start....");
 
-        List<Long> list = adminQueryRepository.warmupRankingBoardIds(categoryId);
+        List<ProductRankResponseDto> list = adminQueryRepository.warmupRankingBoard(categoryId);
 
-        for (int i=1; i<5; i++){
-            List<ProductRankResponseDto> dtos = adminQueryRepository.setPreference(list, i);
-            adminRedisService.warmupRankingPipeLine(dtos, categoryId, i);
-        }
+        for (int i=1; i<5; i++) adminRedisService.warmupRankingPipeLine(list, categoryId, i);
     }
 
 
