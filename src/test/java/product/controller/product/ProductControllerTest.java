@@ -174,4 +174,15 @@ class ProductControllerTest {
         verify(productService,times(1)).findProduct(1L);
     }
 
+    @Test
+    @DisplayName("메인페이지 키워드 검색")
+    void keywordSearch() throws Exception {
+        mvc.perform(get("/api/products/keyword?keyword=겨울"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("{" +
+                        "\"result\":true," +
+                        "\"httpStatus\":\"OK\"," +
+                        "\"check\":{}}"));
+    }
+
 }

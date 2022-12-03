@@ -18,8 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class CartControllerTest {
     @Autowired
     private MockMvc mvc;
-    @Autowired
-    private ObjectMapper mapper;
+
     @MockBean
     private CartService cartService;
 
