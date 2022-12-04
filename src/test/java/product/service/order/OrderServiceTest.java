@@ -13,9 +13,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+import product.MysqlTestContainer;
 import product.dto.order.MyPageResponseDto;
-import product.entity.order.Order;
+import product.entity.order.Orders;
+import product.entity.order.Orders;
 import product.entity.product.Category;
 import product.entity.product.Product;
 import product.entity.product.ProductInfo;
@@ -29,17 +32,19 @@ import product.repository.product.ProductRepository;
 import product.repository.user.UserRepository;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+
+//@DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
 @SpringBootTest
 @Transactional
+@WithMockUser(username = "Order::Test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(MockitoExtension.class)
-class OrderServiceTest {
+class OrderServiceTest extends MysqlTestContainer {
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -99,6 +104,19 @@ class OrderServiceTest {
         productInfoRepository.save(productInfo);
         productRepository.save(product_1);
         productRepository.save(product_2);
+
+        User user = User.builder()
+                .email("Order::Test")
+                .password("password")
+                .age("20대")
+                .authority(Authority.ROLE_USER)
+                .build();
+        userRepository.save(user);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        orderService.orderProduct(1L, 1L, authentication);
+
     }
 
     @Test
@@ -116,12 +134,12 @@ class OrderServiceTest {
         userRepository.save(user);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        Long productId = 1L;
+        Long productId = 2L;
         Long orderNum = 1L;
 
         // WHEN
         orderService.orderProduct(productId, orderNum, authentication);
-        Product product = productRepository.findByProductId(1L);
+        Product product = productRepository.findByProductId(2L);
 
         // THEN
         assertThat(product.getStock()).isEqualTo(9L);
@@ -206,12 +224,43 @@ class OrderServiceTest {
 
 
     @Test
-    @WithMockUser(username = "Order::5")
+    @WithMockUser(username = "Order::Test")
     @DisplayName("<5> 주문 취소 -> Default")
     void orderCancel() {
         // GIVEN
+//        User user = User.builder()
+//                .email("Order::5")
+//                .password("password")
+//                .age("20대")
+//                .authority(Authority.ROLE_USER)
+//                .build();
+//        userRepository.save(user);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//
+//        Long productId = 1L;
+//        Long orderNum = 1L;
+//
+//        orderService.orderProduct(productId, orderNum, authentication);
+        Product product_1 = productRepository.findByProductId(1L);
+        Long stock_1 = product_1.getStock();
+
+        // WHEN
+        orderService.cancel(authentication, 1L);
+        Product product_2 = productRepository.findByProductId(1L);
+        Long stock_2 = product_2.getStock();
+
+        // THEN
+        assertEquals(stock_1, 9L);
+        assertEquals(stock_2, 10L);
+    }
+
+    @Test
+    @WithMockUser(username = "Order::6")
+    @DisplayName("<6> 주문 취소 -> Not Match User")
+    void orderCancelNotMatchUser() {
+        // GIVEN
         User user = User.builder()
-                .email("Order::5")
+                .email("Order::1")
                 .password("password")
                 .age("20대")
                 .authority(Authority.ROLE_USER)
@@ -220,27 +269,47 @@ class OrderServiceTest {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         Long productId = 1L;
-        Product product = productRepository.findByProductId(productId);
         Long orderNum = 1L;
 
-        Order order = new Order(orderNum, "배송중", product, user, 99L);
-
-        orderRepository.save(order);
-        Order order1 = orderRepository.findByOrderId(99L);
-        System.out.println(order1);
-
         orderService.orderProduct(productId, orderNum, authentication);
-        Product product_1 = productRepository.findByProductId(1L);
-        Long stock_1 = product_1.getStock();
 
         // WHEN
-        orderService.cancel(authentication, 2L);
-        Product product_2 = productRepository.findByProductId(1L);
-        Long stock_2 = product_2.getStock();
+        RequestException exception = assertThrows(RequestException.class, ()-> {
+            orderService.cancel(authentication, 3L); });
+        String message = exception.getMessage();
 
         // THEN
-        assertEquals(stock_1, 9L);
-        assertEquals(stock_2, 10L);
+        assertEquals("접근 권한이 없습니다.", message);
+    }
+
+    @Test
+    @WithMockUser(username = "Order::7")
+    @DisplayName("<7> 주문 취소 -> Fail Status")
+    void orderCancelFailStatus() {
+        // GIVEN
+        User user = User.builder()
+                .email("Order::7")
+                .password("password")
+                .age("20대")
+                .authority(Authority.ROLE_USER)
+                .build();
+        userRepository.save(user);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Long productId = 1L;
+        Long orderNum = 1L;
+
+        orderService.orderProduct(productId, orderNum, authentication);
+        Orders order = orderRepository.findByOrderId(4L);
+        order.setOrderStatus("배송완료");
+
+        // WHEN
+        RequestException exception = assertThrows(RequestException.class, ()-> {
+            orderService.cancel(authentication, 4L); });
+        String message = exception.getMessage();
+
+        // THEN
+        assertEquals("접근 권한이 없습니다.", message);
     }
 
 //    @Test

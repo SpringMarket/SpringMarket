@@ -12,6 +12,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import product.MysqlTestContainer;
@@ -20,6 +21,7 @@ import product.dto.order.OrderRequestDto;
 import product.dto.product.ProductDetailResponseDto;
 import product.dto.product.ProductMainResponseDto;
 import product.entity.order.Order;
+import product.entity.order.Orders;
 import product.entity.product.Category;
 import product.entity.product.Product;
 import product.entity.product.ProductInfo;
@@ -44,7 +46,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Transactional
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Rollback
 class CartServiceTest extends RedisTestContainer {
 
     @Autowired
@@ -353,8 +354,8 @@ class CartServiceTest extends RedisTestContainer {
         // WHEN
         cartService.orderCart(authentication, orderList);
 
-        Order order = orderRepository.findByOrderId(1L);
-        Order orderOrder = orderRepository.findByOrderId(2L);
+        Orders order = orderRepository.findByOrderId(1L);
+        Orders orderOrder = orderRepository.findByOrderId(2L);
 
         // THEN
         assertEquals(order.getProduct().getTitle(), "Test_1");

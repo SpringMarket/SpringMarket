@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import product.dto.order.MyPageResponseDto;
 import product.entity.order.Order;
+import product.entity.order.Orders;
 import product.entity.product.Product;
 import product.entity.user.User;
 import product.exception.RequestException;
@@ -47,7 +48,7 @@ public class OrderService {
         // 상품 정보 변경
         product.getProductInfo().plusPreference(orderNum,user.getAge());
 
-        Order order = new Order(orderNum, "배송중", product, user);
+        Orders order = new Orders(orderNum, "배송중", product, user);
         // 주문 데이터 저장
         orderRepository.save(order);
     }
@@ -67,7 +68,7 @@ public class OrderService {
 
         User user = getUser(authentication);
 
-        Order order = orderRepository.findByOrderId(orderId);
+        Orders order = orderRepository.findByOrderId(orderId);
         if (order == null) throw new RequestException(NOT_FOUND_EXCEPTION);
 
         // 로그인된 사용자와 주문 테이블에 저장된 사용자 일치여부 조회

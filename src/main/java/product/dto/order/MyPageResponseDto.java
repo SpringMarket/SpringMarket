@@ -1,6 +1,6 @@
 package product.dto.order;
 
-import product.entity.order.Order;
+import product.entity.order.Orders;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -18,7 +18,7 @@ public class MyPageResponseDto {
     private String orderStatus;
     private String orderTime;
 
-    public MyPageResponseDto(Order order){
+    public MyPageResponseDto(Orders order){
         this.orderId = order.getOrderId();
         this.title = order.getProduct().getTitle();
         this.price = order.getProduct().getPrice();
@@ -27,7 +27,7 @@ public class MyPageResponseDto {
         this.orderTime = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(order.getOrderTime());
     }
 
-    public static MyPageResponseDto toDto(Order order) {
+    public static MyPageResponseDto toDto(Orders order) {
         return new MyPageResponseDto(
                 order.getOrderId(),
                 order.getProduct().getTitle(),

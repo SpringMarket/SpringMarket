@@ -15,9 +15,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Data
 @Builder
-@Table(name = "orders")
 @Entity
-public class Order {
+public class Orders {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,8 +47,8 @@ public class Order {
     private User user;
 
 
-    public String changeStatus(Order order){
-        if (LocalDateTime.now().isBefore(order.getOrderTime().plusDays(7))) {
+    public String changeStatus(Orders orders){
+        if (LocalDateTime.now().isBefore(orders.getOrderTime().plusDays(7))) {
             this.orderStatus = "배송완료";
         }
         return orderStatus;
@@ -59,15 +58,7 @@ public class Order {
         this.orderStatus = "주문취소";
     }
 
-    public Order(Long orderNum, String orderStatus, Product product, User user) {
-        this.orderNum = orderNum;
-        this.orderStatus = orderStatus;
-        this.product = product;
-        this.user = user;
-    }
-
-    public Order(Long orderNum, String orderStatus, Product product, User user, Long orderId) {
-        this.orderId = orderId;
+    public Orders(Long orderNum, String orderStatus, Product product, User user) {
         this.orderNum = orderNum;
         this.orderStatus = orderStatus;
         this.product = product;
