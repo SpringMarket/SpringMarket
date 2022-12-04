@@ -28,10 +28,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class OrderControllerTest {
     @Autowired
     private MockMvc mvc;
-    @Autowired
-    private ObjectMapper mapper;
-    @MockBean
-    private OrderService orderService;
     @MockBean
     private UserRepository userRepository;
 

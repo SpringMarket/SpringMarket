@@ -40,8 +40,6 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                         minPriceRange(minPrice),
                         maxPriceRange(maxPrice),
                         keywordContain(keyword))
-//                        keywordMatch(keyword))
-//                            keywordContain(keyword))
                 .orderBy(sorting(sorting))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -51,13 +49,6 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         if (CollectionUtils.isEmpty(ids)) {
             return new PageImpl<>(new ArrayList<>(), pageable, 0);
         }
-        /*long size = queryFactory.from(qProduct)
-                .select(qProduct.productId)
-                .where(categoryFilter(categoryId),
-                        isStock(stock),
-                        minPriceRange(minPrice),
-                        maxPriceRange(maxPrice),
-                        keywordContain(keyword)).fetch().size();*/
 
         List<ProductMainResponseDto> result = queryFactory.from(qProduct)
                 .select(Projections.constructor(ProductMainResponseDto.class,
@@ -69,6 +60,37 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         return new PageImpl<>(result, pageable, result.size());
     }
 
+    // 키워드 조회
+    @Override
+    public Page<ProductMainResponseDto> keywordFilter(Pageable pageable, String keyword) {
+        /*List<Long> ids = queryFactory.from(qProduct)
+                .select(qProduct.productId)
+                .where(keywordMatch(keyword))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        // Null -> 공백 반환
+        if (CollectionUtils.isEmpty(ids)) {
+            return new PageImpl<>(new ArrayList<>(), pageable, 0);
+        }
+
+        List<ProductMainResponseDto> result = queryFactory.from(qProduct)
+                .select(Projections.constructor(ProductMainResponseDto.class,
+                        qProduct))
+                .where(qProduct.productId.in(ids))
+                .fetch();*/
+
+        List<ProductMainResponseDto> result = queryFactory.from(qProduct)
+                .select(Projections.constructor(ProductMainResponseDto.class,
+                        qProduct))
+                .where(keywordMatch(keyword))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        return new PageImpl<>(result, pageable, result.size());
+    }
 
     // 상세 조회 -> return ProductDetailResponseDto
     @Override
@@ -150,7 +172,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private BooleanExpression keywordMatch(String keyword) {
         if (StringUtils.isNullOrEmpty(keyword)) return null;
         NumberTemplate booleanTemplate = Expressions.numberTemplate(Double.class,
-                "function('match',{0},{1})", QProduct.product.title, "+" + keyword + "*");
+                "function('match',{0},{1})", qProduct.title, "+" + keyword + "*");
         return booleanTemplate.gt(0);
     }
 

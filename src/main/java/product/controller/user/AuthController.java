@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import product.dto.user.EmailValidDto;
 import product.dto.user.LoginRequestDto;
 import product.dto.user.SignUpRequestDto;
 import product.dto.user.TokenRequestDto;
@@ -34,12 +33,6 @@ public class AuthController {
     public Response signup(@Valid @RequestBody SignUpRequestDto signUpRequestDto) {
         authService.signup(signUpRequestDto);
         log.info(signUpRequestDto.getEmail() + " 님이 가입하셨습니다.");
-        return success();
-    }
-
-    @PostMapping("/id-duplicate")
-    public Response emailDuplicate(@RequestBody EmailValidDto emailValidDto) {
-        authService.emailDuplicate(emailValidDto);
         return success();
     }
 

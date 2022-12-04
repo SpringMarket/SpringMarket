@@ -16,4 +16,5 @@ public interface ProductRepositoryCustom {
     List<ProductMainResponseDto> cartList(List<Long> ids, Pageable pageable);
     void addView(Long productId, int viewCnt);
     Integer getView(Long productId);
+    Page<ProductMainResponseDto> keywordFilter(Pageable pageable, String keyword);
 }

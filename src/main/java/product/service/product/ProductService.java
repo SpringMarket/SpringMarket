@@ -52,6 +52,11 @@ public class ProductService {
         return productRepository.mainFilter(pageable, categoryId,  stock, minPrice, maxPrice, keyword, sort);
     }
 
+    @Transactional(readOnly = true)
+    public Page<ProductMainResponseDto> findByKeyword(Pageable pageable, String keyword) {
+        return productRepository.keywordFilter(pageable, keyword);
+    }
+
 
     // 상품 상세 조회 -> Cache Aside
     @Cacheable(value = "product", key = "#id") // [product::1], [name : "" , cre ...]

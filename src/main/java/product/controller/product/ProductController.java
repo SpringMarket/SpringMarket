@@ -42,6 +42,13 @@ public class ProductController {
         return success(productService.findAllProduct(pageable, categoryId, stock, minPrice, maxPrice, keyword, sorting));
     }
 
+    // 메인 페이지 키워드 조회
+    @GetMapping("/products/keyword")
+    public Response findAllProduct(@PageableDefault(size = 15) Pageable pageable,
+                                   @RequestParam(value = "keyword", required = false) String keyword) {
+        return success(productService.findByKeyword(pageable,keyword));
+    }
+
     // 상세 페이지
     @GetMapping("/products/{id}")
     public Response findProduct(@PathVariable Long id) {
