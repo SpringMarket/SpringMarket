@@ -62,10 +62,8 @@ public class AdminRedisService {
                 return i.getTwenty();
             case 3:
                 return i.getThirty();
-            case 4:
-                return i.getOver_forty();
         }
-        return (long) i.getView();
+        return i.getOver_forty();
     }
 
     // 상품 상세 페이지 캐싱 -> NonePipeLine

@@ -8,7 +8,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import product.dto.order.MyPageResponseDto;
-import product.entity.order.Order;
 import product.entity.order.Orders;
 import product.entity.product.Product;
 import product.entity.user.User;
@@ -16,6 +15,8 @@ import product.exception.RequestException;
 import product.repository.order.OrderRepository;
 import product.repository.product.ProductRepository;
 import product.repository.user.UserRepository;
+
+import java.util.Optional;
 
 import static product.exception.ExceptionType.*;
 
@@ -34,7 +35,7 @@ public class OrderService {
 
         log.info("Order Start....");
 
-        User user = getUser(authentication);
+        User user = userRepository.findByEmail(authentication.getName()).orElseThrow(() -> new RequestException(ACCESS_DENIED_EXCEPTION));
 
         Product product = productRepository.findByProductId(productId);
         if (product == null) throw new RequestException(NOT_FOUND_EXCEPTION);
@@ -46,7 +47,7 @@ public class OrderService {
         product.orderChangeStock(orderNum);
 
         // 상품 정보 변경
-        product.getProductInfo().plusPreference(orderNum,user.getAge());
+        product.getProductInfo().plusPreference(orderNum, user.getAge());
 
         Orders order = new Orders(orderNum, "배송중", product, user);
         // 주문 데이터 저장
@@ -57,7 +58,7 @@ public class OrderService {
     @Transactional(readOnly = true)
     public Page<MyPageResponseDto> myPage(Pageable pageable, Authentication authentication) {
 
-        User user = getUser(authentication);
+        User user = userRepository.findByEmail(authentication.getName()).orElseThrow(() -> new RequestException(ACCESS_DENIED_EXCEPTION));
 
         return orderRepository.orderFilter(user,pageable);
     }
@@ -66,20 +67,12 @@ public class OrderService {
     @Transactional
     public void cancel(Authentication authentication, Long orderId) {
 
-        User user = getUser(authentication);
+        User user = userRepository.findByEmail(authentication.getName()).orElseThrow(() -> new RequestException(ACCESS_DENIED_EXCEPTION));
 
         Orders order = orderRepository.findByOrderId(orderId);
         if (order == null) throw new RequestException(NOT_FOUND_EXCEPTION);
 
-        // 로그인된 사용자와 주문 테이블에 저장된 사용자 일치여부 조회
-        if (!user.equals(order.getUser())) {
-            throw new RequestException(ACCESS_DENIED_EXCEPTION);
-        }
-
-        // 주문 상태에 따른 주문 취소 실패 처리
-        if (order.getOrderStatus().equals("배송완료") || order.getOrderStatus().equals("주문취소")) {
-            throw new RequestException(ORDER_FINISH_EXCEPTION);
-        }
+        checkCancelValid(user, order);
 
         // 재고 수 변경
         order.getProduct().cancelChangeStock(order.getOrderNum());
@@ -91,9 +84,14 @@ public class OrderService {
         order.getProduct().getProductInfo().minusPreference(order.getOrderNum(),user.getAge());
     }
 
-    private User getUser(Authentication authentication) {
-        return userRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new RequestException(NOT_FOUND_USER_EXCEPTION));
+    public void checkCancelValid(User user, Orders order){
+        // 로그인된 사용자와 주문 테이블에 저장된 사용자 일치여부 조회
+        if (!user.equals(order.getUser())) {
+            throw new RequestException(ACCESS_DENIED_EXCEPTION);
+        }
+        // 주문 상태에 따른 주문 취소 실패 처리
+        if (order.getOrderStatus().equals("배송완료") || order.getOrderStatus().equals("주문취소")) {
+            throw new RequestException(ORDER_FINISH_EXCEPTION);
+        }
     }
-
 }

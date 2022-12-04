@@ -118,8 +118,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     public void addView(Long productId, int viewCnt) {
         queryFactory
                 .update(qProduct)
-                .set(qProduct.view, viewCnt)
                 .where(qProduct.productId.eq(productId))
+                .set(qProduct.view, viewCnt)
                 .execute();
     }
 

@@ -32,6 +32,7 @@ public class AdminService {
         log.info("Warm Up Named Post PipeLine Start....");
 
         List<ProductDetailResponseDto> list = adminQueryRepository.warmupNamedPost(categoryId);
+
         adminRedisService.warmupPipeLine(list);
     }
 

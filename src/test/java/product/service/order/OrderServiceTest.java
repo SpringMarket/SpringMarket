@@ -1,9 +1,6 @@
 package product.service.order;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +21,7 @@ import product.entity.product.Product;
 import product.entity.product.ProductInfo;
 import product.entity.user.Authority;
 import product.entity.user.User;
+import product.exception.ExceptionType;
 import product.exception.RequestException;
 import product.repository.order.OrderRepository;
 import product.repository.product.CategoryRepository;
@@ -31,6 +29,7 @@ import product.repository.product.ProductInfoRepository;
 import product.repository.product.ProductRepository;
 import product.repository.user.UserRepository;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,10 +40,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 //@DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
 @SpringBootTest
 @Transactional
-@WithMockUser(username = "Order::Test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(MockitoExtension.class)
-class OrderServiceTest extends MysqlTestContainer {
+class OrderServiceTest{
+
+    @Autowired
+    private OrderService orderService;
+
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -56,7 +58,8 @@ class OrderServiceTest extends MysqlTestContainer {
     @Autowired
     private OrderRepository orderRepository;
     @Autowired
-    private OrderService orderService;
+    private EntityManager entityManager;
+
 
     @BeforeAll
     @DisplayName("<Before> 상품 초기화")
@@ -100,23 +103,32 @@ class OrderServiceTest extends MysqlTestContainer {
                 .productInfo(productInfo)
                 .build();
 
+        Product product_3 = Product.builder()
+                .productId(3L)
+                .title("Test_3")
+                .content("Test_3")
+                .photo("Test_3")
+                .price(10000L)
+                .stock(10L)
+                .view(3)
+                .createdTime(LocalDateTime.now())
+                .categoryId(1L)
+                .productInfo(productInfo)
+                .build();
+
         categoryRepository.save(category);
         productInfoRepository.save(productInfo);
         productRepository.save(product_1);
         productRepository.save(product_2);
+        productRepository.save(product_3);
+    }
 
-        User user = User.builder()
-                .email("Order::Test")
-                .password("password")
-                .age("20대")
-                .authority(Authority.ROLE_USER)
-                .build();
-        userRepository.save(user);
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        orderService.orderProduct(1L, 1L, authentication);
-
+    @AfterEach
+    public void teardown() {
+        this.orderRepository.deleteAll();
+        this.entityManager
+                .createNativeQuery("TRUNCATE TABLE orders")
+                .executeUpdate();
     }
 
     @Test
@@ -224,29 +236,29 @@ class OrderServiceTest extends MysqlTestContainer {
 
 
     @Test
-    @WithMockUser(username = "Order::Test")
+    @WithMockUser(username = "Order::5")
     @DisplayName("<5> 주문 취소 -> Default")
     void orderCancel() {
         // GIVEN
-//        User user = User.builder()
-//                .email("Order::5")
-//                .password("password")
-//                .age("20대")
-//                .authority(Authority.ROLE_USER)
-//                .build();
-//        userRepository.save(user);
+        User user = User.builder()
+                .email("Order::5")
+                .password("password")
+                .age("20대")
+                .authority(Authority.ROLE_USER)
+                .build();
+        userRepository.save(user);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//
-//        Long productId = 1L;
-//        Long orderNum = 1L;
-//
-//        orderService.orderProduct(productId, orderNum, authentication);
-        Product product_1 = productRepository.findByProductId(1L);
+
+        Long productId = 3L;
+        Long orderNum = 1L;
+
+        orderService.orderProduct(productId, orderNum, authentication);
+        Product product_1 = productRepository.findByProductId(3L);
         Long stock_1 = product_1.getStock();
 
         // WHEN
         orderService.cancel(authentication, 1L);
-        Product product_2 = productRepository.findByProductId(1L);
+        Product product_2 = productRepository.findByProductId(3L);
         Long stock_2 = product_2.getStock();
 
         // THEN
@@ -260,7 +272,7 @@ class OrderServiceTest extends MysqlTestContainer {
     void orderCancelNotMatchUser() {
         // GIVEN
         User user = User.builder()
-                .email("Order::1")
+                .email("Order::6")
                 .password("password")
                 .age("20대")
                 .authority(Authority.ROLE_USER)
@@ -268,14 +280,28 @@ class OrderServiceTest extends MysqlTestContainer {
         userRepository.save(user);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+        User user_check = User.builder()
+                .email("Order::6::2")
+                .password("password")
+                .age("20대")
+                .authority(Authority.ROLE_USER)
+                .build();
+        userRepository.save(user_check);
+
         Long productId = 1L;
         Long orderNum = 1L;
 
+        this.entityManager
+                .createNativeQuery("TRUNCATE TABLE orders")
+                .executeUpdate();
+
         orderService.orderProduct(productId, orderNum, authentication);
+        Orders order = orderRepository.findById(1L).orElseThrow(() -> new RequestException(ExceptionType.NOT_FOUND_EXCEPTION));
+        System.out.println(order);
 
         // WHEN
         RequestException exception = assertThrows(RequestException.class, ()-> {
-            orderService.cancel(authentication, 3L); });
+             orderService.checkCancelValid(user_check, order); });
         String message = exception.getMessage();
 
         // THEN
@@ -284,8 +310,8 @@ class OrderServiceTest extends MysqlTestContainer {
 
     @Test
     @WithMockUser(username = "Order::7")
-    @DisplayName("<7> 주문 취소 -> Fail Status")
-    void orderCancelFailStatus() {
+    @DisplayName("<7> 주문 취소 -> Fail Status 배송완료")
+    void orderCancelFailStatus_1() {
         // GIVEN
         User user = User.builder()
                 .email("Order::7")
@@ -300,16 +326,74 @@ class OrderServiceTest extends MysqlTestContainer {
         Long orderNum = 1L;
 
         orderService.orderProduct(productId, orderNum, authentication);
-        Orders order = orderRepository.findByOrderId(4L);
+        Orders order = orderRepository.findByOrderId(1L);
         order.setOrderStatus("배송완료");
 
         // WHEN
         RequestException exception = assertThrows(RequestException.class, ()-> {
-            orderService.cancel(authentication, 4L); });
+            orderService.cancel(authentication, 1L); });
         String message = exception.getMessage();
 
         // THEN
-        assertEquals("접근 권한이 없습니다.", message);
+        assertEquals("주문 완료된 상품은 취소가 불가능합니다.", message);
+    }
+
+    @Test
+    @WithMockUser(username = "Order::8")
+    @DisplayName("<7> 주문 취소 -> Fail Status 주문취소")
+    void orderCancelFailStatus_2() {
+        // GIVEN
+        User user = User.builder()
+                .email("Order::8")
+                .password("password")
+                .age("20대")
+                .authority(Authority.ROLE_USER)
+                .build();
+        userRepository.save(user);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Long productId = 1L;
+        Long orderNum = 1L;
+
+        orderService.orderProduct(productId, orderNum, authentication);
+        Orders order = orderRepository.findByOrderId(1L);
+        order.setOrderStatus("주문취소");
+
+        // WHEN
+        RequestException exception = assertThrows(RequestException.class, ()-> {
+            orderService.cancel(authentication, 1L); });
+        String message = exception.getMessage();
+
+        // THEN
+        assertEquals("주문 완료된 상품은 취소가 불가능합니다.", message);
+    }
+
+    @Test
+    @WithMockUser(username = "Order::9")
+    @DisplayName("<7> 주문 취소 -> Not Exist Order")
+    void orderCancelNotExistOrder() {
+        // GIVEN
+        User user = User.builder()
+                .email("Order::9")
+                .password("password")
+                .age("20대")
+                .authority(Authority.ROLE_USER)
+                .build();
+        userRepository.save(user);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Long productId = 1L;
+        Long orderNum = 1L;
+
+        orderService.orderProduct(productId, orderNum, authentication);
+
+        // WHEN
+        RequestException exception = assertThrows(RequestException.class, ()-> {
+            orderService.cancel(authentication, 2L); });
+        String message = exception.getMessage();
+
+        // THEN
+        assertEquals("요청하신 자료를 찾을 수 없습니다.", message);
     }
 
 //    @Test

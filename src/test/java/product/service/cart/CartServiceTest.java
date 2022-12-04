@@ -20,7 +20,7 @@ import product.RedisTestContainer;
 import product.dto.order.OrderRequestDto;
 import product.dto.product.ProductDetailResponseDto;
 import product.dto.product.ProductMainResponseDto;
-import product.entity.order.Order;
+import product.entity.order.Orders;
 import product.entity.order.Orders;
 import product.entity.product.Category;
 import product.entity.product.Product;

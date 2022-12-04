@@ -34,10 +34,11 @@ public class ProductService {
 
     // 랭킹보드 조회
     public List<ProductRankResponseDto> getRankingList(Long categoryId, Long preferId) {
+
+        if (categoryId > 5) throw new RequestException(NOT_FOUND_EXCEPTION);
+
         String key = "Ranking::" + categoryId + "::" + preferId;
         Set<ZSetOperations.TypedTuple<ProductRankResponseDto>> typedTuples = productRedisService.getRankingBoard(key);
-
-        if (typedTuples == null) throw new RequestException(NOT_FOUND_EXCEPTION);
 
         return typedTuples.stream().map(ProductRankResponseDto::convertToResponseRankingDto).collect(Collectors.toList());
     }
@@ -65,7 +66,7 @@ public class ProductService {
 
         log.info("Search Once Log Start....");
         ProductDetailResponseDto product = productRepository.detail(id);
-        if (product == null ) throw new RequestException(NOT_FOUND_EXCEPTION);
+        if (product == null) throw new RequestException(NOT_FOUND_EXCEPTION);
         countView(id);
         return product;
     }

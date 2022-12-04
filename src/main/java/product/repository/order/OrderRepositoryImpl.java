@@ -8,7 +8,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import product.dto.order.MyPageResponseDto;
-import product.entity.order.QOrder;
+import product.entity.order.QOrders;
 import product.entity.user.User;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom{
 
     @Override
     public Page<MyPageResponseDto> orderFilter(User user, Pageable pageable) {
-        QOrder qOrder = QOrder.order;
+        QOrders qOrder = QOrders.orders;
         List<MyPageResponseDto> result =  queryFactory.from(qOrder)
                 .select(Projections.constructor(MyPageResponseDto.class, qOrder))
                 .where(qOrder.user.eq(user))
