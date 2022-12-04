@@ -51,7 +51,7 @@ public class AuthService {
     @Transactional
     public TokenResponseDto login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
         User user = userRepository.findByEmail(loginRequestDto.getEmail())
-                .orElseThrow(() -> new RequestException(NOT_FOUND_EXCEPTION));
+                .orElseThrow(() -> new RequestException(ExceptionType.NOT_FOUND_USER_EXCEPTION));
 
         validatePassword(loginRequestDto, user);
 
