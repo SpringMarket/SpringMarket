@@ -23,6 +23,14 @@ tasks.withType(Test) {
 }
 
 tasks.jacocoTestCoverageVerification {
+
+    def Qdomains = []
+    // 패키지 + 클래스명
+    for (qPattern in '*.QA'..'*.QZ') { // qPattern = '*.QA', '*.QB', ... '*.QZ'
+        Qdomains.add(qPattern + '*')
+    }
+
+
     violationRules {
         rule {
             element = "CLASS"
@@ -32,6 +40,8 @@ tasks.jacocoTestCoverageVerification {
                 value = "COVEREDRATIO"
                 minimum = "0.00".toBigDecimal()
             }
+
+            excludes = [] + Qdomains
         }
     }
 }

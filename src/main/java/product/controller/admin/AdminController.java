@@ -31,7 +31,7 @@ public class AdminController {
         return success("SUCCESS ^__^ !!");
     }
 
-    // Warm UP -> Ranking Board
+/*    // Warm UP -> Ranking Board
     @GetMapping("/warmup/rank")
     public Response warmupRank() {
         adminService.warmupRank();
@@ -43,6 +43,6 @@ public class AdminController {
     public Response warmup() {
         adminService.warmup();
         return success("SUCCESS ^__^ !!");
-    }
+    }*/
 }
 

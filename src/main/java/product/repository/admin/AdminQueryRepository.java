@@ -20,7 +20,6 @@ public class AdminQueryRepository {
     private final JPAQueryFactory queryFactory;
 
     QProduct qProduct = QProduct.product;
-    QProductInfo qProductInfo = QProductInfo.productInfo;
 
     // WarmUp -> Return ProductDetailResponseDto Category Top 100
     public List<ProductDetailResponseDto> warmupNamedPost(Long categoryId) {
@@ -42,7 +41,7 @@ public class AdminQueryRepository {
                 .fetch();
     }
 
-    // WarmUp -> Return Product Category Top 100
+/*    // WarmUp -> Return Product Category Top 100
     public List<Product> warmup(Long categoryId) {
         return queryFactory.from(qProduct)
                 .select(qProduct)
@@ -50,5 +49,5 @@ public class AdminQueryRepository {
                 .orderBy(qProduct.view.desc())
                 .limit(100)
                 .fetch();
-    }
+    }*/
 }

@@ -12,17 +12,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 import product.MysqlTestContainer;
 import product.dto.product.ProductDetailResponseDto;
 import product.dto.product.ProductMainResponseDto;
 import product.dto.product.ProductRankResponseDto;
-import product.entity.product.Category;
 import product.entity.product.Product;
 import product.entity.product.ProductInfo;
 import product.exception.RequestException;
-import product.repository.product.CategoryRepository;
 import product.repository.product.ProductInfoRepository;
 import product.repository.product.ProductRepository;
 import product.service.admin.AdminService;
@@ -31,7 +28,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @Transactional
@@ -41,8 +39,6 @@ class ProductServiceTest extends MysqlTestContainer {
 
     @Autowired
     ProductRepository productRepository;
-    @Autowired
-    CategoryRepository categoryRepository;
     @Autowired
     ProductInfoRepository productInfoRepository;
     @Autowired
@@ -60,11 +56,6 @@ class ProductServiceTest extends MysqlTestContainer {
     @BeforeAll
     @DisplayName("<Before> 상품 초기화")
     void setProduct(){
-        Category category = Category.builder() // 카테고리는 인덱스로 가져오기
-                .categoryId(1L)
-                .category("Test")
-                .build();
-
         ProductInfo productInfo_1 = ProductInfo.builder()
                 .productInfoId(1L)
                 .ten(10L)
@@ -129,7 +120,7 @@ class ProductServiceTest extends MysqlTestContainer {
                 .productInfo(productInfo_3)
                 .build();
 
-        categoryRepository.save(category);
+
         productInfoRepository.save(productInfo_1);
         productInfoRepository.save(productInfo_2);
         productInfoRepository.save(productInfo_3);
@@ -205,25 +196,21 @@ class ProductServiceTest extends MysqlTestContainer {
         assertEquals(list.getTotalElements(),3);
     }
 
-//    @Test
-//    @DisplayName("키워드 조회 -> Default")
-//    void findProductKeyword() {
-//
-//        Pageable pageable = Pageable.ofSize(10);
-//        Page<ProductMainResponseDto> list = productService.findByKeyword(pageable, "_1");
-//
-//        assertEquals(list.getTotalElements(), 3);
-//    }
+    @Test
+    @DisplayName("키워드 조회 -> Default")
+    void findProductKeyword() {
+
+        Pageable pageable = Pageable.ofSize(10);
+        Page<ProductMainResponseDto> list = productService.findByKeyword(pageable, "_1");
+
+        assertEquals(list.getTotalElements(), 3);
+    }
 
 
 
     @Test
     @DisplayName("상품 상세 조회 -> Default")
     void findProduct() {
-        Category category = Category.builder() // 카테고리는 인덱스로 가져오기
-                .categoryId(1L)
-                .category("Test")
-                .build();
 
         ProductInfo productInfo = ProductInfo.builder()
                 .productInfoId(1L)
@@ -246,7 +233,7 @@ class ProductServiceTest extends MysqlTestContainer {
                 .productInfo(productInfo)
                 .build();
 
-        categoryRepository.save(category);
+
         productInfoRepository.save(productInfo);
         productRepository.save(product);
 
@@ -260,10 +247,12 @@ class ProductServiceTest extends MysqlTestContainer {
     void findProductCacheHit() {
         ValueOperations<String, ProductDetailResponseDto> values = redisTemplate.opsForValue();
         ProductDetailResponseDto productCache = values.get("product::1");
+        System.out.println(productCache);
 
         ProductDetailResponseDto productDetailResponseDto = productService.findProduct(1L);
+        System.out.println(productDetailResponseDto);
 
-        assertEquals(productCache, productDetailResponseDto);
+        assertEquals(productCache.getProductId(), productDetailResponseDto.getProductId());
     }
 
     @Test

@@ -49,16 +49,10 @@ class AdminServiceTest extends RedisTestContainer {
     private ProductRepository productRepository;
     @Autowired
     private ProductInfoRepository productInfoRepository;
-    @Autowired
-    private CategoryRepository categoryRepository;
 
     @BeforeAll
     @DisplayName("<Before> 상품 초기화")
     void setProduct(){
-        Category category = Category.builder() // 카테고리는 인덱스로 가져오기
-                .categoryId(1L)
-                .category("Test")
-                .build();
 
         ProductInfo productInfo_1 = ProductInfo.builder()
                 .productInfoId(1L)
@@ -123,7 +117,6 @@ class AdminServiceTest extends RedisTestContainer {
                 .productInfo(productInfo_3)
                 .build();
 
-        categoryRepository.save(category);
         productInfoRepository.save(productInfo_1);
         productInfoRepository.save(productInfo_2);
         productInfoRepository.save(productInfo_3);

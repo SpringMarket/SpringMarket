@@ -48,7 +48,7 @@ public class AdminService {
     }
 
 
-    // Warm UP -> Named Post << None PipeLine >>
+/*    // Warm UP -> Named Post << None PipeLine >>
     @Transactional
     public void warmup() {
         List<Product> warmupProduct = new ArrayList<>();
@@ -71,5 +71,5 @@ public class AdminService {
                 adminRedisService.setRankingBoard("ranking::"+i, ProductMainResponseDto.toDto(list.get(k)), list.get(k).getView());
             }
         }
-    }
+    }*/
 }

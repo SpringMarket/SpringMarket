@@ -10,13 +10,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import product.MysqlTestContainer;
 import product.dto.order.MyPageResponseDto;
 import product.entity.order.Orders;
-import product.entity.order.Orders;
-import product.entity.product.Category;
 import product.entity.product.Product;
 import product.entity.product.ProductInfo;
 import product.entity.user.Authority;
@@ -24,7 +20,6 @@ import product.entity.user.User;
 import product.exception.ExceptionType;
 import product.exception.RequestException;
 import product.repository.order.OrderRepository;
-import product.repository.product.CategoryRepository;
 import product.repository.product.ProductInfoRepository;
 import product.repository.product.ProductRepository;
 import product.repository.user.UserRepository;
@@ -37,7 +32,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
-//@DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
 @SpringBootTest
 @Transactional
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -54,8 +48,6 @@ class OrderServiceTest{
     @Autowired
     private ProductInfoRepository productInfoRepository;
     @Autowired
-    private CategoryRepository categoryRepository;
-    @Autowired
     private OrderRepository orderRepository;
     @Autowired
     private EntityManager entityManager;
@@ -64,10 +56,7 @@ class OrderServiceTest{
     @BeforeAll
     @DisplayName("<Before> 상품 초기화")
     void setProduct(){
-        Category category = Category.builder() // 카테고리는 인덱스로 가져오기
-                .categoryId(1L)
-                .category("Test")
-                .build();
+
 
         ProductInfo productInfo = ProductInfo.builder()
                 .productInfoId(1L)
@@ -116,7 +105,6 @@ class OrderServiceTest{
                 .productInfo(productInfo)
                 .build();
 
-        categoryRepository.save(category);
         productInfoRepository.save(productInfo);
         productRepository.save(product_1);
         productRepository.save(product_2);

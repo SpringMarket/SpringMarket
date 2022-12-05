@@ -12,9 +12,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
-@AllArgsConstructor
-@Data
-@Builder
+@Getter
+@Setter // Test Code
 @Entity
 public class Orders {
 
@@ -47,6 +46,7 @@ public class Orders {
     private User user;
 
 
+    // 이 코드 누가 짰어요 ??
     public String changeStatus(Orders orders){
         if (LocalDateTime.now().isBefore(orders.getOrderTime().plusDays(7))) {
             this.orderStatus = "배송완료";

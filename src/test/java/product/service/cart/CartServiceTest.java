@@ -2,7 +2,6 @@ package product.service.cart;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,17 +11,11 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import product.MysqlTestContainer;
 import product.RedisTestContainer;
 import product.dto.order.OrderRequestDto;
-import product.dto.product.ProductDetailResponseDto;
 import product.dto.product.ProductMainResponseDto;
 import product.entity.order.Orders;
-import product.entity.order.Orders;
-import product.entity.product.Category;
 import product.entity.product.Product;
 import product.entity.product.ProductInfo;
 import product.entity.user.Authority;
@@ -70,10 +63,6 @@ class CartServiceTest extends RedisTestContainer {
     @BeforeAll
     @DisplayName("<Before> 상품 초기화")
     void setProduct(){
-        Category category = Category.builder() // 카테고리는 인덱스로 가져오기
-                .categoryId(1L)
-                .category("Test")
-                .build();
 
         ProductInfo productInfo = ProductInfo.builder()
                 .productInfoId(1L)
@@ -109,7 +98,6 @@ class CartServiceTest extends RedisTestContainer {
                 .productInfo(productInfo)
                 .build();
 
-        categoryRepository.save(category);
         productInfoRepository.save(productInfo);
         productRepository.save(product_1);
         productRepository.save(product_2);
