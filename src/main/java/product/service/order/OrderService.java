@@ -35,7 +35,7 @@ public class OrderService {
 
         log.info("Order Start....");
 
-        User user = userRepository.findByEmail(authentication.getName()).orElseThrow(() -> new RequestException(ACCESS_DENIED_EXCEPTION));
+        User user = getUser(authentication);
 
         Product product = productRepository.findByProductId(productId);
         if (product == null) throw new RequestException(NOT_FOUND_EXCEPTION);
@@ -58,7 +58,7 @@ public class OrderService {
     @Transactional(readOnly = true)
     public Page<MyPageResponseDto> myPage(Pageable pageable, Authentication authentication) {
 
-        User user = userRepository.findByEmail(authentication.getName()).orElseThrow(() -> new RequestException(ACCESS_DENIED_EXCEPTION));
+        User user = getUser(authentication);
 
         return orderRepository.orderFilter(user,pageable);
     }
@@ -67,7 +67,7 @@ public class OrderService {
     @Transactional
     public void cancel(Authentication authentication, Long orderId) {
 
-        User user = userRepository.findByEmail(authentication.getName()).orElseThrow(() -> new RequestException(ACCESS_DENIED_EXCEPTION));
+        User user = getUser(authentication);
 
         Orders order = orderRepository.findByOrderId(orderId);
         if (order == null) throw new RequestException(NOT_FOUND_EXCEPTION);
@@ -82,6 +82,10 @@ public class OrderService {
 
         // productInfo 변경
         order.getProduct().getProductInfo().minusPreference(order.getOrderNum(),user.getAge());
+    }
+
+    private User getUser(Authentication authentication) {
+        return userRepository.findByEmail(authentication.getName()).orElseThrow(() -> new RequestException(ACCESS_DENIED_EXCEPTION));
     }
 
     public void checkCancelValid(User user, Orders order){
