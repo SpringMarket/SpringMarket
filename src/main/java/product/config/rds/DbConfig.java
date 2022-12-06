@@ -38,7 +38,7 @@ public class DbConfig {
         // master와 replica 정보를 키(name), 밸류(dataSource) 형식으로 Map에 저장
         Map<Object, Object> dataSourceMap = new LinkedHashMap<>();
         DataSource masterDataSource = createDataSource(dbProperty.getUrl());
-        dataSourceMap.put("master", masterDataSource);
+        dataSourceMap.put("main", masterDataSource);
         dbProperty.getReplicaList().forEach(replica -> {
             dataSourceMap.put(replica.getName(), createDataSource(replica.getUrl()));
         });

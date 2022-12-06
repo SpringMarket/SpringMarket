@@ -20,8 +20,8 @@ public class ReplicationRoutingDataSource extends AbstractRoutingDataSource {
         replicationRoutingDataSourceNameList = new ReplicationRoutingCircularList<>(
                 targetDataSources.keySet()
                         .stream()
-                        .filter(key -> key.toString().contains("replica"))
                         .map(Object::toString)
+                        .filter(s -> s.contains("replica"))
                         .collect(toList()));
     }
 
@@ -33,7 +33,7 @@ public class ReplicationRoutingDataSource extends AbstractRoutingDataSource {
             log.info("Replica DB name : {}",replicaName); // 테스트에 찍어보기 위한 로그, 운영시 제거
             return replicaName;
         }
-        log.info("master DB name : {}","master"); // 테스트에 찍어보기 위한 로그, 운영시 제거
-        return "master";
+        log.info("Main DB name : {}","main"); // 테스트에 찍어보기 위한 로그, 운영시 제거
+        return "main";
     }
 }
