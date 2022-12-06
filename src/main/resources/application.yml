@@ -1,0 +1,46 @@
+
+server:
+  port: 8080
+
+spring:
+
+  # JPA
+  jpa:
+    generate-ddl: 'true'
+    properties:
+      hibernate:
+        dialect: product.config.query.MySQL8DialectCustom
+        format_sql: 'true'
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
+    database-platform: ${SPRING_JPA_DATABASE_PLATFORM}
+
+  # DB
+  datasource:
+    hikari:
+      leak-detection-threshold: '2000'
+    username: ${RDS_USERNAME}
+    password: ${RDS_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${RDS_HOSTNAME}:${RDS_PORT}/${RDS_DB_NAME}
+
+    # Replica
+    replica-list:
+      - name: replica-1
+        url: jdbc:mysql://replica-1.cuqcruf63x2f.ap-northeast-2.rds.amazonaws.com:3306/ebdb
+      - name: replica-2
+        url: jdbc:mysql://replica-2.cuqcruf63x2f.ap-northeast-2.rds.amazonaws.com:3306/ebdb
+
+  # REDIS
+  redis:
+    host: ${SPRING_REDIS_HOST}
+    port: ${SPRING_REDIS_PORT}
+
+  # SWAGGER
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+# JWT
+jwt:
+  secret: c3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LXR1dG9yaWFsLWppd29vbi1zcHJpbmctYm9vdC1zZWN1cml0eS1qd3QtdHV0b3JpYWwK
