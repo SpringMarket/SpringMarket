@@ -10,9 +10,11 @@ spring:
     properties:
       hibernate:
         dialect: product.config.query.MySQL8DialectCustom
-        format_sql: 'true'
-    hibernate:
-      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
+        format_sql: true
+        hbm2ddl:
+          auto: update
+        physical_naming_strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+        defer-datasource-initialization: true
     database-platform: ${SPRING_JPA_DATABASE_PLATFORM}
 
   # DB
@@ -26,9 +28,9 @@ spring:
 
     # Replica
     replica-list:
-      - name: replica-1
+      - name: replica_1
         url: ${RDS_REPLICA_HOSTNAME_1}
-      - name: replica-2
+      - name: replica_2
         url: ${RDS_REPLICA_HOSTNAME_2}
 
   # REDIS
