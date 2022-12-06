@@ -1,6 +1,11 @@
 package product.controller.user;
 
-import io.swagger.annotations.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.headers.Header;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,21 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
 import product.dto.user.LoginRequestDto;
 import product.dto.user.SignUpRequestDto;
 import product.dto.user.TokenRequestDto;
+import product.response.Failure;
 import product.response.Response;
+import product.response.Success;
 import product.service.user.AuthService;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import static product.response.Response.success;
-
-@ApiResponses({
-        @ApiResponse(code = 200, message = "성공입니다.")
-        ,@ApiResponse(code = 401, message = "유효한 인증 정보가 없습니다.")
-        , @ApiResponse(code = 404, message = "요청하신 정보를 찾을 수 없습니다.")
-        , @ApiResponse(code = 409, message = "이미 값이 존재합니다.")
-        ,@ApiResponse(code = 500, message = "Internal Server Error")
-})
 
 @RequiredArgsConstructor
 @RestController
@@ -36,7 +35,12 @@ public class AuthController {
     Logger log = LoggerFactory.getLogger("ACCESS");
 
 
-    @ApiOperation(value = "신규 회원 가입")
+    @ApiResponses(value ={
+            @ApiResponse(responseCode =  "200", description = "회원 가입 성공", content = @Content(schema = @Schema(implementation = Response.class)))
+            ,@ApiResponse(responseCode = "400", description = "이메일/비밀번호/연령대 입력 형식 오류", content = @Content(schema = @Schema(implementation = Response.class)))
+            ,@ApiResponse(responseCode = "409", description = "이미 가입된 회원", content = @Content(schema = @Schema(implementation = Response.class)))
+            })
+    @Operation(summary = "신규 회원 가입")
     @PostMapping("/signup")
     public Response signup(@Valid @RequestBody SignUpRequestDto signUpRequestDto) {
         authService.signup(signUpRequestDto);
@@ -44,14 +48,27 @@ public class AuthController {
         return success();
     }
 
-    @ApiOperation(value = "회원 로그인")
+    @ApiResponses(value ={
+            @ApiResponse(responseCode =  "200",
+                    description = "로그인 성공",
+                    headers = {@Header(name="AccessToken"),@Header(name="RefreshToken")})
+            ,@ApiResponse(responseCode = "404", description = "존재하지 않는 회원")
+    })
+    @Operation(summary = "회원 로그인")
     @PostMapping("/login")
     public Response login(@Valid @RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
         log.info(loginRequestDto.getEmail() + " 님이 로그인하셨습니다.");
         return success(authService.login(loginRequestDto, response));
     }
 
-    @ApiOperation(value = "토큰 재발급")
+    @Operation(summary = "토큰 재발급")
+
+    @ApiResponses(value ={
+            @ApiResponse(responseCode =  "200",
+                    description = "로그인 성공",
+                    headers = {@Header(name="AccessToken"),@Header(name="RefreshToken")})
+            ,@ApiResponse(responseCode = "401", description = "refreshtoken이 유효하지 않음")
+    })
     @PostMapping("/reissue")
     public Response reissue(@RequestBody TokenRequestDto tokenRequestDto, HttpServletResponse response) {
         return success(authService.reissue(tokenRequestDto, response));
