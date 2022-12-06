@@ -1,13 +1,14 @@
 package product.dto.order;
 
-import lombok.AllArgsConstructor;
+import lombok.*;
 import product.entity.order.Orders;
 
 import javax.validation.constraints.NotBlank;
 import java.time.format.DateTimeFormatter;
 
 @NotBlank
-@AllArgsConstructor
+@NoArgsConstructor
+@Getter
 public class MyPageResponseDto {
     private Long orderId;
     private String title;
