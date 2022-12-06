@@ -32,16 +32,17 @@ public class CartService { // Redis 테스트 코드 : 제윤
 
 
     // 장바구니에 추가
-    @Transactional
+    @Transactional(readOnly = true)
     public void addCart(Long productId, Authentication authentication){
 
+        // 유효성 검사를 어디서?
         if (productRepository.findByProductId(productId) == null) throw new RequestException(NOT_FOUND_EXCEPTION);
 
         String key = "cart::" + authentication.getName(); // key : [cart:jeyun@naver.com] value : [1,2,3,4]
         cartRedisService.addCart(key, productId);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public void deleteCart(Long productId, Authentication authentication){
 
         String key = "cart::" + authentication.getName();
