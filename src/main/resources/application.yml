@@ -27,9 +27,9 @@ spring:
     # Replica
     replica-list:
       - name: replica-1
-        url: jdbc:mysql://replica-1.cuqcruf63x2f.ap-northeast-2.rds.amazonaws.com:3306/ebdb
+        url: ${RDS_REPLICA_HOSTNAME_1}
       - name: replica-2
-        url: jdbc:mysql://replica-2.cuqcruf63x2f.ap-northeast-2.rds.amazonaws.com:3306/ebdb
+        url: ${RDS_REPLICA_HOSTNAME_2}
 
   # REDIS
   redis:
