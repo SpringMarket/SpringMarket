@@ -1,16 +1,14 @@
 package product.dto.product;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.redis.core.ZSetOperations;
 import product.entity.product.Product;
 
 import javax.validation.constraints.NotBlank;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @NotBlank
 public class ProductRankResponseDto {
     private Long productId;
@@ -18,6 +16,10 @@ public class ProductRankResponseDto {
     private String photo;
     private Long price;
     private int view;
+    private Long ten;
+    private Long twenty;
+    private Long thirty;
+    private Long over_forty;
 
     public ProductRankResponseDto(Product product) {
         this.productId = product.getProductId();
@@ -25,6 +27,10 @@ public class ProductRankResponseDto {
         this.photo = product.getPhoto();
         this.price = product.getPrice();
         this.view = product.getView();
+        this.ten = product.getProductInfo().getTen();
+        this.twenty = product.getProductInfo().getTwenty();
+        this.thirty = product.getProductInfo().getThirty();
+        this.over_forty = product.getProductInfo().getOver_forty();
     }
 
     public static ProductRankResponseDto convertToResponseRankingDto(ZSetOperations.TypedTuple typedTuple){

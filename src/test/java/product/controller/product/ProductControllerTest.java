@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import product.config.jwt.JwtAccessDeniedHandler;
 import product.config.jwt.JwtAuthenticationEntryPoint;
@@ -172,6 +173,17 @@ class ProductControllerTest {
         mvc.perform(get("/api/products/{id}",1L));
         // then
         verify(productService,times(1)).findProduct(1L);
+    }
+
+    @Test
+    @DisplayName("메인페이지 키워드 검색")
+    void keywordSearch() throws Exception {
+        mvc.perform(get("/api/products/keyword?keyword=겨울"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("{" +
+                        "\"result\":true," +
+                        "\"httpStatus\":\"OK\"," +
+                        "\"check\":{}}"));
     }
 
 }

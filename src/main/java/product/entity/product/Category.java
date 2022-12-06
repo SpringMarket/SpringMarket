@@ -5,9 +5,6 @@ import lombok.*;
 import javax.persistence.*;
 
 @NoArgsConstructor
-@AllArgsConstructor
-@Data
-@Builder
 @Entity
 public class Category {
 

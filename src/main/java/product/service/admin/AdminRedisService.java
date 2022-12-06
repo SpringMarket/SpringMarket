@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import product.dto.product.ProductDetailResponseDto;
 import product.dto.product.ProductMainResponseDto;
 import product.dto.product.ProductRankResponseDto;
+import product.entity.product.QProductInfo;
 
 import java.time.Duration;
 import java.util.List;
@@ -40,20 +41,32 @@ public class AdminRedisService {
     }
 
     // Ranking Board PipeLine
-    public void warmupRankingPipeLine(List<ProductRankResponseDto> dtos, Long categoryId, int preference){
+    public void warmupRankingPipeLine(List<ProductRankResponseDto> list, Long categoryId, int preference){
         RedisSerializer keySerializer = redisTemplateRankDto.getStringSerializer();
         RedisSerializer valueSerializer = redisTemplateRankDto.getValueSerializer();
 
         redisTemplateRankDto.executePipelined((RedisCallback<Object>) connection -> {
-            dtos.forEach(i -> {
+            list.forEach(i -> {
                 connection.zSetCommands().zAdd(keySerializer.serialize("Ranking::" + categoryId + "::" + preference),
-                        i.getView(), valueSerializer.serialize(i));
+                        returnPreference(i, preference), valueSerializer.serialize(i));
             });
             return null;
         });
     }
 
-    // 상품 상세 페이지 캐싱 -> NonePipeLine
+    private Long returnPreference(ProductRankResponseDto i, int preference){
+        switch (preference) {
+            case 1:
+                return i.getTen();
+            case 2:
+                return i.getTwenty();
+            case 3:
+                return i.getThirty();
+        }
+        return i.getOver_forty();
+    }
+
+/*    // 상품 상세 페이지 캐싱 -> NonePipeLine
     public void setProduct(String key, ProductDetailResponseDto data, Duration duration) {
         ValueOperations<String, ProductDetailResponseDto> values = redisTemplateDetailDto.opsForValue();
         values.set(key, data, duration);
@@ -63,5 +76,5 @@ public class AdminRedisService {
     public void setRankingBoard(String key, ProductMainResponseDto data, double score) {
         ZSetOperations<String, ProductMainResponseDto> values = redisTemplateMainDto.opsForZSet();
         values.add(key, data, score);
-    }
+    }*/
 }

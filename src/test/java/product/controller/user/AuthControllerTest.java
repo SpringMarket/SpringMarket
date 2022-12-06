@@ -432,4 +432,20 @@ class AuthControllerTest {
                 .andExpect(content().json("{\"result\":false,\"httpStatus\":\"BAD_REQUEST\",\"check\":{\"msg\":\"비밀번호를 입력해주세요.\"}}"));
     }
 
+    @Test
+    @DisplayName("reissue")
+    void reissue() throws Exception {
+        // given
+        String content = "{" +
+                "    \"accessToken\": \"Bearer accessToken\"," +
+                "    \"refreshToken\":\" Bearer refreshToken \"" +
+                "}";
+        // then
+        mvc.perform(post("/api/reissue")
+                        .content(content)
+                        .contentType("application/json")
+                        .characterEncoding("UTF-8"))
+                .andExpect(status().isOk());
+    }
+
 }

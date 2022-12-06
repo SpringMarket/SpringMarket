@@ -12,12 +12,10 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
-@AllArgsConstructor
-@Data
-@Builder
-@Table(name = "orders")
+@Getter
+@Setter // Test Code
 @Entity
-public class Order {
+public class Orders {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,22 +46,22 @@ public class Order {
     private User user;
 
 
-    public String changeStatus(Order order){
-        if (LocalDateTime.now().isBefore(order.getOrderTime().plusDays(7))) {
+    // 이 코드 누가 짰어요 ??
+    public String changeStatus(Orders orders){
+        if (LocalDateTime.now().isBefore(orders.getOrderTime().plusDays(7))) {
             this.orderStatus = "배송완료";
         }
         return orderStatus;
     }
 
-
-    public Order(Product product, Long orderNum, User user) {
-        this.orderNum = orderNum;
-        this.orderStatus = "배송중";
-        this.product = product;
-        this.user = user;
-    }
-
     public void cancel(){
         this.orderStatus = "주문취소";
+    }
+
+    public Orders(Long orderNum, String orderStatus, Product product, User user) {
+        this.orderNum = orderNum;
+        this.orderStatus = orderStatus;
+        this.product = product;
+        this.user = user;
     }
 }

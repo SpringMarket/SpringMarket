@@ -1,6 +1,8 @@
 package product.controller.cart;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -21,11 +23,11 @@ public class CartController {
 
     // 카트 조회
     @GetMapping("/cart/list")
-    public Response showCart() {
+    public Response showCart(@PageableDefault(size = 10) Pageable pageable) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        return success(cartService.showCart(authentication));
+        return success(cartService.showCart(authentication, pageable));
     }
 
 

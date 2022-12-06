@@ -20,7 +20,6 @@ public class AdminQueryRepository {
     private final JPAQueryFactory queryFactory;
 
     QProduct qProduct = QProduct.product;
-    QProductInfo qProductInfo = QProductInfo.productInfo;
 
     // WarmUp -> Return ProductDetailResponseDto Category Top 100
     public List<ProductDetailResponseDto> warmupNamedPost(Long categoryId) {
@@ -33,25 +32,16 @@ public class AdminQueryRepository {
     }
 
     // WarmUp -> Return ProductDetailResponseDto Category Top 100 -> 나이별 선호도 정렬 추가
-    public List<Long> warmupRankingBoardIds(Long categoryId) {
+    public List<ProductRankResponseDto> warmupRankingBoard(Long categoryId) {
         return queryFactory.from(qProduct)
-                .select(qProduct.productId)
+                .select(Projections.constructor(ProductRankResponseDto.class, qProduct))
                 .where(qProduct.categoryId.eq(categoryId))
                 .orderBy(qProduct.view.asc())
                 .limit(100)
                 .fetch();
     }
 
-    public List<ProductRankResponseDto> setPreference(List<Long> ids, Integer sort) {
-        return queryFactory.from(qProduct)
-                .select(Projections.constructor(ProductRankResponseDto.class, qProduct))
-                .innerJoin(qProduct.productInfo, qProductInfo)
-                .where(qProduct.productId.in(ids))
-                .orderBy(sortPreference(sort))
-                .fetch();
-    }
-
-    // WarmUp -> Return Product Category Top 100
+/*    // WarmUp -> Return Product Category Top 100
     public List<Product> warmup(Long categoryId) {
         return queryFactory.from(qProduct)
                 .select(qProduct)
@@ -59,23 +49,5 @@ public class AdminQueryRepository {
                 .orderBy(qProduct.view.desc())
                 .limit(100)
                 .fetch();
-    }
-
-
-    // 나이별 선호도 정렬
-    private OrderSpecifier<?> sortPreference(Integer sorting) {
-        switch (sorting) {
-            case 1:
-                return QProductInfo.productInfo.ten.desc();
-            case 2:
-                return QProductInfo.productInfo.twenty.desc();
-            case 3:
-                return QProductInfo.productInfo.thirty.desc();
-            case 4:
-                return QProductInfo.productInfo.over_forty.desc();
-        }
-        return qProduct.view.asc();
-    }
-
-
+    }*/
 }

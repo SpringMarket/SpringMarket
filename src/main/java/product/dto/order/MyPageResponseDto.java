@@ -1,15 +1,13 @@
 package product.dto.order;
 
-import product.entity.order.Order;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import product.entity.order.Orders;
 
 import javax.validation.constraints.NotBlank;
 import java.time.format.DateTimeFormatter;
 
-@Data
-@AllArgsConstructor
 @NotBlank
+@AllArgsConstructor
 public class MyPageResponseDto {
     private Long orderId;
     private String title;
@@ -18,23 +16,12 @@ public class MyPageResponseDto {
     private String orderStatus;
     private String orderTime;
 
-    public MyPageResponseDto(Order order){
+    public MyPageResponseDto(Orders order){
         this.orderId = order.getOrderId();
         this.title = order.getProduct().getTitle();
         this.price = order.getProduct().getPrice();
         this.orderNum = order.getOrderNum();
         this.orderStatus = order.getOrderStatus();
         this.orderTime = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(order.getOrderTime());
-    }
-
-    public static MyPageResponseDto toDto(Order order) {
-        return new MyPageResponseDto(
-                order.getOrderId(),
-                order.getProduct().getTitle(),
-                order.getProduct().getPrice(),
-                order.getOrderNum(),
-                order.changeStatus(order),
-                DateTimeFormatter.ofPattern("yyyy-MM-dd").format(order.getOrderTime())
-        );
     }
 }

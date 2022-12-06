@@ -2,6 +2,10 @@ package product.service.cart;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static product.exception.ExceptionType.NOT_FOUND_EXCEPTION;
+import static product.exception.ExceptionType.OVER_EXIST_EXCEPTION;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -44,30 +49,26 @@ public class CartService { // Redis 테스트 코드 : 제윤
     }
 
     @Transactional(readOnly = true)
-    public List<ProductMainResponseDto> showCart(Authentication authentication) {
+    public List<ProductMainResponseDto> showCart(Authentication authentication, Pageable pageable) {
         String key = "cart::" + authentication.getName();
 
-        List<ProductMainResponseDto> productMainResponseDtos = new ArrayList<>();
         List<Long> list = cartRedisService.cartList(key);
 
-        for (Long cart : list) {
-            productMainResponseDtos.add(productRepository.detailMain(cart));
-        }
-        return productMainResponseDtos;
+        return productRepository.cartList(list, pageable);
     }
 
     @Transactional
     public void orderCart(Authentication authentication, List<OrderRequestDto> list) {
 
-        if (list == null) throw new RequestException(NOT_FOUND_EXCEPTION);
+        if (list.size() == 0) throw new RequestException(NOT_FOUND_EXCEPTION);
 
         String key = "cart::" + authentication.getName();
 
         List<Long> cartList = cartRedisService.cartList(key);
 
         for (OrderRequestDto order : list) {
-            if (!cartList.contains(order.getProductId())) throw new RequestException(NOT_FOUND_EXCEPTION);
-            orderService.orderProduct(order.getProductId(), order.getOrderNum(), authentication);
+            if (cartList.contains(order.getProductId())) orderService.orderProduct(order.getProductId(), order.getOrderNum(), authentication);
+            else throw new RequestException(NOT_FOUND_EXCEPTION);
         }
     }
 }

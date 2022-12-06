@@ -49,16 +49,9 @@ public class AuthService {
 
 
     @Transactional
-    public void emailDuplicate(EmailValidDto emailValidDto) {
-        validateEmailInfo(emailValidDto);
-    }
-
-
-
-    @Transactional
     public TokenResponseDto login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
         User user = userRepository.findByEmail(loginRequestDto.getEmail())
-                .orElseThrow(() -> new RequestException(NOT_FOUND_EXCEPTION));
+                .orElseThrow(() -> new RequestException(ExceptionType.NOT_FOUND_USER_EXCEPTION));
 
         validatePassword(loginRequestDto, user);
 
@@ -97,11 +90,6 @@ public class AuthService {
         return new TokenResponseDto(tokenDto.getAccessToken(), tokenDto.getRefreshToken());
     }
 
-
-    private void validateEmailInfo(EmailValidDto emailValidDto) {
-        if (userRepository.existsByEmail(emailValidDto.getEmail()))
-            throw new RequestException(ExceptionType.ALREADY_EXISTS_EXCEPTION);
-    }
 
 
     private void validatePassword(LoginRequestDto loginRequestDto, User user) {

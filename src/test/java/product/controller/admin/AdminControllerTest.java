@@ -37,7 +37,7 @@ class AdminControllerTest {
 
 
 
-    @Test
+/*    @Test
     @DisplayName("warmup")
     void warmup() throws Exception {
         mvc.perform(get("/warmup"))
@@ -46,9 +46,9 @@ class AdminControllerTest {
                         "\"result\":true," +
                         "\"httpStatus\":\"OK\"," +
                         "\"check\":{\"data\":\"SUCCESS ^__^ !!\"}}"));
-    }
+    }*/
 
-    @Test
+/*    @Test
     @DisplayName("warmup verify")
     void warmupVerify() throws Exception {
         // when
@@ -56,9 +56,9 @@ class AdminControllerTest {
 
         // then
         verify(adminService,times(1)).warmup();
-    }
+    }*/
 
-    @Test
+/*    @Test
     @DisplayName("warmupRank")
     void warmupRank() throws Exception {
         mvc.perform(get("/warmup/rank"))
@@ -67,9 +67,9 @@ class AdminControllerTest {
                         "\"result\":true," +
                         "\"httpStatus\":\"OK\"," +
                         "\"check\":{\"data\":\"SUCCESS ^__^ !!\"}}"));
-    }
+    }*/
 
-    @Test
+/*    @Test
     @DisplayName("warmupRank verify")
     void warmupRankVerify() throws Exception {
         // when
@@ -77,7 +77,7 @@ class AdminControllerTest {
 
         // then
         verify(adminService,times(1)).warmupRank();
-    }
+    }*/
 
     @Test
     @DisplayName("warmupPipeLine")

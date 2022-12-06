@@ -10,8 +10,7 @@ import product.exception.RequestException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static product.exception.ExceptionType.ALREADY_EXIST_EXCEPTION;
-import static product.exception.ExceptionType.NOT_FOUND_EXCEPTION;
+import static product.exception.ExceptionType.*;
 
 @RequiredArgsConstructor
 @Repository
@@ -34,6 +33,7 @@ public class CartRedisService {
         }
         else {
             List<Long> list = values.get(key);
+            if (list.size()>=10) throw new RequestException(OVER_EXIST_EXCEPTION);
             if (list.contains(productId)) throw new RequestException(ALREADY_EXIST_EXCEPTION);
             list.add(productId);
             values.set(key, list);
@@ -41,7 +41,7 @@ public class CartRedisService {
     }
     public void deleteCart(String key, Long productId){
         ValueOperations<String, List<Long>> values = redisTemplate.opsForValue();
-        if(values.get(key) == null) throw new RequestException(NOT_FOUND_EXCEPTION);
+        if(values.get(key) == null) throw new RequestException(NOT_FOUND_KEY_EXCEPTION);
         else {
             List<Long> list = values.get(key);
             if (!list.contains(productId)) throw new RequestException(NOT_FOUND_EXCEPTION);

@@ -2,19 +2,13 @@ package product.entity.user;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
 import javax.persistence.*;
-import java.util.Optional;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
 @Entity
-//@Table(indexes = @Index(name = "i_email", columnList = "email"))
 public class User {
 
     @Id
@@ -34,6 +28,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
+
+    public User() {
+    }
 
     @Builder
     public User(String email, String password, String age, Authority authority) {

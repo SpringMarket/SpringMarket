@@ -32,6 +32,7 @@ public class AdminService {
         log.info("Warm Up Named Post PipeLine Start....");
 
         List<ProductDetailResponseDto> list = adminQueryRepository.warmupNamedPost(categoryId);
+
         adminRedisService.warmupPipeLine(list);
     }
 
@@ -41,16 +42,13 @@ public class AdminService {
 
         log.info("Warm Up Ranking Board PipeLine Start....");
 
-        List<Long> list = adminQueryRepository.warmupRankingBoardIds(categoryId);
+        List<ProductRankResponseDto> list = adminQueryRepository.warmupRankingBoard(categoryId);
 
-        for (int i=1; i<5; i++){
-            List<ProductRankResponseDto> dtos = adminQueryRepository.setPreference(list, i);
-            adminRedisService.warmupRankingPipeLine(dtos, categoryId, i);
-        }
+        for (int i=1; i<5; i++) adminRedisService.warmupRankingPipeLine(list, categoryId, i);
     }
 
 
-    // Warm UP -> Named Post << None PipeLine >>
+/*    // Warm UP -> Named Post << None PipeLine >>
     @Transactional
     public void warmup() {
         List<Product> warmupProduct = new ArrayList<>();
@@ -73,5 +71,5 @@ public class AdminService {
                 adminRedisService.setRankingBoard("ranking::"+i, ProductMainResponseDto.toDto(list.get(k)), list.get(k).getView());
             }
         }
-    }
+    }*/
 }
