@@ -53,6 +53,7 @@ public class ProductService {
         return productRepository.mainFilter(pageable, categoryId,  stock, minPrice, maxPrice, keyword, sort);
     }
 
+    // 상품 키워드 조회
     @Transactional(readOnly = true)
     public Page<ProductMainResponseDto> findByKeyword(Pageable pageable, String keyword) {
         return productRepository.keywordFilter(pageable, keyword);
