@@ -10,11 +10,11 @@ spring:
     properties:
       hibernate:
         dialect: product.config.query.MySQL8DialectCustom
-        format_sql: true
-        hbm2ddl:
-          auto: update
+        format_sql: 'true'
         physical_naming_strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
         defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
     database-platform: ${SPRING_JPA_DATABASE_PLATFORM}
 
   # DB

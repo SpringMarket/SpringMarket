@@ -34,7 +34,7 @@ public class OrderController {
 
     // 주문 목록 조회
     @GetMapping("/order/list")
-    public Response myPage(@PageableDefault(size = 10) Pageable pageable) {
+    public Response myPage(@PageableDefault(size = 15) Pageable pageable) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
