@@ -4,6 +4,7 @@ import lombok.*;
 import product.entity.order.Orders;
 
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @NotBlank
@@ -18,13 +19,13 @@ public class MyPageResponseDto {
     private String orderStatus;
     private String orderTime;
 
-    public MyPageResponseDto(Orders order){
-        this.orderId = order.getOrderId();
-        this.productId = order.getProduct().getProductId();
-        this.title = order.getProduct().getTitle();
-        this.price = order.getProduct().getPrice();
-        this.orderNum = order.getOrderNum();
-        this.orderStatus = order.getOrderStatus();
-        this.orderTime = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(order.getOrderTime());
+    public MyPageResponseDto(Long orderId, Long productId, String title, Long price, Long orderNum, String orderStatus, LocalDateTime orderTime) {
+        this.orderId = orderId;
+        this.productId = productId;
+        this.title = title;
+        this.price = price;
+        this.orderNum = orderNum;
+        this.orderStatus = orderStatus;
+        this.orderTime = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(orderTime);
     }
 }

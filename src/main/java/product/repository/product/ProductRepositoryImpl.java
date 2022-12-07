@@ -52,7 +52,11 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
         List<ProductMainResponseDto> result = queryFactory.from(qProduct)
                 .select(Projections.constructor(ProductMainResponseDto.class,
-                        qProduct))
+                        qProduct.productId,
+                        qProduct.title,
+                        qProduct.photo,
+                        qProduct.price
+                ))
                 .where(qProduct.productId.in(ids))
                 .orderBy(sorting(sorting))
                 .fetch();
@@ -83,7 +87,11 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
         List<ProductMainResponseDto> result = queryFactory.from(qProduct)
                 .select(Projections.constructor(ProductMainResponseDto.class,
-                        qProduct))
+                        qProduct.productId,
+                        qProduct.title,
+                        qProduct.photo,
+                        qProduct.price
+                        ))
                 .where(keywordMatch(keyword))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -96,7 +104,14 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     @Override
     public ProductDetailResponseDto detail(Long productId) {
         return queryFactory.from(qProduct)
-                .select(Projections.constructor(ProductDetailResponseDto.class, qProduct))
+                .select(Projections.constructor(ProductDetailResponseDto.class,
+                        qProduct.productId,
+                        qProduct.title,
+                        qProduct.content,
+                        qProduct.photo,
+                        qProduct.price,
+                        qProduct.createdTime
+                ))
                 .where(qProduct.productId.eq(productId))
                 .fetchOne();
     }
@@ -105,7 +120,12 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     @Override
     public List<ProductMainResponseDto> cartList(List<Long> ids, Pageable pageable) {
         return queryFactory.from(qProduct)
-                .select(Projections.constructor(ProductMainResponseDto.class, qProduct))
+                .select(Projections.constructor(ProductMainResponseDto.class,
+                        qProduct.productId,
+                        qProduct.title,
+                        qProduct.photo,
+                        qProduct.price
+                ))
                 .where(qProduct.productId.in(ids))
                 .orderBy(sorting("조회순"))
                 .offset(pageable.getOffset())
