@@ -36,13 +36,13 @@ public class OrderService {
 
         log.info("Order Start....");
 
-        User user = getUser(authentication);
-
-        Product product = productRepository.findByProductId(productId);
+        Product product = productRepository.findByIdWithPessimisticLock(productId);
         if (product == null) throw new RequestException(NOT_FOUND_EXCEPTION);
 
         // 재고 부족 예외처리
         if(product.getStock()< orderNum) throw new RequestException(OUT_OF_STOCK_EXCEPTION);
+
+        User user = getUser(authentication);
 
         // 상품 재고 차감
         product.orderChangeStock(orderNum);
