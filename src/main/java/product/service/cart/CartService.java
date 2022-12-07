@@ -70,5 +70,9 @@ public class CartService { // Redis 테스트 코드 : 제윤
             if (cartList.contains(order.getProductId())) orderService.orderProduct(order.getProductId(), order.getOrderNum(), authentication);
             else throw new RequestException(NOT_FOUND_EXCEPTION);
         }
+
+        for (OrderRequestDto orderRequestDto : list) {
+            cartRedisService.deleteCart(key, orderRequestDto.getProductId());
+        }
     }
 }
