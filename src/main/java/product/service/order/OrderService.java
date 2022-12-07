@@ -50,6 +50,8 @@ public class OrderService {
         // 상품 정보 변경
         product.getProductInfo().plusPreference(orderNum, user.getAge());
 
+        productRepository.save(product);
+
         Orders order = new Orders(orderNum, "배송중", product, user);
         // 주문 데이터 저장
         orderRepository.save(order);
