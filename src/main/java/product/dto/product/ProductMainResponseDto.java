@@ -13,12 +13,10 @@ public class ProductMainResponseDto {
     private String photo;
     private Long price;
 
-
-
-    public ProductMainResponseDto(Product product) {
-        this.productId = product.getProductId();
-        this.title = product.getTitle();
-        this.photo = product.getPhoto();
-        this.price = product.getPrice();
+    public ProductMainResponseDto(Long productId, String title, String photo, Long price) {
+        this.productId = productId;
+        this.title = title;
+        this.photo = photo;
+        this.price = price;
     }
 }

@@ -23,7 +23,15 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom{
     public Page<MyPageResponseDto> orderFilter(User user, Pageable pageable) {
         QOrders qOrder = QOrders.orders;
         List<MyPageResponseDto> result =  queryFactory.from(qOrder)
-                .select(Projections.constructor(MyPageResponseDto.class, qOrder))
+                .select(Projections.constructor(MyPageResponseDto.class,
+                        qOrder.orderId,
+                        qOrder.product.productId,
+                        qOrder.product.title,
+                        qOrder.product.price,
+                        qOrder.orderNum,
+                        qOrder.orderStatus,
+                        qOrder.orderTime
+                ))
                 .where(qOrder.user.eq(user))
                 .where(qOrder.orderStatus.ne("주문취소"))
                 .orderBy(qOrder.orderTime.desc())
