@@ -1,6 +1,11 @@
 
 server:
   port: 8080
+  tomcat:
+    max-connections: 2000
+    threads:
+      max: 50
+
 
 spring:
 
@@ -21,6 +26,7 @@ spring:
   datasource:
     hikari:
       leak-detection-threshold: '2000'
+      maximum-pool-size: 50
     username: ${RDS_USERNAME}
     password: ${RDS_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
