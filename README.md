@@ -1,7 +1,7 @@
 # 🐶 Spring Market
 [![spring-market](https://github.com/SpringMarket/Market/actions/workflows/gradle.yml/badge.svg)](https://github.com/SpringMarket/Market/actions/workflows/gradle.yml)
 
-
+# InfraStructure
 ![InfraStructure](https://user-images.githubusercontent.com/112923814/206205534-6b2cf6e1-9461-4258-bbc1-f54b762be4b8.jpg)
 
 # Tech Stack
@@ -33,12 +33,12 @@
 - **AWS OpenSearch**
 - **Slf4j**
 
-### Front
-
-- **React - yarn**
-
 ### TestCode
 
 - **Junit 5**
 - **Mock**
 - **TestContainer**
+
+### Front
+
+- **React - yarn**
