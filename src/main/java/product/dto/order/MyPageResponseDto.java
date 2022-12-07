@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 @Getter
 public class MyPageResponseDto {
     private Long orderId;
+    private Long productId;
     private String title;
     private Long price;
     private Long orderNum;
@@ -19,6 +20,7 @@ public class MyPageResponseDto {
 
     public MyPageResponseDto(Orders order){
         this.orderId = order.getOrderId();
+        this.productId = order.getProduct().getProductId();
         this.title = order.getProduct().getTitle();
         this.price = order.getProduct().getPrice();
         this.orderNum = order.getOrderNum();
