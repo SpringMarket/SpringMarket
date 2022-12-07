@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import product.dto.order.MyPageResponseDto;
 import product.entity.order.Orders;
@@ -33,28 +34,33 @@ public class OrderService {
     // 상품 주문
     @Transactional
     public void orderProduct(Long productId, Long orderNum, Authentication authentication) {
+        User user = getUser(authentication);
+        orderProcess(productId, orderNum, user);
+    }
+    public void orderProcess(Long productId, Long orderNum, User user){
 
-        log.info("Order Start....");
+        Product product = productModify(productId, orderNum, user.getAge());
+
+        Orders order = new Orders(orderNum, "배송중", product, user);
+
+        // 주문 데이터 저장
+        orderRepository.save(order);
+    }
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public Product productModify(Long productId, Long orderNum, String age){
 
         Product product = productRepository.findByIdWithPessimisticLock(productId);
-        if (product == null) throw new RequestException(NOT_FOUND_EXCEPTION);
 
         // 재고 부족 예외처리
         if(product.getStock()< orderNum) throw new RequestException(OUT_OF_STOCK_EXCEPTION);
-
-        User user = getUser(authentication);
 
         // 상품 재고 차감
         product.orderChangeStock(orderNum);
 
         // 상품 정보 변경
-        product.getProductInfo().plusPreference(orderNum, user.getAge());
+        product.getProductInfo().plusPreference(orderNum, age);
 
-//        productRepository.saveAndFlush(product);
-
-        Orders order = new Orders(orderNum, "배송중", product, user);
-        // 주문 데이터 저장
-        orderRepository.save(order);
+        return product;
     }
 
     // 주문 목록 조회
