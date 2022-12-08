@@ -71,17 +71,28 @@
 현준
 
 ## 트러블 슈팅
-- 조회 성능 향상 (인덱스)
-1. 테이블 반정규화
+- 조회 성능 향상 (인덱스) 
+1. 테이블 반정규화 
 2. sorting 부하
 3. full text search와 결합 인덱스 동시에 안 탐
 4. RDS 스케일업과 DB replica
 
-- 메인페이지 성능 향상
+- 조회수 업데이트
+-> Spring Batch
+-> Redis
 
-- Redis pipeline
+- 동시성 {
+-> Pessimistic Lock 처리 오류
+-> DB 스케일업
+-> DB Replica
+-> Max pool size custom
+-> 트랜잭션 분리 Propagation.REQUIRES_NEW
+-> saveAndFlush()
+}
 
-- 동시성
+- 배포 시 DB 연결 성능 느림 600초 -> 6초 
+- 메인페이지 성능 향상 - Redis Zset
+- 레디스 파이프라인 -> 웜업 + ...
 
 ## 팀원
 
