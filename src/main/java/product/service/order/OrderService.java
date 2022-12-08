@@ -36,7 +36,19 @@ public class OrderService {
     // 상품 주문
     @Transactional
     public void orderProduct(Long productId, Long orderNum, Authentication authentication) {
+
         User user = getUser(authentication);
+
+        Product product = productModify(productId, orderNum, user.getAge());
+
+
+        // 주문 데이터 저장
+        Orders order = new Orders(orderNum, "배송중", product, user);
+        orderRepository.save(order);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public Product productModify(Long productId, Long orderNum, String age){
 
         Product product = productRepository.findByIdWithPessimisticLock(productId);
 
@@ -45,16 +57,12 @@ public class OrderService {
 
         // 상품 재고 차감
         product.orderChangeStock(orderNum);
-
         // 상품 정보 변경
-        product.getProductInfo().plusPreference(orderNum, user.getAge());
+        product.getProductInfo().plusPreference(orderNum, age);
 
         productRepository.saveAndFlush(product);
 
-        Orders order = new Orders(orderNum, "배송중", product, user);
-
-        // 주문 데이터 저장
-        orderRepository.save(order);
+        return product;
     }
 
     // 주문 목록 조회
