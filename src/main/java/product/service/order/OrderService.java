@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -17,6 +18,7 @@ import product.repository.order.OrderRepository;
 import product.repository.product.ProductRepository;
 import product.repository.user.UserRepository;
 
+import javax.persistence.LockModeType;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -46,6 +48,8 @@ public class OrderService {
         // 주문 데이터 저장
         orderRepository.save(order);
     }
+
+    @Lock(value = LockModeType.PESSIMISTIC_WRITE)
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Product productModify(Long productId, Long orderNum, String age){
 
