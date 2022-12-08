@@ -10,7 +10,7 @@ spring:
     generate-ddl: 'true'
     properties:
       hibernate:
-        dialect: product.config.query.MySQL8DialectCustom
+#        dialect: product.config.query.MySQL8DialectCustom
         format_sql: 'true'
         physical_naming_strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
         defer-datasource-initialization: true
