@@ -63,6 +63,8 @@ public class OrderService {
 
         // 상품 정보 변경
         product.getProductInfo().plusPreference(orderNum, age);
+        
+        productRepository.saveAndFlush(product);
 
         return product;
     }
