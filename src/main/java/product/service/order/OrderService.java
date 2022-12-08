@@ -49,7 +49,6 @@ public class OrderService {
         orderRepository.save(order);
     }
 
-    @Lock(value = LockModeType.PESSIMISTIC_WRITE)
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Product productModify(Long productId, Long orderNum, String age){
 
@@ -64,6 +63,8 @@ public class OrderService {
         // 상품 정보 변경
         product.getProductInfo().plusPreference(orderNum, age);
         
+        productRepository.saveAndFlush(product);
+
         productRepository.saveAndFlush(product);
 
         return product;
