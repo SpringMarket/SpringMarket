@@ -125,7 +125,7 @@ QueryDSL은 서브쿼리를 지원하지 않기 때문에 커버링 인덱스를
 ## 🎯트러블 슈팅
 
 <details>
-<summary>❗INDEX 중복</summary>
+<summary>📌 INDEX 중복</summary>
 <div markdown="1">       
 
 😎숨겨진 내용😎
@@ -134,7 +134,46 @@ QueryDSL은 서브쿼리를 지원하지 않기 때문에 커버링 인덱스를
 </details>
 
 <details>
-<summary>❗Cache Warmup TCP Overhead</summary>
+<summary>📌 1만 건의 상품 데이터 Cache Warmup 동작 시 Latency 지연이 발생했습니다. </summary>
+<div markdown="1">       
+
+#### ❗ 문제상황
+  - 상품 데이터의 빠른 조회와 DB 부하 분산을 위해 캐싱은 필수였습니다.
+  - 하지만 TCP 기반으로 동작하는 Redis에 1만 건의 데이터를 개별로 Input 할 때 타임아웃 + 극심한 Latency 지연이 발생했습니다.
+  ![Warmup NonePipeline Logic - Postman2 ](https://user-images.githubusercontent.com/112923814/206866704-34a1e734-5478-4d00-b12a-edfe693f02dd.png)
+  
+#### 💡 Solution : Redis Pipeline 구축
+  - 작업의 단위를 직접 구축해서 요청이 가능해졌습니다. ( 다중 Insert 가능 )
+  
+#### ✔ 결과
+  - 10,000건의 TCP 통신이 10건(+1000)으로 축소되었습니다.
+  
+![warmup rank ](https://user-images.githubusercontent.com/112923814/206866707-21c54446-dd68-4b61-ba97-92056cf27581.png)
+
+
+
+</div>
+</details>
+
+<details>
+<summary>📌 상품이 클릭될 때마다 조회수 +1 Update 요청이 발생했습니다.</summary>
+<div markdown="1">       
+  
+  
+#### 💡 Solution : Cache Write Back
+  - 조회수를 캐시에 모아 일정 주기 배치 작업을 통해 DB에 반영
+  - 싱글쓰레드인 Redis의 특성상 Atomic하게 Increment를 처리할 수 있다.
+  - 조회 기능의 많은 I/O와 함께 발생하는 Update 쿼리를 컨트롤할 수 있다.  
+  
+#### ✔ 결과
+  - 클릭 시마다 발생했던 Update 쿼리 -> 1시간 주기로 배치작업
+  - 결과 자세하게 작성 필요..
+
+</div>
+</details>
+
+<details>
+<summary>📌 DB 분산과 서버 튜닝</summary>
 <div markdown="1">       
 
 😎숨겨진 내용😎
@@ -143,7 +182,7 @@ QueryDSL은 서브쿼리를 지원하지 않기 때문에 커버링 인덱스를
 </details>
 
 <details>
-<summary>❗I/O가 많은 조회기능 Update 쿼리 해결</summary>
+<summary>📌 동시성 제어의 동작 최적화</summary>
 <div markdown="1">       
 
 😎숨겨진 내용😎
@@ -152,25 +191,7 @@ QueryDSL은 서브쿼리를 지원하지 않기 때문에 커버링 인덱스를
 </details>
 
 <details>
-<summary>❗DB 분산과 서버 튜닝</summary>
-<div markdown="1">       
-
-😎숨겨진 내용😎
-
-</div>
-</details>
-
-<details>
-<summary>❗동시성 제어의 동작 최적화</summary>
-<div markdown="1">       
-
-😎숨겨진 내용😎
-
-</div>
-</details>
-
-<details>
-<summary>❗문제상황 작성</summary>
+<summary>📌 문제상황 작성</summary>
 <div markdown="1">       
 
 😎숨겨진 내용😎
