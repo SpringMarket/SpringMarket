@@ -16,7 +16,7 @@ spring:
         defer-datasource-initialization: true
     hibernate:
       ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
-    database-platform: org.hibernate.dialect.MySQL8Dialect
+    database-platform: ${SPRING_JPA_DATABASE_PLATFORM}
 
 
 
@@ -24,7 +24,6 @@ spring:
   datasource:
     hikari:
       leak-detection-threshold: '2000'
-      maximum-pool-size: 33
     username: ${RDS_USERNAME}
     password: ${RDS_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
