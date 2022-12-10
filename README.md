@@ -139,7 +139,7 @@ QueryDSL은 서브쿼리를 지원하지 않기 때문에 커버링 인덱스를
 </details>
 
 <details>
-<summary>📌 1만 건의 상품 데이터 Cache Warmup 동작 시 Latency 지연이 발생했습니다. </summary>
+<summary>📌 1만 건의 상품 데이터 Cache Warmup 동작 시 극심한 Latency의 지연이 발생했습니다. </summary>
 <div markdown="1">       
 
 #### ❗ 문제상황
