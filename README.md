@@ -1,16 +1,27 @@
-# 🐸 Spring Market
+# Spring Market
 [![spring-market](https://github.com/SpringMarket/Market/actions/workflows/gradle.yml/badge.svg)](https://github.com/SpringMarket/Market/actions/workflows/gradle.yml)
 
-## 프로젝트 소개
+![image](https://user-images.githubusercontent.com/112923814/206835670-2683c2ba-89d0-4509-bf81-4e5d2678ebca.png)
+
+# 🌏프로젝트 소개
+- **국내 최대 수량의 의류 데이터**를 보유한 쇼핑몰
 
 
-👉 [Spring Market 이용해보기 Click!](https://www.notion.so/1-3b015d8a07d149148b5fea36c4035ceb) <br>
-👉 [Spring Market 팀 노션 Click!](https://www.notion.so/1-3b015d8a07d149148b5fea36c4035ceb)
 
-## ⚙ InfraStructure
+⚙ [Spring Market 이용해보기 Click!](https://www.notion.so/1-3b015d8a07d149148b5fea36c4035ceb) <br>
+⚙ [Spring Market 팀 노션 Click!](https://www.notion.so/1-3b015d8a07d149148b5fea36c4035ceb)
+
+##  InfraStructure
+      
 ![InfraStructure](https://user-images.githubusercontent.com/112923814/206205534-6b2cf6e1-9461-4258-bbc1-f54b762be4b8.jpg)
 
-# 🛠 Tech Stack
+
+##  Tech Stack
+
+<details>
+<summary>📣버전</summary>
+<div markdown="1">    
+  
 ### **Application**
 
 - **JAVA 11**
@@ -48,8 +59,14 @@
 ### Front
 
 - **React - yarn**
+</div>
+</details>
 
-## 기술 스택 & 라이브러리 사용 이유
+
+<details>
+<summary>📣기술 스택 & 라이브러리 사용 이유</summary>
+<div markdown="1">       
+  
 
 |기술 스택| 사용 이유|
 |:--|:--|
@@ -67,32 +84,69 @@
 |TestContainer|제윤|
 |React|제윤|
 
-## 부하테스트
-현준
+</div>
+</details>
+
+
+## 주요 기능
+
 
 ## 트러블 슈팅
-- 조회 성능 향상 (인덱스) 
-1. 테이블 반정규화 
-2. sorting 부하
-3. full text search와 결합 인덱스 동시에 안 탐
-4. RDS 스케일업과 DB replica
 
-- 조회수 업데이트
--> Spring Batch
--> Redis
+<details>
+<summary>❗INDEX 중복</summary>
+<div markdown="1">       
 
-- 동시성 {
--> Pessimistic Lock 처리 오류
--> DB 스케일업
--> DB Replica
--> Max pool size custom
--> 트랜잭션 분리 Propagation.REQUIRES_NEW
--> saveAndFlush()
-}
+😎숨겨진 내용😎
 
-- 배포 시 DB 연결 성능 느림 600초 -> 6초 
-- 메인페이지 성능 향상 - Redis Zset
-- 레디스 파이프라인 -> 웜업 + ...
+</div>
+</details>
+
+<details>
+<summary>❗Cache Warmup TCP Overhead</summary>
+<div markdown="1">       
+
+😎숨겨진 내용😎
+
+</div>
+</details>
+
+<details>
+<summary>❗I/O가 많은 조회기능 Update 쿼리 해결</summary>
+<div markdown="1">       
+
+😎숨겨진 내용😎
+
+</div>
+</details>
+
+<details>
+<summary>❗DB 분산과 서버 튜닝</summary>
+<div markdown="1">       
+
+😎숨겨진 내용😎
+
+</div>
+</details>
+
+<details>
+<summary>❗동시성 제어의 동작 최적화</summary>
+<div markdown="1">       
+
+😎숨겨진 내용😎
+
+</div>
+</details>
+
+<details>
+<summary>❗문제상황 작성</summary>
+<div markdown="1">       
+
+😎숨겨진 내용😎
+
+</div>
+</details>
+
 
 ## 팀원
 
