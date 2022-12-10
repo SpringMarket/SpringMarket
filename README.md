@@ -11,10 +11,13 @@
 ⚙ [Spring Market 이용해보기 Click!](https://www.notion.so/1-3b015d8a07d149148b5fea36c4035ceb) <br>
 ⚙ [Spring Market 팀 노션 Click!](https://www.notion.so/1-3b015d8a07d149148b5fea36c4035ceb)
 
-##  InfraStructure
-      
-![InfraStructure](https://user-images.githubusercontent.com/112923814/206205534-6b2cf6e1-9461-4258-bbc1-f54b762be4b8.jpg)
-
+## ⚒ InfraStructure 
+<details>
+<summary>InfraStructure</summary>
+<div markdown="1">  
+<img src ="https://user-images.githubusercontent.com/112923814/206205534-6b2cf6e1-9461-4258-bbc1-f54b762be4b8.jpg"/></a>      
+</div>
+</details>
 
 ##  Tech Stack
 <img src ="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-badge&logo=Spring Boot&logoColor=white"/></a>
@@ -96,10 +99,33 @@
 </details>
 
 
-## 주요 기능
+## 🔥주요 기능
 
 
-## 트러블 슈팅
+### 조회 기능
+- 메인 페이지 로딩 속도는 플랫폼 첫 인상에 큰 영향을 주기 때문에 100ms 이내를 목표
+- 쇼핑몰 홈페이지 로딩 속도가 2초 이상이라면 고객이 해당 페이지를 떠날 확률이 높기 때문에 고객의 서비스 체류 시간을 높이기 위해서
+필터링 조회 속도를 2초 이내를 목표, 상세 조회는 500ms 이내를 목표
+
+**1. Redis Sorted Set으로 메인 페이지 로딩 최적화 & 파이프라인 구축** <br>
+Redis 파이프라인을 구축하여 메인페이지에 노출할 인기 상품 데이터를 Redis에 캐싱을 하고
+Redis에 캐싱된 데이터를 사용해 메인 페이지 조회 성능 % 개선, 평균 로딩 속도 ~ms로 목표 달성
+
+**2. Redis에 캐싱된 데이터로 상품 상세조회** <br>
+카테고리별 인기 상품 ~개를 Redis에 캐싱하여 캐싱된 상품의 상세페이지 조회 성능 % 개선
+
+**3. 결합 인덱스 추가, 커버링 인덱스 적용**<br>
+조회수+pk로 결합 인덱스를 추가하여 조회순, 날짜순 정렬 시 성능 저하의 가장 큰 원인이었던 sort 부하를 해결하고
+QueryDSL은 서브쿼리를 지원하지 않기 때문에 커버링 인덱스를 활용해 페이징 조회 성능을 1900% 개선 
+
+**4. Full Text Search로 키워드 검색**<br>
+키워드 조회 시 인덱스를 사용하지 않는 like 키워드 방식과 비교해 인덱스를 사용하여 조회하는 full-text-search 방식으로 변경하여 약 634% 성능 개선
+
+**5. 데이터 반정규화**<br>
+쿼리문에서 join문을 제거를 위해 데이터 반정규화를 하여 조회수, 재고수 테이블을 상품 테이블과 병합하여 
+조회 성능을 66.6% 개선
+
+## 🎯트러블 슈팅
 
 <details>
 <summary>❗INDEX 중복</summary>
@@ -156,7 +182,7 @@
 </details>
 
 
-## 팀원
+## 🧑‍💻팀원
 
 |송제윤|윤수영|계현준|
 |:--|:--|:--|
