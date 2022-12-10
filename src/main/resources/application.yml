@@ -24,7 +24,7 @@ spring:
   datasource:
     hikari:
       leak-detection-threshold: '2000'
-      maximum-pool-size: 10
+      maximum-pool-size: 30
     username: ${RDS_USERNAME}
     password: ${RDS_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
