@@ -163,7 +163,7 @@ QueryDSL은 서브쿼리를 지원하지 않기 때문에 커버링 인덱스를
 </details>
 
 <details>
-<summary>📌 상품이 클릭될 때마다 조회수 +1 Update 요청이 발생했습니다.</summary>
+<summary>📌 높은 트래픽 상황에도 상품이 클릭될 때마다 조회수 Update 쿼리가 동작했습니다.</summary>
 <div markdown="1">       
   
 #### ❗ 문제상황
