@@ -16,7 +16,7 @@ spring:
         defer-datasource-initialization: true
     hibernate:
       ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
-    database-platform: ${SPRING_JPA_DATABASE_PLATFORM}
+    database-platform: org.hibernate.dialect.MySQL8Dialect
 
 
 
