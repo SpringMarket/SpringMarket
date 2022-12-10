@@ -45,6 +45,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .limit(pageable.getPageSize())
                 .fetch();
 
+
         // Null -> 공백 반환
         if (CollectionUtils.isEmpty(ids)) {
             return new PageImpl<>(new ArrayList<>(), pageable, 0);
@@ -96,6 +97,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+
+        System.out.println(keyword);
 
         return new PageImpl<>(result, pageable, result.size());
     }
