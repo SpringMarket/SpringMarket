@@ -12,12 +12,9 @@
 ⚙ [Spring Market 팀 노션 Click!](https://www.notion.so/1-3b015d8a07d149148b5fea36c4035ceb)
 
 ## ⚒ InfraStructure 
-<details>
-<summary>InfraStructure</summary>
-<div markdown="1">  
+
 <img src ="https://user-images.githubusercontent.com/112923814/206205534-6b2cf6e1-9461-4258-bbc1-f54b762be4b8.jpg"/></a>      
-</div>
-</details>
+
 
 ##  Tech Stack
 <img src ="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-badge&logo=Spring Boot&logoColor=white"/></a>
