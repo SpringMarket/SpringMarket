@@ -31,11 +31,11 @@ spring:
 
 
     # Replica
-    replica-list:
-      - name: replica_1
-        url: ${RDS_REPLICA_HOSTNAME_1}
-      - name: replica_2
-        url: ${RDS_REPLICA_HOSTNAME_2}
+#    replica-list:
+#      - name: replica_1
+#        url: ${RDS_REPLICA_HOSTNAME_1}
+#      - name: replica_2
+#        url: ${RDS_REPLICA_HOSTNAME_2}
 
   # REDIS
   redis:
