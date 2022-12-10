@@ -31,18 +31,11 @@ public class AdminController {
         return success("SUCCESS ^__^ !!");
     }
 
-/*    // Warm UP -> Ranking Board
-    @GetMapping("/warmup/rank")
-    public Response warmupRank() {
-        adminService.warmupRank();
+    // Warm UP -> Named Post
+    @GetMapping("/warmup/{categoryId}")
+    public Response warmup(@PathVariable Long categoryId) {
+        adminService.warmup(categoryId);
         return success("SUCCESS ^__^ !!");
     }
-
-    // Warm UP -> Named Post
-    @GetMapping("/warmup")
-    public Response warmup() {
-        adminService.warmup();
-        return success("SUCCESS ^__^ !!");
-    }*/
 }
 
