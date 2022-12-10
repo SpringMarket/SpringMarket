@@ -140,7 +140,8 @@ QueryDSL은 서브쿼리를 지원하지 않기 때문에 커버링 인덱스를
 #### ❗ 문제상황
   - 상품 데이터의 빠른 조회와 DB 부하 분산을 위해 캐싱은 필수였습니다.
   - 하지만 TCP 기반으로 동작하는 Redis에 1만 건의 데이터를 개별로 Input 할 때 타임아웃 + 극심한 Latency 지연이 발생했습니다.
-  ![Warmup NonePipeline Logic - Postman2 ](https://user-images.githubusercontent.com/112923814/206866704-34a1e734-5478-4d00-b12a-edfe693f02dd.png)
+  
+![Warmup NonePipeline Logic - Postman2 ](https://user-images.githubusercontent.com/112923814/206866704-34a1e734-5478-4d00-b12a-edfe693f02dd.png)
   
 #### 💡 Solution : Redis Pipeline 구축
   - 작업의 단위를 직접 구축해서 요청이 가능해졌습니다. ( 다중 Insert 가능 )
@@ -176,10 +177,25 @@ QueryDSL은 서브쿼리를 지원하지 않기 때문에 커버링 인덱스를
 </details>
 
 <details>
-<summary>📌 DB 분산과 서버 튜닝</summary>
+<summary>📌 AWS 인스턴스 성능 튜닝</summary>
 <div markdown="1">       
 
-😎숨겨진 내용😎
+#### ❗ 문제상황
+  - 대규모 데이터와 트래픽 작업을 하기에는 DB와 EC2 인스턴스 성능 개선이 필요했고 스케일업 이전에 프리티어 인스턴스로 성능 최적화를 진행해보고자 했습니다.
+  
+#### 💡 Solution : Step 3
+   - Step 1. DB 읽기 전용 복제본을 생성해 Read 요청을 분산합니다.
+   - Step 2. Hikari Connection Pool 최적의 개수를 찾아야 했습니다.
+   > Cache Write Back 전략으로 조회수를 관리하고 있었기에 Connection Pool 확장이 필요했습니다.
+   - Step 3. Time_Wait 소켓의 최적화가 필요했습니다.
+   > 낮은 성능의 DB로 대규모 상품 데이터를 핸들링하는 상황이기에 남아있는 모든 소켓에서 요청마다
+   > TCP handshake가 발생하는데에서 생기는 불필요한 성능 낭비를 없애야 했습니다.
+
+  
+#### ✔ 결과
+  - Step 1. Main DB에는 Write 요청만이 동작하고 Replica에 Read 분산 요청 ( CPU 안정화 )
+  - Step 2. Jmeter 부하테스트를 통해 에러율이 가장 낮아지는 Connection Pool Size를 찾았습니다. ( 20 )
+  - Step 3. KeepAlive 적용을 통해 매 요청마다 새로운 세션을 만들지 않고, 1024개의 세션을 연결한 뒤 그 연결을 통해 요청을 처리하게 해줍니다.
 
 </div>
 </details>
