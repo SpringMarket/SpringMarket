@@ -14,4 +14,4 @@ public class ProductApplication {
         SpringApplication.run(ProductApplication.class, args);
     }
 }
-// CI-CACHE-TEST-3
+// DB-CONNECTION-TEST
