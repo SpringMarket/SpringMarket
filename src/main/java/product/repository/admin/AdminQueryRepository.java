@@ -58,13 +58,4 @@ public class AdminQueryRepository {
                 .fetch();
     }
 
-/*    // WarmUp -> Return Product Category Top 100
-    public List<Product> warmup(Long categoryId) {
-        return queryFactory.from(qProduct)
-                .select(qProduct)
-                .where(qProduct.categoryId.eq(categoryId))
-                .orderBy(qProduct.view.desc())
-                .limit(100)
-                .fetch();
-    }*/
 }
