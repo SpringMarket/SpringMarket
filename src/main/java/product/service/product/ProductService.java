@@ -11,9 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import product.dto.product.ProductDetailResponseDto;
 import product.dto.product.ProductMainResponseDto;
 import product.dto.product.ProductRankResponseDto;
-import product.entity.product.Category;
-import product.entity.product.Product;
-import product.entity.product.ProductInfo;
 import product.exception.RequestException;
 import product.repository.product.ProductRepository;
 
@@ -22,6 +19,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static product.exception.ExceptionType.NOT_FOUND_EXCEPTION;
+import static product.exception.ExceptionType.WORD_EXCEPTION;
 
 
 @Slf4j
@@ -56,7 +54,10 @@ public class ProductService {
     // 상품 키워드 조회
     @Transactional(readOnly = true)
     public Page<ProductMainResponseDto> findByKeyword(Pageable pageable, String keyword) {
-        return productRepository.keywordFilter(pageable, keyword);
+
+        if (keyword.length() == 1 || keyword.length() == 0) throw new RequestException(WORD_EXCEPTION);
+
+        return productRepository.keywordFilter(pageable, keyword.substring(0, 2));
     }
 
 
