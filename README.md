@@ -147,6 +147,7 @@ QueryDSL은 서브쿼리를 지원하지 않기 때문에 커버링 인덱스를
   
 #### ✔ 결과
   - 10,000건의 TCP 통신이 10건(+1000)으로 축소되었습니다.
+  - 통신 자료 추가 첨부
   
 ![warmup rank ](https://user-images.githubusercontent.com/112923814/206866707-21c54446-dd68-4b61-ba97-92056cf27581.png)
 
