@@ -34,7 +34,7 @@ public class AdminQueryRepository {
                 ))
                 .where(qProduct.categoryId.eq(categoryId))
                 .orderBy(qProduct.view.desc())
-                .limit(100)
+                .limit(1500)
                 .fetch();
     }
 
