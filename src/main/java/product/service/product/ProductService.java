@@ -18,8 +18,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static product.exception.ExceptionType.NOT_FOUND_EXCEPTION;
-import static product.exception.ExceptionType.WORD_EXCEPTION;
+import static product.exception.ExceptionType.*;
 
 
 @Slf4j
@@ -48,16 +47,23 @@ public class ProductService {
 
         log.info("Search All Log Start....");
 
-        return productRepository.mainFilter(pageable, categoryId,  stock, minPrice, maxPrice, keyword, sort);
+        Page<ProductMainResponseDto> list = productRepository.mainFilter(pageable, categoryId,  stock, minPrice, maxPrice, keyword, sort);
+        if (list.getNumberOfElements() == 0) throw new RequestException(EMPTY_RESULT_EXCEPTION);
+
+        return list;
     }
 
     // 상품 키워드 조회
     @Transactional(readOnly = true)
     public Page<ProductMainResponseDto> findByKeyword(Pageable pageable, String keyword) {
 
-        if (keyword.length() == 1 || keyword.length() == 0) throw new RequestException(WORD_EXCEPTION);
+        if (keyword.length() == 0) throw new RequestException(ZERO_WORD_EXCEPTION);
+        if (keyword.length() == 1) throw new RequestException(ONE_WORD_EXCEPTION);
 
-        return productRepository.keywordFilter(pageable, keyword.substring(0, 2));
+        Page<ProductMainResponseDto> list = productRepository.keywordFilter(pageable, keyword.substring(0, 2));
+        if (list.getNumberOfElements() == 0) throw new RequestException(EMPTY_RESULT_EXCEPTION);
+
+        return list;
     }
 
 
