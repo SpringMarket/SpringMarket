@@ -11,12 +11,13 @@
 ⚙ [Spring Market 이용해보기 Click!](https://www.notion.so/1-3b015d8a07d149148b5fea36c4035ceb) <br>
 ⚙ [Spring Market 팀 노션 Click!](https://www.notion.so/1-3b015d8a07d149148b5fea36c4035ceb)
 
-## ⚒ InfraStructure 
+# ⚙ InfraStructure 
 
 <img src ="https://user-images.githubusercontent.com/112923814/206205534-6b2cf6e1-9461-4258-bbc1-f54b762be4b8.jpg"/></a>      
 
 
-##  Tech Stack
+
+# 🕹 Tech Stack
 <img src ="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-badge&logo=Spring Boot&logoColor=white"/></a>
 <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"></a>
 <img src ="https://img.shields.io/badge/Spring Securit-6DB33F?style=for-the-badge&logo=Spring Boot&logoColor=white"/></a>
@@ -27,7 +28,7 @@
 <img src ="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=Redis&logoColor=white"/></a> 
 
 <details>
-<summary>📣버전</summary>
+<summary><strong>📣버전</strong></summary>
 <div markdown="1">    
   
 ### **Application**
@@ -72,7 +73,7 @@
 
 
 <details>
-<summary>📣기술 스택 & 라이브러리 사용 이유</summary>
+<summary><strong>📣기술 & 라이브러리 사용 이유</strong></summary>
 <div markdown="1">       
   
 
@@ -98,38 +99,14 @@
 
 ## 🔥주요 기능
 
-### 주문 기능
-  - 대규모 트래픽에서 많은 사용자들이 상품 주문 시 주문과 재고 데이터가 일관되게 관리가 되지 않으면 서비스에 대한 신뢰도에 치명적인 영향을 끼치기 때문에 주문 기능에서 동시성 이슈 관리가 매우 중요
-  - ~ 행사 시 주문 데이터를 참고해 초당 ~ 건 상품 주문 시 동시성 이슈 제어를 목표 
 
-<details>
-<summary>📌 Pessimistic Lock으로 동시성 제어</summary>
-<div markdown="1">   
-<br>
-
-  - 트랜잭션이 시작될 때 MySQL DB에 Exclusive Lock을 걸어 Lock 해제 전에 다른 트랜잭션에서는 데이터를 읽거나 수정할 수 없게 하여 Race Condition을 해결
-  
-</div>
-</details>
-
-<details>
-<summary>📌 최적의 Connection Pool Size 설정으로 데드락 문제 해결</summary>
-<div markdown="1">       
-<br>
-
-  - Pessimistic Lock은 데드락 발생 가능성이 있어 JMeter 부하테스트를 통해 데드락을 회피할 수 있는 최적의 Connection Pool Size인 20으로 설정
-  - 부하테스트 결과 1000명의 사용자가 10초 간 같은 상품 주문은 모두 성공하였고 데이터 정합성도 달성
-</div>
-</details>
-
-
-### 조회 기능
+#### 조회 기능
 - 메인 페이지 로딩 속도는 플랫폼 첫 인상에 큰 영향을 주기 때문에 100ms 이내를 목표
 - 쇼핑몰 홈페이지 로딩 속도가 2초 이상이라면 고객이 해당 페이지를 떠날 확률이 높기 때문에 고객의 서비스 체류 시간을 높이기 위해서
 필터링 조회 속도를 2초 이내를 목표, 상세 조회는 500ms 이내를 목표
 
 <details>
-<summary>📌 Redis Sorted Set으로 메인 페이지 로딩 최적화 & 파이프라인 구축</summary>
+<summary><strong> 1⃣ Redis Sorted Set으로 메인 페이지 로딩 최적화 & 파이프라인 구축</strong></summary>
 <div markdown="1">     
 <br>
 
@@ -139,7 +116,7 @@
 </details>
 
 <details>
-<summary>📌 Redis에 캐싱된 데이터로 상품 상세조회</summary>
+<summary><strong> 2⃣ Redis에 캐싱된 데이터로 상품 상세조회</strong></summary>
 <div markdown="1"> 
 <br>
 
@@ -148,7 +125,7 @@
 </details>
 
 <details>
-<summary>📌 결합 인덱스 추가, 커버링 인덱스 적용</summary>
+<summary><strong> 3⃣ 결합 인덱스 추가, 커버링 인덱스 적용</strong></summary>
 <div markdown="1">       
 <br>
 
@@ -158,7 +135,7 @@
 </details>
 
 <details>
-<summary>📌 Full Text Search로 키워드 검색</summary>
+<summary><strong> 4⃣ Full Text Search로 키워드 검색</strong></summary>
 <div markdown="1">    
 <br>
 
@@ -167,7 +144,7 @@
 </details>
 
 <details>
-<summary>📌 데이터 반정규화</summary>
+<summary><strong> 5⃣ 데이터 반정규화</strong></summary>
 <div markdown="1">       
 <br>
 
@@ -175,12 +152,39 @@
 </div>
 </details>
 
+#### 주문 기능
+  - 대규모 트래픽에서 많은 사용자들이 상품 주문 시 주문과 재고 데이터가 일관되게 관리가 되지 않으면 서비스에 대한 신뢰도에 치명적인 영향을 끼치기 때문에 주문 기능에서 동시성 이슈 관리가 매우 중요
+  - ~ 행사 시 주문 데이터를 참고해 초당 ~ 건 상품 주문 시 동시성 이슈 제어를 목표 
+
+<details>
+<summary><strong> 1⃣ Pessimistic Lock으로 동시성 제어</strong></summary>
+<div markdown="1">   
+<br>
+
+  - 트랜잭션이 시작될 때 MySQL DB에 Exclusive Lock을 걸어 Lock 해제 전에 다른 트랜잭션에서는 데이터를 읽거나 수정할 수 없게 하여 Race Condition을 해결
+  
+</div>
+</details>
+
+<details>
+<summary><strong> 2⃣ 최적의 Connection Pool Size 설정으로 데드락 문제 해결</strong></summary>
+<div markdown="1">       
+<br>
+
+  - Pessimistic Lock은 데드락 발생 가능성이 있어 JMeter 부하테스트를 통해 데드락을 회피할 수 있는 최적의 Connection Pool Size인 20으로 설정
+  - 부하테스트 결과 1000명의 사용자가 10초 간 같은 상품 주문은 모두 성공하였고 데이터 정합성도 달성
+</div>
+</details>
+
 
 
 ## 💉서비스 안정성
-### 테스트 커버리지 00%
-### 부하테스트
-### 모니터링 (알림)
+#### 테스트 커버리지 00%
+- ...
+#### 부하테스트
+- ...
+#### 모니터링 (알림)
+- ...
 
 ## 🎯트러블 슈팅
 
