@@ -1,7 +1,9 @@
 # Spring Market
-[![spring-market](https://github.com/SpringMarket/Market/actions/workflows/gradle.yml/badge.svg)](https://github.com/SpringMarket/Market/actions/workflows/gradle.yml)
 
 ![image](https://user-images.githubusercontent.com/112923814/206835670-2683c2ba-89d0-4509-bf81-4e5d2678ebca.png)
+<br/>
+[![spring-market](https://github.com/SpringMarket/Market/actions/workflows/gradle.yml/badge.svg)](https://github.com/SpringMarket/Market/actions/workflows/gradle.yml)
+
 
 # 🌏 프로젝트 소개
 - **국내 최대 수량의 의류 데이터**를 보유한 쇼핑몰입니다.
