@@ -185,7 +185,7 @@
 ## 🎯트러블 슈팅
 
 <details>
-<summary>📌 INDEX 중복</summary>
+<summary><strong>📌 INDEX 중복</strong></summary>
 <div markdown="1">       
 
 😎숨겨진 내용😎
@@ -194,7 +194,7 @@
 </details>
 
 <details>
-<summary>📌 10,000 건의 상품 데이터 Cache Warmup 동작 시 극심한 Latency의 지연이 발생했습니다. </summary>
+<summary><strong>📌 10,000 건의 상품 데이터 Cache Warmup 동작 시 극심한 Latency의 지연이 발생했습니다.</strong> </summary>
 <div markdown="1">       
 
 #### ❗ 문제상황
@@ -218,7 +218,7 @@
 </details>
 
 <details>
-<summary>📌 높은 트래픽 상황에도 상품이 클릭될 때마다 조회수 Update 쿼리가 동작했습니다.</summary>
+<summary><strong>📌 높은 트래픽 상황에도 상품이 클릭될 때마다 조회수 Update 쿼리가 동작했습니다.</strong></summary>
 <div markdown="1">       
   
 #### ❗ 문제상황
@@ -237,7 +237,7 @@
 </details>
 
 <details>
-<summary>📌 AWS 인스턴스 성능 튜닝</summary>
+<summary><strong>📌 AWS 인스턴스 성능 튜닝</strong></summary>
 <div markdown="1">       
 
 #### ❗ 문제상황
@@ -262,7 +262,7 @@
 </details>
 
 <details>
-<summary>📌 동시성 제어의 동작 최적화</summary>
+<summary><strong>📌 동시성 제어의 동작 최적화</strong></summary>
 <div markdown="1">       
 
 😎숨겨진 내용😎
@@ -271,7 +271,7 @@
 </details>
 
 <details>
-<summary>📌 문제상황 작성</summary>
+<summary><strong>📌 문제상황 작성</strong></summary>
 <div markdown="1">       
 
 😎숨겨진 내용😎
