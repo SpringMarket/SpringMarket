@@ -10,7 +10,7 @@
 
 ⚙ [Spring Market 이용해보기 Click!](https://www.notion.so/1-3b015d8a07d149148b5fea36c4035ceb) <br>
 ⚙ [Spring Market 팀 노션 Click!](https://www.notion.so/1-3b015d8a07d149148b5fea36c4035ceb)
-
+<br/><br/>
 # ⚙ InfraStructure 
 
 <img src ="https://user-images.githubusercontent.com/112923814/206205534-6b2cf6e1-9461-4258-bbc1-f54b762be4b8.jpg"/></a>      
@@ -74,7 +74,8 @@
 
 <details>
 <summary><strong>📣기술 & 라이브러리 사용 이유</strong></summary>
-<div markdown="1">       
+<div markdown="1">   
+  <br/>
   
 
 |기술 스택| 사용 이유|
@@ -95,7 +96,7 @@
 
 </div>
 </details>
-
+<br/>
 
 ## 🔥 주요 기능
 
@@ -151,7 +152,7 @@
   - 쿼리문에서 join문을 제거를 위해 데이터 반정규화를 하여 조회수, 재고수 테이블을 상품 테이블과 병합하여 조회 성능을 66.6% 개선
 </div>
 </details>
-
+<br/>
 #### 주문 기능
   - 대규모 트래픽에서 많은 사용자들이 상품 주문 시 주문과 재고 데이터가 일관되게 관리가 되지 않으면 서비스에 대한 신뢰도에 치명적인 영향을 끼치기 때문에 주문 기능에서 동시성 이슈 관리가 매우 중요
   - ~ 행사 시 주문 데이터를 참고해 초당 ~ 건 상품 주문 시 동시성 이슈 제어를 목표 
@@ -175,7 +176,7 @@
   - 부하테스트 결과 1000명의 사용자가 10초 간 같은 상품 주문은 모두 성공하였고 데이터 정합성도 달성
 </div>
 </details>
-
+<br/>
 
 
 ## 💉 프로젝트 관리
@@ -185,7 +186,7 @@
 - ...
 #### 모니터링 (알림)
 - ...
-
+<br/>
 ## 🎯 트러블 슈팅
 
 <details>
@@ -282,7 +283,7 @@
 
 </div>
 </details>
-
+<br/>
 
 ## 🧑‍💻팀원
 
