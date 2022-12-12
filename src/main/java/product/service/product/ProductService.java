@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import product.dto.product.ProductDetailResponseDto;
 import product.dto.product.ProductMainResponseDto;
 import product.dto.product.ProductRankResponseDto;
+import product.entity.product.Product;
 import product.exception.RequestException;
 import product.repository.product.ProductRepository;
 
@@ -84,5 +85,11 @@ public class ProductService {
         String key = "productView::" + productId;
         log.info("View Increment");
         productRedisService.incrementView(key, productId);
+    }
+
+    @Transactional
+    public void viewTest(Long productId) {
+        Product product = productRepository.findByProductId(productId);
+        product.viewTest();
     }
 }
