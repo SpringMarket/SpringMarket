@@ -201,12 +201,12 @@
 ## 🎯 트러블 슈팅
 
 <details>
-<summary><strong>📌 상품을 조회/정렬을 할 때 60초 이상 소용되는 이슈가 발생했습니다. </strong></summary>
+<summary><strong>📌 조회/정열 시 두개의 Index가 적용되지 않는 이슈가 발생했습니다. </strong></summary>
 <div markdown="1">       
 
 #### ❗ 문제상황
   - 필터링 조회에서 full-text-search로 키워드 검색을 하면 60sec 가까이 나오게 됩니다.
-  - 필터링 조회에서 정렬은 필수적으로 해야하는데 where절에서 풀텍스트서치로 키워드 조회를 하면 제목에 걸린 full-text 인덱스가 쿼리문에 적용되기 때문에 정렬 컬럼으로 인덱스를 사용할 수 없어 sort 부하 해결이 안됩니다.
+  - 필터링 조회에서 정렬은 필수적으로 해야하는데 where절에서 full-text-search로 키워드 조회를 하면 제목에 걸린 full-text-index가 쿼리문에 적용되기 때문에 정렬 컬럼으로 인덱스를 사용할 수 없어 sort 부하 해결이 안됩니다.
   
 #### 💡 Solution :
   - (INDEX 활용) 필터링 조회 시 정렬 컬럼으로 인덱스를 사용하기 위해 키워드 검색은 contains문을 사용하였습니다.
@@ -302,23 +302,6 @@
 </div>
 </details>
 
-<details>
-<summary><strong>📌 동시성 제어의 동작 최적화</strong></summary>
-<div markdown="1">       
-
-😎숨겨진 내용😎
-
-</div>
-</details>
-
-<details>
-<summary><strong>📌 문제상황 작성</strong></summary>
-<div markdown="1">       
-
-😎숨겨진 내용😎
-
-</div>
-</details>
 <br/>
 
 ## 🧑‍💻팀원
