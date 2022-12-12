@@ -196,6 +196,7 @@
 - Github Actions + Elastic Beanstalk 사용으로 CI/CD 환경을 구축했습니다.
 - ALB를 활용한 Trigger 기반 오토 스케일링으로 유동적인 트래픽에 효율적으로 대응하고 있습니다.
 - Github Actions CI 동작 시 Gradle 세팅을 캐싱해 더욱 생산성을 높였습니다.
+- 인터넷 보안 환경을 위해 HTTPS를 적용했습니다.
 #### ✔ 모니터링
 - Cloud Watch를 사용하여 로그 + 성능 지표를 모니터링 하고 있습니다.
 - CPU가 70%를 초과하면 경보가 발생하는 알림 프로세스를 구축했습니다. 
