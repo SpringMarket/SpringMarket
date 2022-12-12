@@ -394,23 +394,27 @@ Redis를 사용한 코드를 어느 환경에서든 바로 테스트가 가능�
 </details>
 
 <details>
-<summary><strong>📌 5,000 건의 상품 데이터 Cache Warmup 동작 시 Latency의 지연이 발생했습니다.</strong> </summary>
+<summary><strong>📌 5,000 건의 상품 데이터 Cache Warmup 동작 시 Redis Latency의 지연이 발생했습니다.</strong> </summary>
 <div markdown="1">       
 
 #### ❗ 문제상황
   - 상품 데이터의 빠른 조회와 DB 부하 분산을 위해 캐싱은 필수였습니다.
   - 하지만 TCP 기반으로 동작하는 Redis에 5,000 건의 데이터를 개별로 Input 하면서 Latency의 지연이 발생했습니다.
-  
-![Warmup NonePipeline Logic - Postman2 ](https://user-images.githubusercontent.com/112923814/206866704-34a1e734-5478-4d00-b12a-edfe693f02dd.png)
+  - <strong>Request +5000 ( Redis 요청 5000건 발생)</strong>
+  - ![1313](https://user-images.githubusercontent.com/112923814/207049796-b844c15d-4fba-4342-a256-65c6d6d1733b.png)
+  - ![nonepipe 5000-](https://user-images.githubusercontent.com/112923814/207048644-36273836-353b-48b5-b3be-dc19f1b232ad.png)
+
+
   
 #### 💡 Solution : Redis Pipeline 구축
   - 작업의 단위를 직접 구축해서 요청이 가능해졌습니다. ( 다중 Insert 가능 )
   
 #### ✔ 결과
-  - 10,000건의 TCP 통신이 10건(+1000)으로 축소되었습니다.
-  - 통신 자료 추가 첨부
-  
-![warmup rank ](https://user-images.githubusercontent.com/112923814/206866707-21c54446-dd68-4b61-ba97-92056cf27581.png)
+  - 5,000건의 TCP 통신이 1건(+5000)으로 축소되었습니다.
+  - <strong>Request +1 ( Redis 요청 1건 발생)</strong>
+  - ![131313](https://user-images.githubusercontent.com/112923814/207049817-dc7d5da6-a4ee-4f4e-99a3-5f7e88b98c56.png)
+  - ![pipe 5000_](https://user-images.githubusercontent.com/112923814/207049047-4a8b1c9f-3f94-4a1d-88a2-711e1b9b428b.png)
+
 
 
 </div>
@@ -423,6 +427,10 @@ Redis를 사용한 코드를 어느 환경에서든 바로 테스트가 가능�
 #### ❗ 문제상황
   - 높은 트래픽이 발생할 때 조회가 일어날 때마다 발생하는 Update 쿼리는 서버에 큰 무리가 있었습니다.
   - 10초간 상품 상세 조회가 1만회 동작할 때 에러율이 62.31% 발생했습니다. 
+  - ![10,000 view update1](https://user-images.githubusercontent.com/112923814/207050945-515b7aec-1999-4547-bbba-53dc37670325.png)
+  - ![10,000 view update graph](https://user-images.githubusercontent.com/112923814/207050910-be5d0354-3d3a-4312-9077-b8db909638d2.png)
+
+
   
 #### 💡 Solution : Cache Write Back
   - 조회수를 캐시에 모아 일정 주기 배치 작업을 통해 DB에 반영
@@ -432,6 +440,9 @@ Redis를 사용한 코드를 어느 환경에서든 바로 테스트가 가능�
 #### ✔ 결과
   - 클릭 시마다 발생했던 Update 쿼리 -> 1시간 주기로 배치작업
   - 10초간 상품 상세 조회가 1만회 동작하는 상황에 에러율 0%를 달성했습니다.
+  - ![10,000 view redis1](https://user-images.githubusercontent.com/112923814/207050998-1e314ddd-4fee-49f4-9b76-157514757c0c.png)
+  - ![10,000 view redis graph](https://user-images.githubusercontent.com/112923814/207051036-38937920-808d-4bf0-9414-2a4f4504a93c.png)
+
 
 
 </div>
