@@ -205,7 +205,7 @@
 <div markdown="1">       
 
 #### ❗ 문제상황
-  - 필터링 조회에서 full-text-search로 키워드 검색을 하면 60s 가까이 나오게 됩니다.
+  - 필터링 조회에서 full-text-search로 키워드 검색을 하면 60sec 가까이 나오게 됩니다.
   - 필터링 조회에서 정렬은 필수적으로 해야하는데 where절에서 풀텍스트서치로 키워드 조회를 하면 제목에 걸린 full-text 인덱스가 쿼리문에 적용되기 때문에 정렬 컬럼으로 인덱스를 사용할 수 없어 sort 부하 해결이 안됩니다.
 #### 💡 Solution :
   - 필터링 조회 시 정렬 컬럼으로 인덱스를 사용학 위해 키워드 검색은 contains문을 사용하였습니다.
@@ -213,6 +213,22 @@
  
 #### ✔ 결과
   - 키워드에 따른 속도 편차는 있지만 평균 500ms로 약 11,900%의 성능향상 효과를 얻었습니다.
+</div>
+</details>
+
+<details>
+<summary><strong>📌 cross join → inner join 사용</strong></summary>
+<div markdown="1">       
+
+#### ❗ 문제상황
+  - 조회 쿼리가 나갈 때 DB 로그를 보니 cross join이 발생한 것을 확인했습니다.
+  (cross join 은 카다시안곱을 수행하여 join하기 때문에 너무 많은 데이터를 가져와 성능이 저하됩니다.)
+#### 💡 Solution :
+  - join을 명시적으로 사용하지 않은 쿼리문에서 자동으로 cross join이 발생되고 있었기 때문에 join이 필요한 테이블에 inner join을 추가하여 명시적으로 join을 해주었습니다.
+ 
+#### ✔ 결과
+  - 조회 시 기존에 cross join으로 나가던 쿼리문이 inner join 바뀌었습니다.
+  - 200만건 기준 필터링 조회 시 평균 8초, 성능 200%까지 개선되었습니다. 
 </div>
 </details>
 
