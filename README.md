@@ -17,7 +17,7 @@
 
 <img src ="https://user-images.githubusercontent.com/112923814/206205534-6b2cf6e1-9461-4258-bbc1-f54b762be4b8.jpg"/></a>      
 
-# ⚙ ERD
+# ⛓ ERD
 <details>
 <summary><strong> OPEN </strong></summary>
 <div markdown="1">       
@@ -28,16 +28,32 @@
 </div>
 </details>
 
+# 🧬API
+👉 https://documenter.getpostman.com/view/23647730/2s8YzP3RB4
+
 
 # 🕹 Tech Stack
 <img src ="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-badge&logo=Spring Boot&logoColor=white"/></a>
 <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"></a>
-<img src ="https://img.shields.io/badge/Spring Securit-6DB33F?style=for-the-badge&logo=Spring Boot&logoColor=white"/></a>
+<img src ="https://img.shields.io/badge/Spring Security-6DB33F?style=for-the-badge&logo=Spring Security&logoColor=white"/></a>
 <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white">
+<img src="https://img.shields.io/badge/JPA-999933?style=for-the-badge&logo=JPA&logoColor=white"></a>
 <br>
 <img src ="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white"/></a>
-<img src ="https://img.shields.io/badge/Amazon AWS-232F3E?style=for-the-badge&logo=Amazon AWS&logoColor=white"/></a>
+<img src ="https://img.shields.io/badge/Amazon RDS-527FFF?style=for-the-badge&logo=Amazon RDS&logoColor=white"/></a>
+<img src ="https://img.shields.io/badge/Amazon S3-569A31?style=for-the-badge&logo=Amazon S3&logoColor=white"/></a>
 <img src ="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=Redis&logoColor=white"/></a> 
+<br>
+<img src ="https://img.shields.io/badge/GitHub Actions-2088FF?style=for-the-badge&logo=GitHub Actions&logoColor=white"/></a>
+<img src ="https://img.shields.io/badge/Amazon EC2-FF9900?style=for-the-badge&logo=Amazon EC2&logoColor=white"/></a>
+<img src ="https://img.shields.io/badge/AWS Elastic Beanstalk-336633?style=for-the-badge&logo=AWS Elastic Beanstalk&logoColor=white"/></a>
+<br>
+<img src ="https://img.shields.io/badge/Amazon CloudWatch-FF4F8B?style=for-the-badge&logo=Amazon CloudWatch&logoColor=white"/></a>
+<img src ="https://img.shields.io/badge/OpenSearch-005EB8?style=for-the-badge&logo=OpenSearch&logoColor=white"/></a>
+<br>
+<img src ="https://img.shields.io/badge/JUnit5-25A162?style=for-the-badge&logo=JUnit5&logoColor=white"/></a>
+<br>
+<img src ="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=white"/></a>
 
 <details>
 <summary><strong>📣버전</strong></summary>
@@ -169,9 +185,9 @@
   <summary><strong> 5️⃣ Faker & SQLAlchemy</strong></summary>
     <div markdown="1">     
       
-1000만건 상품 데이터를 목표로 하였기 때문에 실제 의류 쇼핑몰 크롤링을 하기에는 무리가 있다고 판단하여 더미데이터 생성을 하기로 결정하였습니다.
-카테고리별로 다른 상품 이름, 사진을 생성해야 하고, 상품과 주문 생성일자가 Primary key인 id에 따라 증가하도록 데이터를 구성할 수 있어야 하고 생성한 대량의 데이터를 손쉽게 RDS MySQL DB로 보낼 수 있어야 했습니다.
-파이썬 Faker 라이브러리로 위 조건을 만족하는 더미데이터를 생성했고 Python과 MySQL을 연결시켜주는 라이브러리 mysqlclient를 설치하고 파이썬의 ORM인 SQLAlchemy를 이용하여 생성한 더미데이터 1000만 건을 데이터베이스에 입력했습니다.
+- 1000만건 상품 데이터를 목표로 하였기 때문에 실제 의류 쇼핑몰 크롤링을 하기에는 무리가 있다고 판단하여 더미데이터 생성을 하기로 결정하였습니다.
+- 카테고리별로 다른 상품 이름, 사진을 생성해야 하고, 상품과 주문 생성일자가 Primary key인 id에 따라 증가하도록 데이터를 구성할 수 있어야 하고 생성한 대량의 데이터를 손쉽게 RDS MySQL DB로 보낼 수 있어야 했습니다.
+- 파이썬 Faker 라이브러리로 위 조건을 만족하는 더미데이터를 생성했고 Python과 MySQL을 연결시켜주는 라이브러리 mysqlclient를 설치하고 파이썬의 ORM인 SQLAlchemy를 이용하여 생성한 더미데이터 1000만 건을 데이터베이스에 입력했습니다.
     
   </details> 
   
@@ -208,33 +224,16 @@ Github 이벤트(ex. PR) 처리가 가능합니다.
     
     
   <details>
-  <summary><strong> 8️⃣ Logback</strong></summary>
-    <div markdown="1">     
-    <br>
-      개발 과정에서 문제 원인 파악 및 개발의 안정성 확보를 위해 콘솔 로그 외의 로그 관리의 필요성을 느꼈습니다.
-
-Spring Boot에서 로깅은 대표적으로 Log4j, Logback, Log4j2으로 로그 구현체를 사용합니다.
-Slf4j는 위 로깅 프레임워크에 대한 인터페이스 역할을 하는 라이브러리로 Slf4j를 이용하면 코드를 유지하면서 다른 로깅 프레임워크의 전환을 쉽고 간단하게 할 수 있습니다.
-스프링 부트에서는 Slf4j+Logback이 기본 설정입니다.
-
-Log4j는 가장 오래된 프레임워크이며 2015년에 단종되었기 때문에 선택지에서 제외하였습니다.
-Logback은 Log4j를 개발한 개발자가 개발한 Log4j의 후속 버전으로 지속적으로 업데이트되고 있습니다.
-      <br/>
-### Logback 장점
-
-- logback-classic의 Logger 클래스는 SLF4J의 API 스펙을 구현하므로 SLF4J의 API를 그대로 사용하여도 되는 이점이 있습니다.
-- 로깅시에 파일 입출력을 수행할 때 logback에서 로깅시 I/O 작업을 하다가 실패하는 경우 logback을 작동시키기 위해 어플리케이션을 재시작할 필요가 없습니다
-- FileAppender 및RollingFileAppender의 하위 클래스들은 I/O 오류를 자동 복구할 수 있습니다.
-- logback은 log4j가 제공하는것보다 훨씬 많은 필터링 기능을 제공합니다. 특정 사용자(특정 조건)에서의 로그레벨을 변경하는 등의 필터 정책을 사용할 수 있습니다
-- logback는 Groovy 코드를 통한 설정을 지원하는데, XML에서 사용하는 설정이 Groovy로 바뀌었을때 어떤식으로 사용되는지도 문서로 지원합니다.
-- logback은 세부적인 공식문서를 제공하며 지속적으로 업데이트됩니다
-
-Log4j2는 가장 최근에 나온 로깅 프레임워크로 logback과 마찬가지로 필터링 기능과 자동 리로드 기능을 가지고 있습니다. logback과의 가장 큰 차이점은 Multi Thread 환경에서 비동기 로거(Async Logger)의 경우 log4j, logback 보다 처리량이 더 높고, 대기 시간이 훨씬 짧습니다. 또한 람다 표현식과 사용자 정의 로그 레벨도 지원합니다.
-
-로깅으로 DB관련 로그, 에러 로그, api 통신 로그를 분리해 파일로 관리하는 것을 목표로 했기 때문에 스프링 기본 설정인 logback 사용을 결정하였습니다.
-
-ConsoleAppender로 Info레벨 이상 로그를 콘솔에 출력,
-RollingFileAppender로 Debug레벨 이상 DB관련 로그와 Warn레벨 이상 에러로그를 각각 다른 파일로 저장하고
+  <summary><strong> 8️⃣ Logback</strong></summary>  
+  <div markdown="1">     
+    
+- 개발 과정에서 문제 원인 파악 및 개발의 안정성 확보를 위해 콘솔 로그 외의 로그 관리의 필요성을 느꼈습니다.
+- Spring Boot에서 로깅은 대표적으로 Log4j, Logback, Log4j2으로 로그 구현체를 사용합니다.
+- Log4j는 가장 오래된 프레임워크이며 2015년에 단종되었기 때문에 선택지에서 제외하였습니다.
+- Logback은 Log4j를 개발한 개발자가 개발한 Log4j의 후속 버전으로 지속적으로 업데이트되고 있습니다.
+- Log4j2는 가장 최근에 나온 로깅 프레임워크로 logback과 마찬가지로 필터링 기능과 자동 리로드 기능을 가지고 있습니다. logback과의 가장 큰 차이점은 Multi Thread 환경에서 비동기 로거(Async Logger)의 경우 log4j, logback 보다 처리량이 더 높고, 대기 시간이 훨씬 짧습니다. 또한 람다 표현식과 사용자 정의 로그 레벨도 지원합니다.
+- 로깅으로 DB관련 로그, 에러 로그, api 통신 로그를 분리해 파일로 관리하는 것을 목표로 했기 때문에 스프링 기본 설정인 logback 사용을 결정하였습니다.     
+- ConsoleAppender로 Info레벨 이상 로그를 콘솔에 출력,RollingFileAppender로 Debug레벨 이상 DB관련 로그와 Warn레벨 이상 에러로그를 각각 다른 파일로 저장하고
 logback-access 모듈을 이용해 api 통신 관련 통신 로그 또한 파일로 저장하여 모니터링하였습니다.
 <!--     </div> -->
   </details> 
