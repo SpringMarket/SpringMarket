@@ -379,25 +379,27 @@ Redis를 사용한 코드를 어느 환경에서든 바로 테스트가 가능�
 <div markdown="1">       
 
 #### ❗ 문제상황
-  - 필터링 조회에서 full-text-search로 키워드 검색을 하면 60sec 가까이 나오게 됩니다.
-  - 필터링 조회에서 정렬은 필수적으로 해야하는데 where절에서 full-text-search로 키워드 조회를 하면 제목에 걸린 full-text-index가 쿼리문에 적용되기 때문에 정렬 컬럼으로 인덱스를 사용할 수 없어 sort 부하 해결이 안됩니다.
+  - Full-Text-Search 키워드 필터가 포함된 필터링 조회 동작 시 타임아웃이 발생했습니다.
+  - 필터링 조회에서 정렬(조회순, 날짜순)은 필수적으로 이루어져야 하는데 Full-Text-Search 키워드 필터가 동작하면서 Full-Text-Index가 쿼리에 적용되었고, 이로인해 정렬 컬럼의 인덱스가 누락되어 sort에 부하가 발생했습니다.
   
 #### 💡 Solution :
-  - (INDEX 활용) 필터링 조회 시 정렬 컬럼으로 인덱스를 사용하기 위해 키워드 검색은 contains문을 사용하였습니다.
-  - (full-text-index 활용)정렬 없이 full-text-search를 사용한 키워드 검색만 하는 기능을 추가하였습니다.
+  - 필터링 조회 시 정렬 컬럼으로 인덱스를 사용하기 위해 키워드 검색은 contains문을 사용하였습니다.
+  - 키워드만으로 검색이 이루어질 때는 Full-Text-Search가 동작 되도록 설정했습니다.
  
 #### ✔ 결과
-  - 키워드에 따른 속도 편차는 있지만 평균 500ms로 약 11,900%의 성능향상 효과를 얻었습니다.
+  - 키워드에 따른 속도 편차는 발생하지만 평균 500ms로 성능의 안정화를 이루었습니다. 
+  - ( 약 11,900%의 성능향상 효과를 얻었습니다. )
+  
 </div>
 </details>
 
 <details>
-<summary><strong>📌 10,000 건의 상품 데이터 Cache Warmup 동작 시 극심한 Latency의 지연이 발생했습니다.</strong> </summary>
+<summary><strong>📌 5,000 건의 상품 데이터 Cache Warmup 동작 시 Latency의 지연이 발생했습니다.</strong> </summary>
 <div markdown="1">       
 
 #### ❗ 문제상황
   - 상품 데이터의 빠른 조회와 DB 부하 분산을 위해 캐싱은 필수였습니다.
-  - 하지만 TCP 기반으로 동작하는 Redis에 1만 건의 데이터를 개별로 Input 할 때 타임아웃 + 극심한 Latency 지연이 발생했습니다.
+  - 하지만 TCP 기반으로 동작하는 Redis에 5,000 건의 데이터를 개별로 Input 하면서 Latency의 지연이 발생했습니다.
   
 ![Warmup NonePipeline Logic - Postman2 ](https://user-images.githubusercontent.com/112923814/206866704-34a1e734-5478-4d00-b12a-edfe693f02dd.png)
   
