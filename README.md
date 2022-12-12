@@ -388,7 +388,7 @@ Redis를 사용한 코드를 어느 환경에서든 바로 테스트가 가능�
  
 #### ✔ 결과
   - 키워드에 따른 속도 편차는 발생하지만 평균 500ms로 성능의 안정화를 이루었습니다. 
-  - ( 약 11,900%의 성능향상 효과를 얻었습니다. )
+  - ( 약 11,900%의 성능향상 효과를 얻었습니다. ) </br>
   
 </div>
 </details>
@@ -427,20 +427,20 @@ Redis를 사용한 코드를 어느 환경에서든 바로 테스트가 가능�
   
 #### ❗ 문제상황
   - 높은 트래픽이 발생할 때 조회가 일어날 때마다 발생하는 Update 쿼리는 서버에 큰 무리가 있었습니다.
-  - 10초간 상품 상세 조회가 1만회 동작할 때 에러율이 62.31% 발생했습니다. 
+  - <strong>10초간 상품 상세 조회가 1만회 동작할 때 에러율이 62.31% 발생했습니다.</strong> 
   - ![10,000 view update1](https://user-images.githubusercontent.com/112923814/207050945-515b7aec-1999-4547-bbba-53dc37670325.png)
   - ![10,000 view update graph](https://user-images.githubusercontent.com/112923814/207050910-be5d0354-3d3a-4312-9077-b8db909638d2.png)
 
 
   
 #### 💡 Solution : Cache Write Back
-  - 조회수를 캐시에 모아 일정 주기 배치 작업을 통해 DB에 반영
-  - 싱글쓰레드인 Redis의 특성상 Atomic하게 Increment를 처리할 수 있다.
-  - 조회 기능의 많은 I/O와 함께 발생하는 Update 쿼리를 컨트롤할 수 있다.  
+  - 조회수를 캐시에 모아 일정 주기 DB에 배치하는 프로세스를 구현했습니다.
+  - 싱글쓰레드인 Redis의 특성상 Atomic하게 Increment를 처리할 수 있었습니다..
+  - 조회 기능의 많은 I/O와 함께 발생하는 Update 쿼리를 컨트롤할 수 있었습니다..  
   
 #### ✔ 결과
-  - 클릭 시마다 발생했던 Update 쿼리 -> 1시간 주기로 배치작업
-  - 10초간 상품 상세 조회가 1만회 동작하는 상황에 에러율 0%를 달성했습니다.
+  - 클릭 시마다 발생했던 Update 쿼리를 1시간 주기로 일어나는 배치 작업으로 최적화가 이루어졌습니다.
+  - <strong>동일 상황에 에러율 0%를 달성했습니다.</strong>
   - ![10,000 view redis1](https://user-images.githubusercontent.com/112923814/207050998-1e314ddd-4fee-49f4-9b76-157514757c0c.png)
   - ![10,000 view redis graph](https://user-images.githubusercontent.com/112923814/207051036-38937920-808d-4bf0-9414-2a4f4504a93c.png)
 
@@ -454,15 +454,16 @@ Redis를 사용한 코드를 어느 환경에서든 바로 테스트가 가능�
 <div markdown="1">       
 
 #### ❗ 문제상황
-  - 조회 쿼리가 나갈 때 DB 로그를 보니 cross join이 발생한 것을 확인했습니다.
-  (cross join 은 카다시안곱을 수행하여 join하기 때문에 너무 많은 데이터를 가져와 성능이 저하됩니다.)
+  - 조회 쿼리 동작 시 DB 로그에 cross join이 발생한 것을 확인했습니다.</br>
+  ( cross join 은 카다시안 곱을 수행하여 join하기 때문에 너무 많은 데이터를 가져와 성능이 저하됩니다. )
   
 #### 💡 Solution :
-  - (inner join 명시적 사용) join을 명시적으로 사용하지 않은 쿼리문에서 자동으로 cross join이 발생되고 있었기 때문에 join이 필요한 테이블에 inner join을 추가하여 명시적으로 join을 해주었습니다.
+  - inner join 명시적으로 사용했습니다.
+  - join을 명시적으로 사용하지 않은 쿼리문에서 자동으로 cross join이 발생되고 있었기 때문에 join이 필요한 테이블에 inner join을 작성하였습니다.
  
 #### ✔ 결과
-  - 조회 시 기존에 cross join으로 나가던 쿼리문이 inner join 바뀌었습니다.
-  - 200만건 기준 필터링 조회 시 평균 8초, 성능 200%까지 개선되었습니다. 
+  - cross join으로 나가던 쿼리문이 inner join 바뀌었습니다.
+  - 200만건 기준 필터링 조회 시 평균 8초, 성능 200%까지 개선되었습니다. </br>
 </div>
 </details>
 
@@ -473,11 +474,12 @@ Redis를 사용한 코드를 어느 환경에서든 바로 테스트가 가능�
 #### ❗ 문제상황
   - 스케일업 이전에 프리티어 인스턴스로 성능 최적화를 진행해보고자 했습니다.
   
-#### 💡 Solution : Step 3
-   - Step 1. DB 읽기 전용 복제본을 생성해 Read 요청을 분산합니다.
-   - Step 2. Hikari Connection Pool 최적의 개수를 찾아야 했습니다.
-   > Cache Write Back 전략으로 조회수를 관리하고 있었기에 Connection Pool 확장이 필요했습니다.
-   - Step 3. Time_Wait 소켓의 최적화가 필요했습니다.
+#### 💡 Step 3
+  
+   1. <strong>DB 읽기 전용 복제본을 생성해 Read 요청을 분산합니다.</strong></br>
+   2. <strong>Hikari Connection Pool 최적의 개수를 찾아야 했습니다.</strong></br>
+   > Cache Write Back 전략으로 조회수를 관리하고 있었기에 Connection Pool 확장이 필요했습니다.</br>
+   3. <strong>Time_Wait 소켓의 최적화가 필요했습니다.</strong></br>
    > 낮은 성능의 DB로 대규모 상품 데이터를 핸들링하는 상황이기에 남아있는 모든 소켓에서 요청마다
    > TCP handshake가 발생하는데에서 생기는 불필요한 성능 낭비를 없애야 했습니다.
 
