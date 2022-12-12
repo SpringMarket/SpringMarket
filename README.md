@@ -274,23 +274,28 @@ Redis를 사용한 코드를 어느 환경에서든 바로 테스트가 가능�
 - <details><summary><strong> 📢 Latency 목표값 설정 기준 Click!</strong></summary><div markdown="1"></br><pre><strong>KISSmetrics는 고객의 47%가 2초 이내의 시간에 로딩이 되는 웹 페이지를 원하고 있으며, 40%는 로딩에 3초 이상 걸리는 페이지를 바로 떠난다고 설명했습니다.</strong></pre></br></div></details>
 - 메인 페이지의 로딩 속도는 플랫폼 첫 인상에 큰 영향을 주기에 100ms 이내를 목표했습니다.
 - 필터링/키워드 조회 속도 2초, 상세 조회는 400ms 이내를 목표했습니다.
-</br>
-<details>
-<summary><strong> 1⃣ Redis Sorted Set으로 메인 페이지 로딩 최적화 & 파이프라인 구축</strong></summary>
-<div markdown="1">     
-</br>
-
-  - Redis 파이프라인을 구축하여 메인페이지에 노출할 인기 상품 데이터를 Redis에 캐싱
-  - Redis에 캐싱된 데이터를 사용해 메인 페이지 조회 성능 % 개선, 평균 로딩 속도 ~ms로 목표 달성
+</br> 
+<details> 
+<summary><strong> 1⃣ Redis Sorted Set - 랭킹보드 구현을 통한 메인 페이지 로딩 최적화 </strong></summary>
+<div markdown="1">      
+</br> 
+ 
+  - Redis Sorted Set을 통해 평균 100ms의 속도로 랭킹보드를 제공하고 있습니다. 
+  - 메인 페이지에 접근할 때마다 Order By가 동작하는 기존의 코드보다 28배 성능이 향상되었습니다. ( 28s -> 100ms )
+  - 파이프라인 + 스케줄러를 통해 주기적으로 랭킹보드를 세팅하고 있습니다.
+  
 </div>
 </details>
 
 <details>
-<summary><strong> 2⃣ Redis에 캐싱된 데이터로 상품 상세조회</strong></summary>
+<summary><strong> 2⃣ Redis Cache Aside - 상품 상세페이지 캐싱</strong></summary>
 <div markdown="1"> 
 <br>
 
-  - 카테고리별 인기 상품 ~개를 Redis에 캐싱, 캐싱된 상품의 상세페이지 조회 성능 % 개선
+  - 카테고리별 상위 5,000개의 상품 페이지를 캐싱하여 사용하고 있습니다.
+  - Redis 캐시 데이터를 통해 DB의 부하를 최소화했습니다.
+  - 파이프라인 작업을 통해 TCP 통신의 최적화를 이뤘습니다.
+  
 </div>
 </details>
 
@@ -299,8 +304,9 @@ Redis를 사용한 코드를 어느 환경에서든 바로 테스트가 가능�
 <div markdown="1">       
 <br>
 
-  - 조회수+pk로 결합 인덱스를 추가하여 조회순, 날짜순 정렬 시 성능 저하의 가장 큰 원인이었던 sort 부하를 해결
-  - QueryDSL은 서브쿼리를 지원하지 않기 때문에 커버링 인덱스를 활용해 페이징 조회 성능을 1900% 개선 
+  - 조회수+pk로 결합 인덱스를 추가하여 조회순, 날짜순 정렬 시 성능 저하의 가장 큰 원인이었던 sort 부하를 해결했습니다.
+  - QueryDSL은 서브쿼리를 지원하지 않기 때문에 커버링 인덱스를 활용해 페이징 조회 성능을 1900% 개선했습니다. 
+  
 </div>
 </details>
 
@@ -309,7 +315,8 @@ Redis를 사용한 코드를 어느 환경에서든 바로 테스트가 가능�
 <div markdown="1">    
 <br>
 
-  - 키워드 조회 시 인덱스를 사용하지 않는 like 키워드 방식과 비교해 인덱스를 사용하여 조회하는 full-text-search 방식으로 변경하여 약 634% 성능 개선
+  - 키워드 조회 시 Full-Text-Search 방식을 사용하여 like문을 사용한 쿼리보다 약 634% 성능을 개선했습니다.
+  
 </div>
 </details>
 
@@ -318,7 +325,8 @@ Redis를 사용한 코드를 어느 환경에서든 바로 테스트가 가능�
 <div markdown="1">       
 <br>
 
-  - 쿼리문에서 join문을 제거를 위해 데이터 반정규화를 하여 조회수, 재고수 테이블을 상품 테이블과 병합하여 조회 성능을 66.6% 개선
+  - 쿼리문에서 join문을 제거를 위해 데이터 반정규화를 하여 조회수, 재고수 테이블을 상품 테이블과 병합했고 조회 성능을 66.6% 개선했습니다.
+  
 </div>
 </details>
 <br/>
