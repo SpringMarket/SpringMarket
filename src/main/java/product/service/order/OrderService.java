@@ -37,6 +37,8 @@ public class OrderService {
     @Transactional
     public void orderProduct(Long productId, Long orderNum, Authentication authentication) {
 
+        if(orderNum < 1) throw new RequestException(ORDER_NUM_EXCEPTION);
+
         User user = getUser(authentication);
 
         Product product = productModify(productId, orderNum, user.getAge());
