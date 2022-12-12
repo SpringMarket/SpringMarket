@@ -201,7 +201,7 @@
 ## 🎯 트러블 슈팅
 
 <details>
-<summary><strong>📌 조회/정렬 INDEX 활용</strong></summary>
+<summary><strong>📌 상품을 조회/정렬을 할 때 60초 이상 소용되는 이슈가 발생했습니다. </strong></summary>
 <div markdown="1">       
 
 #### ❗ 문제상황
@@ -209,8 +209,8 @@
   - 필터링 조회에서 정렬은 필수적으로 해야하는데 where절에서 풀텍스트서치로 키워드 조회를 하면 제목에 걸린 full-text 인덱스가 쿼리문에 적용되기 때문에 정렬 컬럼으로 인덱스를 사용할 수 없어 sort 부하 해결이 안됩니다.
   
 #### 💡 Solution :
-  - 필터링 조회 시 정렬 컬럼으로 인덱스를 사용학 위해 키워드 검색은 contains문을 사용하였습니다.
-  - 정렬 없이 full-text-search를 사용한 키워드 검색만 하는 기능을 추가하였습니다.
+  - (INDEX 활용) 필터링 조회 시 정렬 컬럼으로 인덱스를 사용하기 위해 키워드 검색은 contains문을 사용하였습니다.
+  - (full-text-index 활용)정렬 없이 full-text-search를 사용한 키워드 검색만 하는 기능을 추가하였습니다.
  
 #### ✔ 결과
   - 키워드에 따른 속도 편차는 있지만 평균 500ms로 약 11,900%의 성능향상 효과를 얻었습니다.
@@ -218,7 +218,7 @@
 </details>
 
 <details>
-<summary><strong>📌 inner join 명시적 사용</strong></summary>
+<summary><strong>📌 쿼리문 동작 시 cross join이 발생하여 성능 이슈가 발생했습니다. </strong></summary>
 <div markdown="1">       
 
 #### ❗ 문제상황
@@ -226,7 +226,7 @@
   (cross join 은 카다시안곱을 수행하여 join하기 때문에 너무 많은 데이터를 가져와 성능이 저하됩니다.)
   
 #### 💡 Solution :
-  - join을 명시적으로 사용하지 않은 쿼리문에서 자동으로 cross join이 발생되고 있었기 때문에 join이 필요한 테이블에 inner join을 추가하여 명시적으로 join을 해주었습니다.
+  - (inner join 명시적 사용) join을 명시적으로 사용하지 않은 쿼리문에서 자동으로 cross join이 발생되고 있었기 때문에 join이 필요한 테이블에 inner join을 추가하여 명시적으로 join을 해주었습니다.
  
 #### ✔ 결과
   - 조회 시 기존에 cross join으로 나가던 쿼리문이 inner join 바뀌었습니다.
