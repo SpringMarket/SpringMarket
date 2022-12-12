@@ -1,8 +1,7 @@
 # Spring Market
 
-![image](https://user-images.githubusercontent.com/112923814/206835670-2683c2ba-89d0-4509-bf81-4e5d2678ebca.png)
+![image](https://user-images.githubusercontent.com/112923814/207095093-e2d922cd-5dc5-4036-859c-c10890e416b7.png)
 <br/>
-[![spring-market](https://github.com/SpringMarket/Market/actions/workflows/gradle.yml/badge.svg)](https://github.com/SpringMarket/Market/actions/workflows/gradle.yml)
 
 
 # 🌏 프로젝트 소개
