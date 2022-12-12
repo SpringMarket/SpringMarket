@@ -115,7 +115,7 @@
 
 #### 조회 기능
 
-- <details><summary><strong> 📢 Latency 목표값 설정 기준 Click!</strong></summary><div markdown="1"></br>KISSmetrics는 고객의 47%가 2초 이내의 시간에 로딩이 되는 웹 페이지를 원하고 있으며,</br> 40%는 로딩에 3초 이상 걸리는 페이지를 바로 떠난다고 설명했습니다.</br></div></details>
+- <details><summary><strong> 📢 Latency 목표값 설정 기준 Click!</strong></summary><div markdown="1"></br><pre><strong>KISSmetrics는 고객의 47%가 2초 이내의 시간에 로딩이 되는 웹 페이지를 원하고 있으며, 40%는 로딩에 3초 이상 걸리는 페이지를 바로 떠난다고 설명했습니다.</strong></pre></br></div></details>
 - 메인 페이지의 로딩 속도는 플랫폼 첫 인상에 큰 영향을 주기에 100ms 이내를 목표했습니다.
 - 필터링/키워드 조회 속도 2초, 상세 조회는 400ms 이내를 목표했습니다.
 </br>
@@ -168,16 +168,18 @@
 <br/>
 
 #### 주문 기능
-  - <details><summary><strong> 📢 동시성 제어 목표값 설정 기준 Click!</strong></summary><div markdown="1"></br>온라인 패션 스토어 무신사가 선보인 패션 특화 라이브 방송 ‘무신사 라이브’ 메종 키츠네 편이 방송 시작 5분 만에 매출 1억 원을 돌파했습니다.</br></div></details>
-  - 대규모 트래픽에서 많은 사용자들이 상품 주문 시 주문과 재고 데이터가 일관되게 관리가 되지 않으면 서비스에 대한 신뢰도에 치명적인 영향을 끼치기 때문에 주문 기능에서 동시성 이슈 관리가 매우 중요
-  - ~ 행사 시 주문 데이터를 참고해 초당 ~ 건 상품 주문 시 동시성 이슈 제어를 목표 
+  - <details><summary><strong> 📢 동시성 제어 목표값 설정 기준 Click!</strong></summary><div markdown="1"></br><pre><strong>온라인 패션 스토어 무신사가 선보인 패션 특화 라이브 방송 ‘무신사 라이브’ 메종 키츠네 편이 방송 시작 5분 만에 매출 1억 원을 돌파했습니다.</br>동시 상품의 주문으로 가정했을 때 300초 동안 2000건의 주문이 발생한 상황입니다.</strong> (상품 가격 50,000원 기준)</pre></div></details>
+  - 대규모 트래픽 상황에서 주문과 재고 데이터의 정합성은 서비스의 신뢰도에 큰 영향을 주고 있습니다.
+  - 안정적인 동시성 제어를 위해 목표치를 '무신사 라이브' 메종 키츠네 편의 15배로 설정했습니다.
+  - **( 30초 동안 동시 주문 3000건에 대한 정합성 유지 )**
 
 <details>
 <summary><strong> 1⃣ Pessimistic Lock으로 동시성 제어</strong></summary>
 <div markdown="1">   
 <br>
 
-  - 트랜잭션이 시작될 때 MySQL DB에 Exclusive Lock을 걸어 Lock 해제 전에 다른 트랜잭션에서는 데이터를 읽거나 수정할 수 없게 하여 Race Condition을 해결
+  - 트랜잭션이 시작될 때 MySQL DB에 Exclusive Lock을 걸어 Race Condition을 해결했습니다.
+  - 부하테스트 결과 30초 간 동일 상품에 대한 주문 3000건의 데이터 정합성을 유지 성공했습니다.
   
 </div>
 </details>
@@ -186,8 +188,11 @@
 <summary><strong> 2⃣ 최적의 Connection Pool Size 설정으로 데드락 문제 해결</strong></summary>
 <div markdown="1">       
 <br>
-  - Pessimistic Lock은 데드락 발생 가능성이 있어 JMeter 부하테스트를 통해 데드락을 회피할 수 있는 최적의 Connection Pool Size인 20으로 설정
-  - 부하테스트 결과 1000명의 사용자가 10초 간 같은 상품 주문은 모두 성공하였고 데이터 정합성도 달성
+  
+  - Pessimistic Lock은 데드락 발생 가능성이 있었습니다.
+  - 데드락을 피하는 Connection Pool Size 공식과 JMeter 부하테스트를 통해 데드락을 회피할 수 있으며</br>에러율이 가장 낮은 지점(20)을 발견하고 적용하였습니다.
+  - Default Connection Pool Size (10) 기준보다 에러율이 10% 하락했습니다.
+  
 </div>
 </details>
 <br/>
