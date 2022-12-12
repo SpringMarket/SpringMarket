@@ -31,12 +31,16 @@ spring:
     url: jdbc:mysql://${RDS_HOSTNAME}:${RDS_PORT}/${RDS_DB_NAME}
 
 
-    # Replica
-#    replica-list:
-#      - name: replica_1
-#        url: ${RDS_REPLICA_HOSTNAME_1}
-#      - name: replica_2
-#        url: ${RDS_REPLICA_HOSTNAME_2}
+    #Replica
+    replica-list:
+      - name: replica_1
+        url: ${RDS_REPLICA_HOSTNAME_1}
+      - name: replica_2
+        url: ${RDS_REPLICA_HOSTNAME_2}
+      - name: replica_3
+        url: ${RDS_REPLICA_HOSTNAME_3}
+      - name: replica_4
+        url: ${RDS_REPLICA_HOSTNAME_4}
 
   # REDIS
   redis:
