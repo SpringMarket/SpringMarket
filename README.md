@@ -18,11 +18,15 @@
 <img src ="https://user-images.githubusercontent.com/112923814/206205534-6b2cf6e1-9461-4258-bbc1-f54b762be4b8.jpg"/></a>      
 
 # ⚙ ERD
-<div markdown="1">     
+<details>
+<summary><strong> OPEN </strong></summary>
+<div markdown="1">       
 <br>
-<img src ="https://user-images.githubusercontent.com/95573777/206997790-92b26036-298a-489a-b187-347743e8ec2e.png"/>
-</div>
 
+![image](https://user-images.githubusercontent.com/112923814/207008488-d2395e48-ea03-4744-aa31-492b1d4fecf6.png)
+
+</div>
+</details>
 
 
 # 🕹 Tech Stack
@@ -207,7 +211,7 @@
 ## 🎯 트러블 슈팅
 
 <details>
-<summary><strong>📌 조회/정열 시 두개의 Index가 적용되지 않는 이슈가 발생했습니다. </strong></summary>
+<summary><strong>📌 조회/정렬 시 두개의 Index가 적용되지 않는 이슈가 발생했습니다. </strong></summary>
 <div markdown="1">       
 
 #### ❗ 문제상황
