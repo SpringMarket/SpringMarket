@@ -10,7 +10,7 @@
 
 
 
-✔ [Spring Market 이용해보기 Click!](https://www.notion.so/1-3b015d8a07d149148b5fea36c4035ceb) <br>
+✔ [Spring Market 이용해보기 Click!](https://spring-market.vercel.app/) <br>
 ✔ [Spring Market 팀 노션 Click!](https://www.notion.so/1-3b015d8a07d149148b5fea36c4035ceb)
 <br/><br/>
 # ⚙ InfraStructure 
@@ -29,7 +29,7 @@
 </details>
 
 # 🧬API
-👉 https://documenter.getpostman.com/view/23647730/2s8YzP3RB4
+👉 [Spring Market API Click!](https://documenter.getpostman.com/view/23647730/2s8YzP3RB4)
 
 
 # 🕹 Tech Stack
