@@ -29,7 +29,7 @@
 </details>
 
 # 🧬API
-👉 [Spring Market API Click!](https://documenter.getpostman.com/view/23647730/2s8YzP3RB4)
+✔ [Spring Market API Click!](https://documenter.getpostman.com/view/23647730/2s8YzP3RB4)
 
 
 # 🕹 Tech Stack
