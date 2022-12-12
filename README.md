@@ -196,7 +196,7 @@ Github 이벤트(ex. PR) 처리가 가능합니다.
   <details>
   <summary><strong> 7️⃣ AWS Elastic Beanstalk</strong></summary>
     <div markdown="1">
-
+<!--  -->
 - 다양한 인프라 서비스를 간편하게 사용할 수 있습니다.
 < 용량 프로비저닝, 로드 밸런싱, 모니터링, 협업 도구 >
 - Github에서 통합이 가능
