@@ -1,15 +1,12 @@
 package product.repository.admin;
 
-import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import product.dto.product.ProductDetailResponseDto;
 import product.dto.product.ProductRankResponseDto;
-import product.entity.product.Product;
 import product.entity.product.QProduct;
-import product.entity.product.QProductInfo;
 
 import java.util.List;
 
@@ -34,7 +31,7 @@ public class AdminQueryRepository {
                 ))
                 .where(qProduct.categoryId.eq(categoryId))
                 .orderBy(qProduct.view.desc())
-                .limit(1500)
+                .limit(5000)
                 .fetch();
     }
 
