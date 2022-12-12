@@ -400,6 +400,7 @@ Redis를 사용한 코드를 어느 환경에서든 바로 테스트가 가능�
 #### ❗ 문제상황
   - 상품 데이터의 빠른 조회와 DB 부하 분산을 위해 캐싱은 필수였습니다.
   - 하지만 TCP 기반으로 동작하는 Redis에 5,000 건의 데이터를 개별로 Input 하면서 Latency의 지연이 발생했습니다.
+  - ( 카테고리별 상위 5,000건의 상품 데이터를 캐싱하여 사용하고 있습니다. )
   - <strong>Request +5000 ( Redis 요청 5000건 발생)</strong>
   - ![1313](https://user-images.githubusercontent.com/112923814/207049796-b844c15d-4fba-4342-a256-65c6d6d1733b.png)
   - ![nonepipe 5000-](https://user-images.githubusercontent.com/112923814/207048644-36273836-353b-48b5-b3be-dc19f1b232ad.png)
