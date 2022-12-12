@@ -14,7 +14,8 @@
 <br/><br/>
 # ⚙ InfraStructure 
 
-<img src ="https://user-images.githubusercontent.com/112923814/206205534-6b2cf6e1-9461-4258-bbc1-f54b762be4b8.jpg"/></a>      
+![InfraStructure2](https://user-images.githubusercontent.com/112923814/207117134-890a5ce5-fc20-4b9b-a055-87cf071dd654.jpg)
+
 
 # ⛓ ERD
 <details>
