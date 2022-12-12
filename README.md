@@ -478,16 +478,18 @@ Redis를 사용한 코드를 어느 환경에서든 바로 테스트가 가능�
   
    1. <strong>DB 읽기 전용 복제본을 생성해 Read 요청을 분산합니다.</strong></br>
    2. <strong>Hikari Connection Pool 최적의 개수를 찾아야 했습니다.</strong></br>
-   > Cache Write Back 전략으로 조회수를 관리하고 있었기에 Connection Pool 확장이 필요했습니다.</br>
+   > Cache Write Back 전략으로 조회수를 관리하고 있었기에 Connection Pool 확장이 필요했습니다.
+   > RDS micro.t3 인스턴스의 성능을 고려한 확장이 필요했습니다. </br>
    3. <strong>Time_Wait 소켓의 최적화가 필요했습니다.</strong></br>
-   > 낮은 성능의 DB로 대규모 상품 데이터를 핸들링하는 상황이기에 남아있는 모든 소켓에서 요청마다
+   > 낮은 성능의 DB로 대규모 상품 데이터를 핸들링하는 상황이기에, 남아있는 모든 소켓에 요청마다
    > TCP handshake가 발생하는데에서 생기는 불필요한 성능 낭비를 없애야 했습니다.
 
   
 #### ✔ 결과
-  - Step 1. Main DB에는 Write 요청만을 동작시키고 Replica DB에 Read 동작을 분산 요청해 스트레스 테스트가 %%% ( CPU 안정화 )
-  - Step 2. Jmeter 부하테스트를 통해 에러율이 가장 낮아지는 Connection Pool Size를 찾았습니다.
-  > Default Size인 10개에서 20개로 확장하니 동시 주문 150건 기준 에러율이 300% 하락했습니다.   
+  - Step 1. Main DB에는 Write 요청만을 동작시키고 Replica DB에 Read 동작을 분산 동작시켜 부하를 분산했습니다.
+  - Step 2. Jmeter 부하테스트를 통해 에러율이 가장 낮아지는 Connection Pool Size가 20임을 발견했습니다.
+  > Default Size인 10개에서 20개로 확장하니 1초 동안 이루어지는 동시 주문 150건의 에러율이 371% 하락했습니다.
+  > ( Error 21.04% -> Error  5.67% )  
   - Step 3. KeepAlive 적용을 통해 매 요청마다 새로운 세션을 만들지 않고, 1024개의 세션을 연결한 뒤 그 연결을 통해 요청을 처리하게 만들었습니다.
 
 </div>
