@@ -17,6 +17,12 @@
 
 <img src ="https://user-images.githubusercontent.com/112923814/206205534-6b2cf6e1-9461-4258-bbc1-f54b762be4b8.jpg"/></a>      
 
+# ⚙ ERD
+<div markdown="1">     
+<br>
+<img src ="https://user-images.githubusercontent.com/95573777/206997790-92b26036-298a-489a-b187-347743e8ec2e.png"/>
+</div>
+
 
 
 # 🕹 Tech Stack
