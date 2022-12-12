@@ -269,7 +269,7 @@ Redis를 사용한 코드를 어느 환경에서든 바로 테스트가 가능�
 ## 🔥 주요 기능
 
 
-#### 조회 기능
+### ✔ 검색
 
 - <details><summary><strong> 📢 Latency 목표값 설정 기준 Click!</strong></summary><div markdown="1"></br><pre><strong>KISSmetrics는 고객의 47%가 2초 이내의 시간에 로딩이 되는 웹 페이지를 원하고 있으며, 40%는 로딩에 3초 이상 걸리는 페이지를 바로 떠난다고 설명했습니다.</strong></pre></br></div></details>
 - 메인 페이지의 로딩 속도는 플랫폼 첫 인상에 큰 영향을 주기에 100ms 이내를 목표했습니다.
@@ -323,7 +323,7 @@ Redis를 사용한 코드를 어느 환경에서든 바로 테스트가 가능�
 </details>
 <br/>
 
-#### 주문 기능
+### ✔ 주문
   - <details><summary><strong> 📢 동시성 제어 목표값 설정 기준 Click!</strong></summary><div markdown="1"></br><pre><strong>온라인 패션 스토어 무신사가 선보인 패션 특화 라이브 방송 ‘무신사 라이브’ 메종 키츠네 편이 방송 시작 5분 만에 매출 1억 원을 돌파했습니다.</br>동시 상품의 주문으로 가정했을 때 300초 동안 2000건의 주문이 발생한 상황입니다.</strong> (상품 가격 50,000원 기준)</pre></div></details>
   - 대규모 트래픽 상황에서 주문과 재고 데이터의 정합성은 서비스의 신뢰도에 큰 영향을 주고 있습니다.
   - 안정적인 동시성 제어를 위해 목표치를 '무신사 라이브' 메종 키츠네 편의 15배로 설정했습니다.
@@ -341,13 +341,13 @@ Redis를 사용한 코드를 어느 환경에서든 바로 테스트가 가능�
 </details>
 
 <details>
-<summary><strong> 2⃣ 최적의 Connection Pool Size 설정으로 데드락 문제 해결</strong></summary>
+<summary><strong> 2⃣ Connection Pool Size 설정으로 데드락 문제 해결</strong></summary>
 <div markdown="1">       
 <br>
   
   - Pessimistic Lock은 데드락 발생 가능성이 있었습니다.
   - 데드락을 피하는 Connection Pool Size 공식과 JMeter 부하테스트를 통해 데드락을 회피할 수 있으며</br>에러율이 가장 낮은 지점(20)을 발견하고 적용하였습니다.
-  - Default Connection Pool Size (10) 기준보다 에러율이 10% 하락했습니다.
+  - Default Connection Pool Size인 10개 기준보다 에러율이 10% 하락했습니다.
   
 </div>
 </details>
@@ -375,7 +375,7 @@ Redis를 사용한 코드를 어느 환경에서든 바로 테스트가 가능�
 ## 🎯 트러블 슈팅
 
 <details>
-<summary><strong>📌 조회/정렬 시 두개의 Index가 적용되지 않는 이슈가 발생했습니다. </strong></summary>
+<summary><strong>📌 조회/정렬 동작 시 두개의 Index가 적용되지 않는 이슈가 발생했습니다. </strong></summary>
 <div markdown="1">       
 
 #### ❗ 문제상황
@@ -388,23 +388,6 @@ Redis를 사용한 코드를 어느 환경에서든 바로 테스트가 가능�
  
 #### ✔ 결과
   - 키워드에 따른 속도 편차는 있지만 평균 500ms로 약 11,900%의 성능향상 효과를 얻었습니다.
-</div>
-</details>
-
-<details>
-<summary><strong>📌 쿼리문 동작 시 cross join이 발생하여 성능 이슈가 발생했습니다. </strong></summary>
-<div markdown="1">       
-
-#### ❗ 문제상황
-  - 조회 쿼리가 나갈 때 DB 로그를 보니 cross join이 발생한 것을 확인했습니다.
-  (cross join 은 카다시안곱을 수행하여 join하기 때문에 너무 많은 데이터를 가져와 성능이 저하됩니다.)
-  
-#### 💡 Solution :
-  - (inner join 명시적 사용) join을 명시적으로 사용하지 않은 쿼리문에서 자동으로 cross join이 발생되고 있었기 때문에 join이 필요한 테이블에 inner join을 추가하여 명시적으로 join을 해주었습니다.
- 
-#### ✔ 결과
-  - 조회 시 기존에 cross join으로 나가던 쿼리문이 inner join 바뀌었습니다.
-  - 200만건 기준 필터링 조회 시 평균 8초, 성능 200%까지 개선되었습니다. 
 </div>
 </details>
 
@@ -428,7 +411,6 @@ Redis를 사용한 코드를 어느 환경에서든 바로 테스트가 가능�
 ![warmup rank ](https://user-images.githubusercontent.com/112923814/206866707-21c54446-dd68-4b61-ba97-92056cf27581.png)
 
 
-
 </div>
 </details>
 
@@ -437,7 +419,8 @@ Redis를 사용한 코드를 어느 환경에서든 바로 테스트가 가능�
 <div markdown="1">       
   
 #### ❗ 문제상황
-  - 높은 트래픽이 발생할 때 조회가 일어날 때마다 발생하는 Update 쿼리는 서버에 큰 무리가 있었습니다. (CPU ?%)
+  - 높은 트래픽이 발생할 때 조회가 일어날 때마다 발생하는 Update 쿼리는 서버에 큰 무리가 있었습니다.
+  - 10초간 상품 상세 조회가 1만회 동작할 때 에러율이 62.31% 나왔습니다. 
   
 #### 💡 Solution : Cache Write Back
   - 조회수를 캐시에 모아 일정 주기 배치 작업을 통해 DB에 반영
@@ -446,8 +429,26 @@ Redis를 사용한 코드를 어느 환경에서든 바로 테스트가 가능�
   
 #### ✔ 결과
   - 클릭 시마다 발생했던 Update 쿼리 -> 1시간 주기로 배치작업
-  - 결과 자세하게 작성 필요.. (CPU ?%)
+  - 10초간 상품 상세 조회가 1만회 동작하는 상황에 에러율 0%를 달성했습니다.
 
+
+</div>
+</details>
+
+<details>
+<summary><strong>📌 쿼리문 동작 시 cross join이 발생하여 성능 이슈가 발생했습니다. </strong></summary>
+<div markdown="1">       
+
+#### ❗ 문제상황
+  - 조회 쿼리가 나갈 때 DB 로그를 보니 cross join이 발생한 것을 확인했습니다.
+  (cross join 은 카다시안곱을 수행하여 join하기 때문에 너무 많은 데이터를 가져와 성능이 저하됩니다.)
+  
+#### 💡 Solution :
+  - (inner join 명시적 사용) join을 명시적으로 사용하지 않은 쿼리문에서 자동으로 cross join이 발생되고 있었기 때문에 join이 필요한 테이블에 inner join을 추가하여 명시적으로 join을 해주었습니다.
+ 
+#### ✔ 결과
+  - 조회 시 기존에 cross join으로 나가던 쿼리문이 inner join 바뀌었습니다.
+  - 200만건 기준 필터링 조회 시 평균 8초, 성능 200%까지 개선되었습니다. 
 </div>
 </details>
 
