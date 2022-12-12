@@ -84,12 +84,13 @@
 </details>
 
 
+
 <details>
 <summary><strong>📣기술 & 라이브러리 사용 이유</strong></summary>
 <div markdown="1">   
   <br/>
   
-
+<!-- 
 |기술 스택| 사용 이유|
 |:--|:--|
 |Query DSL|현준|
@@ -104,11 +105,165 @@
 |Logback| 수영 |
 |Junit 5| 수영 |
 |TestContainer|제윤|
-|React|제윤|
+|React|제윤| -->
 
+ 
+  
+  <details>
+  <summary><strong> 1️⃣ Query DSL</strong></summary>
+    <div markdown="1">     
+    <br>
+      1. 동적인 쿼리 작성이 편리하다.
+        - 프로젝트 특성 상 조회 시 여러 가지 조건에 따라 동적으로 쿼리문이 실행되어야 하는 상황이 존재
+      2. 자동 완성 등 IDE의 도움을 받을 수 있다.<br/>
+      3. 문자가 아닌 코드로 쿼리를 작성함으로써, 컴파일 시점에 문법 오류를 쉽게 확인할 수 있다.
+        - 쿼리문을 작성하며 자동완성과 문법 오류를 검증할 수 있기 때문에 편리함
+      4. 쿼리 작성 시 제약 조건 등을 메서드 추출을 통해 재사용할 수 있다.
+        - 쿼리문이 길어지게 되면 가독성이 떨어지는데 메서드를 사용하여 재사용하여 쿼리문의 길이를 줄이면 가독성이 증가함
+    </div>
+  </details> 
+  
+  <details>
+  <summary><strong> 2️⃣ Full Text Search</strong></summary>
+    <div markdown="1">     
+    <br>
+1. 대용량 데이터를 조회하기 위해서는 like 키워드는 너무 성능이 떨어진다고 생각되어 인덱스를 사용하여 조회하는 full text index를 사용하면 조회 성능이 향상될 것으로 예상되어 사용하게 됬다.<br/>
+    -  1000만건이 되는 데이터의 키워드를 조회하려고 하기 like 키워드만으로 조회를 하기에는 한계가 있다는 것을 느꼈다. 1000만 건의 5분의 1 수준 200만건을 조회하는데도 32.09초가 걸려 목표로하는 2초 이내의 조회를 하기에는 많이 부족해 보여서 인덱스를 활용하여 조회하는 full-text-search를 도입하여 조회 성능을 향상시키고자 했다.
+    </div>
+  </details> 
+  
+  <details>
+  <summary><strong> 3️⃣ RDS- MySQL</strong></summary>
+    <div markdown="1">     
+    <br>
+대용량 데이터를 다루기 때문에 PostgreSQL과 MySQL 사이에서 고민을 했는데 MySQL을 선택한 이유에 대해서 작성해 보았다.
+
+1. 프로젝트 전 MySQL을 미리 학습한 경험이 있어 빠르게 마무리해야 하는 프로젝트 특성 상 다른 DB보다 빠르게 프로젝트에 적용이 가능하기 때문에 선택하게 됬다.
+2. 단순 CRUD 시 MySQL의 성능이 조금 더 우수하다. 
+    
+    PostgreSQL은 Update시 MySQL과는 다르게 변경 전 값을 삭제 마크처리 후 변경 후 값을 새 행으로 추가하는 방식으로 작업이 진행되기 때문에 Update의 성능이 떨어진다. 하지만 Update 기능이 많이 일어나는 프로젝트 특성 상 MySQL을 사용하는 것이 적합하다고 생각됐다. (그래서 PostgreSQL은 보통 Insert, Select 위주의 서비스에 사용된다)
+    
+
+3. 현업에서 MySQL의 점유율 높기 때문에 레퍼런스를 찾기 쉽다.
+    
+    PostgreSQL도 4위의 점유율과 급격하게 성장하고 있지만 MySQL은 전 세계 2위의 점유율을 가지고 있고 오랫동안 높은 점유율을 가지고 있기 때문에 개발을 처음 공부하는 입장으로서 많은 레퍼런스들을 참고 할 수 있다는 점에서 선택하였다.
+    
+4. 전문 검색 기능을 사용할 수 있다.
+    
+    MySQL 과 PostgreSQL 모두 ‘full-text-search’ 전문 검색 기능을 지원하고 있다.
+    </div>
+  </details> 
+  
+    
+  <details>
+  <summary><strong> 4️⃣ AWS ElastiCache for Redis</strong></summary>
+    <div markdown="1">     
+    <br>
+AWS 아키텍처로 구성된 프로젝트에서 최적화된 서비스와 
+팀 프로젝트 환경에서 효과적인 모니터링을 위해서 사용
+    </div>
+  </details> 
+  
+    
+  <details>
+  <summary><strong> 5️⃣ Faker & SQLAlchemy</strong></summary>
+    <div markdown="1">     
+    <br>
+1000만건 상품 데이터를 목표로 하였기 때문에 실제 의류 쇼핑몰 크롤링을 하기에는 무리가 있다고 판단하여 더미데이터 생성을 하기로 결정하였습니다.<br/>
+카테고리별로 다른 상품 이름, 사진을 생성해야 하고, 상품과 주문 생성일자가 Primary key인 id에 따라 증가하도록 데이터를 구성할 수 있어야 하고 생성한 대량의 데이터를 손쉽게 RDS MySQL DB로 보낼 수 있어야 했습니다.<br/>
+파이썬 Faker 라이브러리로 위 조건을 만족하는 더미데이터를 생성했고 Python과 MySQL을 연결시켜주는 라이브러리 mysqlclient를 설치하고 파이썬의 ORM인 SQLAlchemy를 이용하여 생성한 더미데이터 1000만 건을 데이터베이스에 입력했습니다.<br/>
+    </div>
+  </details> 
+  
+    
+    
+  <details>
+  <summary><strong> 6️⃣ Github Action</strong></summary>
+    <div markdown="1">     
+    <br>
+- 비용에 문제가 발생하지 않습니다.<br/>
+- 클라우드에서 동작하므로 서버 설치가 필요하지 않습니다.<br/>
+- Github Repository로 관리하는 프로젝트이기에 호환이 좋고 
+Github 이벤트(ex. PR) 처리가 가능합니다.<br/>
+- GitHub의 완전 관리 서비스이기에 사용이 편리하기에
+인프라를 관리하는데 드는 코스트를 낮출 수 있습니다.<br/>
+    </div>
+  </details> 
+  
+    
+    
+  <details>
+  <summary><strong> 7️⃣ AWS Elastic Beanstalk</strong></summary>
+    <div markdown="1">     
+    <br>
+- 다양한 인프라 서비스를 간편하게 사용할 수 있습니다.<br/>
+< 용량 프로비저닝, 로드 밸런싱, 모니터링, 협업 도구 ><br/>
+- Github에서 통합이 가능<br/>
+- 완전 관리형 서비스 사용으로 프로젝트에서 인프라에 사용하는 코스트를 낮출 수 있음<br/>
+    </div>
+  </details> 
+  
+    
+    
+  <details>
+  <summary><strong> 8️⃣ Logback</strong></summary>
+    <div markdown="1">     
+    <br>
+      개발 과정에서 문제 원인 파악 및 개발의 안정성 확보를 위해 콘솔 로그 외의 로그 관리의 필요성을 느꼈습니다.
+
+Spring Boot에서 로깅은 대표적으로 Log4j, Logback, Log4j2으로 로그 구현체를 사용합니다.
+Slf4j는 위 로깅 프레임워크에 대한 인터페이스 역할을 하는 라이브러리로 Slf4j를 이용하면 코드를 유지하면서 다른 로깅 프레임워크의 전환을 쉽고 간단하게 할 수 있습니다.
+스프링 부트에서는 Slf4j+Logback이 기본 설정입니다.
+
+Log4j는 가장 오래된 프레임워크이며 2015년에 단종되었기 때문에 선택지에서 제외하였습니다.
+Logback은 Log4j를 개발한 개발자가 개발한 Log4j의 후속 버전으로 지속적으로 업데이트되고 있습니다.
+      <br/>
+### Logback 장점
+
+- logback-classic의 Logger 클래스는 SLF4J의 API 스펙을 구현하므로 SLF4J의 API를 그대로 사용하여도 되는 이점이 있습니다.
+- 로깅시에 파일 입출력을 수행할 때 logback에서 로깅시 I/O 작업을 하다가 실패하는 경우 logback을 작동시키기 위해 어플리케이션을 재시작할 필요가 없습니다
+- FileAppender 및RollingFileAppender의 하위 클래스들은 I/O 오류를 자동 복구할 수 있습니다.
+- logback은 log4j가 제공하는것보다 훨씬 많은 필터링 기능을 제공합니다. 특정 사용자(특정 조건)에서의 로그레벨을 변경하는 등의 필터 정책을 사용할 수 있습니다
+- logback는 Groovy 코드를 통한 설정을 지원하는데, XML에서 사용하는 설정이 Groovy로 바뀌었을때 어떤식으로 사용되는지도 문서로 지원합니다.
+- logback은 세부적인 공식문서를 제공하며 지속적으로 업데이트됩니다
+
+Log4j2는 가장 최근에 나온 로깅 프레임워크로 logback과 마찬가지로 필터링 기능과 자동 리로드 기능을 가지고 있습니다. logback과의 가장 큰 차이점은 Multi Thread 환경에서 비동기 로거(Async Logger)의 경우 log4j, logback 보다 처리량이 더 높고, 대기 시간이 훨씬 짧습니다. 또한 람다 표현식과 사용자 정의 로그 레벨도 지원합니다.
+
+로깅으로 DB관련 로그, 에러 로그, api 통신 로그를 분리해 파일로 관리하는 것을 목표로 했기 때문에 스프링 기본 설정인 logback 사용을 결정하였습니다.
+
+ConsoleAppender로 Info레벨 이상 로그를 콘솔에 출력,
+RollingFileAppender로 Debug레벨 이상 DB관련 로그와 Warn레벨 이상 에러로그를 각각 다른 파일로 저장하고
+logback-access 모듈을 이용해 api 통신 관련 통신 로그 또한 파일로 저장하여 모니터링하였습니다.
+<!--     </div> -->
+  </details> 
+  
+    
+    
+  <details>
+  <summary><strong> 9️⃣ JUnit5 & Jacoco</strong></summary>
+    <div markdown="1">     
+    <br>
+ - Spring Boot 2.2.0 버전부터 JUnit5가 기본으로 채택되었으며 JUnit4보다 다양한 기능이 제공되어 JUnit5로 테스트 코드를 작성하였습니다.<br/>
+ - 컨트롤러 테스트는 @WebMvcTest 어노테이션으로 Web Layer에만 집중하여 테스트하였으며, 서비스 테스트는 모듈 간의 상호작용이 정상적으로 수행되는지 확인하기 위해 통합 테스트를 진행했습니다.<br/>
+ - JUnit 테스트 결과를 바탕으로 커버리지를 결과를 리포트해주는 Jacoco 라이브러리를 도입하여 구문 커버리지를 측정하며 안 쓰이는 코드와 어노테이션을 확인하며 리팩토링을 진행하였습니다.
+<!--     </div> -->
+  </details> 
+  
+      
+    
+  <details>
+  <summary><strong> 🔟 TestContainer</strong></summary>
+    <div markdown="1">     
+    <br>
+Redis를 사용한 코드를 어느 환경에서든 바로 테스트가 가능하게 하기 위해서 사용 
+<!--     </div> -->
+  </details> 
+  
+  
 </div>
 </details>
 <br/>
+
 
 ## 🔥 주요 기능
 
