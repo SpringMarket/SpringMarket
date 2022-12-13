@@ -48,14 +48,4 @@ public class AdminService {
         List<ProductRankResponseDto> list = adminQueryRepository.warmupRankingBoard(categoryId);
         for (int i=1; i<5; i++) adminRedisService.warmupRankingPipeLine(list, categoryId, i);
     }
-
-
-    // Warm UP -> Named Post << None PipeLine >>
-    @Transactional
-    public void warmup(Long categoryId) {
-        List<ProductDetailResponseDto> list = adminQueryRepository.warmupNamedPost(categoryId);
-        for (ProductDetailResponseDto product : list) {
-            adminRedisService.setProduct("product::" + product.getProductId(), product, Duration.ofDays(1));
-        }
-    }
 }

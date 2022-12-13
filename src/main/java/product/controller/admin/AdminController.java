@@ -39,12 +39,5 @@ public class AdminController {
         adminService.warmupPipeLine(categoryId);
         return success("SUCCESS ^__^ !!");
     }
-
-    // Warm UP -> Named Post
-    @GetMapping("/warmup/{categoryId}")
-    public Response warmup(@PathVariable Long categoryId) {
-        adminService.warmup(categoryId);
-        return success("SUCCESS ^__^ !!");
-    }
 }
 

@@ -196,17 +196,6 @@ class ProductServiceTest extends MysqlTestContainer {
         assertEquals(list.getTotalElements(),3);
     }
 
-    @Test
-    @DisplayName("키워드 조회 -> Default")
-    void findProductKeyword() {
-
-        Pageable pageable = Pageable.ofSize(10);
-        Page<ProductMainResponseDto> list = productService.findByKeyword(pageable, "_1");
-
-        assertEquals(list.getTotalElements(), 3);
-    }
-
-
 
     @Test
     @DisplayName("상품 상세 조회 -> Default")
@@ -293,6 +282,7 @@ class ProductServiceTest extends MysqlTestContainer {
     @Test
     @DisplayName("조회수 DB 업데이트")
     void updateDB(){
+        ValueOperations<String, String> values = StringredisTemplate.opsForValue();
         Product product_1 = productRepository.findByProductId(1L);
         int view_1 = product_1.getView();
 
@@ -300,13 +290,15 @@ class ProductServiceTest extends MysqlTestContainer {
         productService.countView(1L);
         productService.countView(1L);
 
-        productRedisService.UpdateViewRDS();
+        String view = values.get("productView::1");
 
-        Product product_2 = productRepository.findByProductId(1L);
-        int view_2 = product_2.getView();
+//        productRedisService.UpdateViewRDS();
+//
+//        Product product_2 = productRepository.findByProductId(1L);
+//        int view_2 = product_2.getView();
 
         assertEquals(view_1, 10);
-        assertEquals(view_2, 12);
+        assertEquals(view, "12");
     }
 
     @Test
