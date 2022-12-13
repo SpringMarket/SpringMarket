@@ -514,7 +514,10 @@ Redis를 사용한 코드를 어느 환경에서든 바로 테스트가 가능�
     <tr>
       <td align="center"><a href="https://github.com/JeyunSong"><img src="https://user-images.githubusercontent.com/87157566/207309118-7b605a47-bd31-44ff-806c-dc6aef3d85f9.jpg" width="200px;" /><br /><sub><b>송제윤</b></sub></a><br /></td>
       <td align="center"><a href="https://github.com/kyebalza"><img src="https://user-images.githubusercontent.com/87157566/207311363-ce5707ee-5679-44e3-a955-7642771be89d.jpg" width="200px;" /><br /><sub><b>계현준</b></sub></a><br /></td>
-      <td align="center"><a href="https://github.com/Suyoung225"><img src="https://user-images.githubusercontent.com/87157566/207311444-fe1fab93-0f91-4684-8b4f-ca8884e8a77f.jpg" width="200px; "/><br /><sub><b>윤수영</b></sub></a><br /></td>
+      <td align="center"><a href="https://github.com/Suyoung225"><img src="https://user-images.githubusercontent.com/87157566/207468174-6be4110a-40f2-471b-97ca-b64dda0c8b24.jpg" width="200px; "/><br /><sub><b>윤수영</b></sub></a><br /></td>
      <tr/>
   </tbody>
 </table>
+
+
+
