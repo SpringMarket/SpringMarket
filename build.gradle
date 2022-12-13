@@ -38,7 +38,7 @@ jacocoTestReport {
 
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it,
-                    exclude: [] + Qdomains)
+                    exclude: [] + Qdomains + ['/product/config*'] + ['*.*fulltestsearch.*'] + ['/product/dto*'] + ['/product/entity*'] + ['/product/ProductApplication*'] + ['*.*querydsl.*'])
         }))
     }
 
@@ -63,7 +63,7 @@ tasks.jacocoTestCoverageVerification {
                 minimum = "0.00".toBigDecimal()
             }
 
-            excludes = ['*.*querydsl.*'] + Qdomains
+            excludes = [ ['*.*querydsl.*'] + ['*.*fulltestsearch.*'] + ['/product/config*'] + ['/product/dto*'] + ['/product/entity*'] + ['/product/ProductApplication*'] ] + Qdomains
         }
     }
 

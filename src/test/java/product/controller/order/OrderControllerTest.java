@@ -68,7 +68,7 @@ class OrderControllerTest extends MysqlTestContainer {
                         .content(content)
                         .contentType("application/json")
                         .characterEncoding("UTF-8"))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isNotFound());
     }
 
     @Test

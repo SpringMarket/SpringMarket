@@ -56,13 +56,4 @@ public class ProductController {
         log.info(id+"번 상품 조회");
         return success(productService.findProduct(id));
     }
-
-    // 상세 페이지 테스트
-    @GetMapping("/products/test/{id}")
-    public Response findProductTest(@PathVariable Long id) {
-        // productService.countView(id);
-        log.info(id+"번 상품 조회");
-        productService.viewTest(id);
-        return success(productService.findProduct(id));
-    }
 }
