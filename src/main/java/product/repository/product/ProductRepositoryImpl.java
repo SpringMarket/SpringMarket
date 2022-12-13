@@ -182,7 +182,6 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
     // 정렬
     private OrderSpecifier<?> sorting(String sorting) {
-        if (StringUtils.isNullOrEmpty(sorting)) return qProduct.view.asc();
         if (!sorting.equals("조회순")) return qProduct.productId.desc();
         return qProduct.view.asc();
     }

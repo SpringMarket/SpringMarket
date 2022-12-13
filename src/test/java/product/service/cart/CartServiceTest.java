@@ -428,4 +428,20 @@ class CartServiceTest extends RedisTestContainer {
         // THEN
         assertEquals("요청하신 자료를 찾을 수 없습니다.", message);
     }
+
+    @Test
+    @WithMockUser(username = "Cart::13")
+    @DisplayName("<13> 카트에 상품 추가 -> Access Denied")
+    void addCartAccessDenied() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        userRepository.deleteAll();
+
+        RequestException exception = assertThrows(RequestException.class, ()-> {
+            cartService.addCart(1L, authentication); });
+        String message = exception.getMessage();
+
+        // THEN
+        assertEquals("로그인 후 사용해주세요.", message);
+    }
 }

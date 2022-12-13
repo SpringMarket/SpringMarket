@@ -175,7 +175,7 @@ class ProductServiceTest extends MysqlTestContainer {
         Long minPrice = 0L;
         Long maxPrice = 99999L;
         String keyword = "Test";
-        String sort = "조회순";
+        String sort = "날짜순";
         Page<ProductMainResponseDto> list =  productService.findAllProduct(pageable, categoryId, stock, minPrice, maxPrice, keyword, sort);
 
         assertEquals(list.getTotalElements(),3);
@@ -194,8 +194,58 @@ class ProductServiceTest extends MysqlTestContainer {
         Page<ProductMainResponseDto> list =  productService.findAllProduct(pageable, categoryId, stock, minPrice, maxPrice, keyword, sort);
 
         assertEquals(list.getTotalElements(),3);
+
+    }
+    @Test
+    @DisplayName("상품 필터링 조회 -> Empty Result")
+    void findAllProductEmpty() {
+
+        Pageable pageable = Pageable.ofSize(10);
+        Long categoryId = 3L;
+        String stock = "1";
+        Long minPrice = 0L;
+        Long maxPrice = 1000L;
+        String keyword = "Test";
+        String sort = "조회순";
+
+        RequestException exception = assertThrows(RequestException.class, ()-> {
+            productService.findAllProduct(pageable, categoryId, stock, minPrice, maxPrice, keyword, sort); });
+        String message = exception.getMessage();
+
+        // THEN
+        assertEquals("조회된 상품이 없습니다.", message);
+
     }
 
+    @Test
+    @DisplayName("상품 키워드 조회 -> Keyword zero word")
+    void findByKeywordZeroWord() {
+        Pageable pageable = Pageable.ofSize(10);
+        String keyword = "";
+
+        // WHEN
+        RequestException exception = assertThrows(RequestException.class, ()-> {
+            productService.findByKeyword(pageable, keyword); });
+        String message = exception.getMessage();
+
+        // THEN
+        assertEquals("키워드를 작성해주세요.", message);
+    }
+
+    @Test
+    @DisplayName("상품 키워드 조회 -> Keyword one word")
+    void findByKeywordOneWord() {
+        Pageable pageable = Pageable.ofSize(10);
+        String keyword = "하";
+
+        // WHEN
+        RequestException exception = assertThrows(RequestException.class, ()-> {
+            productService.findByKeyword(pageable, keyword); });
+        String message = exception.getMessage();
+
+        // THEN
+        assertEquals("두 글자 이상부터 검색이 가능합니다.", message);
+    }
 
     @Test
     @DisplayName("상품 상세 조회 -> Default")
