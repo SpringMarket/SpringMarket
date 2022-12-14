@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import product.MysqlTestContainer;
 import product.config.jwt.TokenProvider;
@@ -25,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 @Transactional
 @ExtendWith(MockitoExtension.class)
+@ActiveProfiles("test")
 class AuthServiceTest extends MysqlTestContainer {
 
     @Autowired

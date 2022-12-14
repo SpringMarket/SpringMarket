@@ -14,6 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import product.config.jwt.JwtAccessDeniedHandler;
 import product.config.jwt.JwtAuthenticationEntryPoint;
@@ -32,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = ProductController.class)
 @AutoConfigureMockMvc(addFilters = false)
+@ActiveProfiles("test")
 class ProductControllerTest {
     @Autowired
     private MockMvc mvc;

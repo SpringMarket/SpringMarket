@@ -6,9 +6,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -23,6 +25,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Configuration
+@Profile("!test")
 @RequiredArgsConstructor
 // DataSource를 직접 설정해야하기 때문에 자동으로 DataSource를 연결하는 DataSourceAutoConfiguration 클래스를 제외
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})

@@ -55,3 +55,49 @@ spring:
 # JWT
 jwt:
   secret: c3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LXR1dG9yaWFsLWppd29vbi1zcHJpbmctYm9vdC1zZWN1cml0eS1qd3QtdHV0b3JpYWwK
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  # JPA
+  jpa:
+    generate-ddl: 'true'
+    properties:
+      hibernate:
+        dialect: product.config.query.MySQL8DialectCustom
+        format_sql: 'true'
+        physical_naming_strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+        defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+
+
+  # DB
+  datasource:
+    hikari:
+      leak-detection-threshold: '2000'
+      maximum-pool-size: 20
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/sys
+
+
+  # REDIS
+  redis:
+    host: localhost
+    port: 6379
+
+  # SWAGGER
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+
+# JWT
+jwt:
+  secret: c3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LXR1dG9yaWFsLWppd29vbi1zcHJpbmctYm9vdC1zZWN1cml0eS1qd3QtdHV0b3JpYWwK

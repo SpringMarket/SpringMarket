@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import product.MysqlTestContainer;
 import product.dto.product.ProductDetailResponseDto;
@@ -35,6 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Transactional
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ActiveProfiles("test")
 class ProductServiceTest extends MysqlTestContainer {
 
     @Autowired
