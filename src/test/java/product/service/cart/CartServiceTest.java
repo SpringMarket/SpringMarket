@@ -5,12 +5,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import product.RedisTestContainer;
 import product.dto.order.OrderRequestDto;
@@ -26,6 +28,7 @@ import product.repository.product.CategoryRepository;
 import product.repository.product.ProductInfoRepository;
 import product.repository.product.ProductRepository;
 import product.repository.user.UserRepository;
+import product.service.order.OrderService;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -35,11 +38,14 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 @Transactional
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ActiveProfiles("test")
 class CartServiceTest extends RedisTestContainer {
 
     @Autowired
@@ -49,6 +55,8 @@ class CartServiceTest extends RedisTestContainer {
     private RedisTemplate<String, List<Long>> redisTemplate;
     @Autowired
     private CartService cartService;
+    @MockBean
+    private OrderService orderService;
     @Autowired
     ProductRepository productRepository;
     @Autowired
@@ -364,12 +372,15 @@ class CartServiceTest extends RedisTestContainer {
         // WHEN
         cartService.orderCart(authentication, orderList);
 
-        Orders order = orderRepository.findByOrderId(1L);
-        Orders orderOrder = orderRepository.findByOrderId(2L);
+//        Orders order = orderRepository.findByOrderId(1L);
+//        Orders orderOrder = orderRepository.findByOrderId(2L);
 
         // THEN
-        assertEquals(order.getProduct().getTitle(), "Test_1");
-        assertEquals(orderOrder.getProduct().getTitle(), "Test_2");
+//        assertEquals(order.getProduct().getTitle(), "Test_1");
+//        assertEquals(orderOrder.getProduct().getTitle(), "Test_2");
+        verify(orderService,times(1)).orderProduct(1L,1L,authentication);
+        verify(orderService,times(1)).orderProduct(2L,1L,authentication);
+
     }
 
     @Test

@@ -4,14 +4,17 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import product.MysqlTestContainer;
+import product.config.rds.DbConfig;
 import product.dto.order.MyPageResponseDto;
 import product.entity.order.Orders;
 import product.entity.product.Product;
@@ -37,7 +40,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Transactional
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(MockitoExtension.class)
-class OrderServiceTest extends MysqlTestContainer {
+@ActiveProfiles("test")
+class OrderServiceTest extends MysqlTestContainer{
 
     @Autowired
     private OrderService orderService;
