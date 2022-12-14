@@ -29,6 +29,7 @@ import product.repository.user.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -115,6 +116,13 @@ class CartServiceTest extends RedisTestContainer {
     @DisplayName("<1> 카트에 상품 추가 -> Default")
     void addCart() {
         // GIVEN
+        User user = User.builder()
+                .email("Cart::1")
+                .password("password")
+                .age("20대")
+                .authority(Authority.ROLE_USER)
+                .build();
+        userRepository.save(user);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         ValueOperations<String, List<Long>> values = redisTemplate.opsForValue();
 
@@ -193,6 +201,13 @@ class CartServiceTest extends RedisTestContainer {
     @DisplayName("<4> 카트에 상품 추가 -> Not Exist Data")
     void addCartNotExistData(){
         // GIVEN
+        User user = User.builder()
+                .email("Cart::4")
+                .password("password")
+                .age("20대")
+                .authority(Authority.ROLE_USER)
+                .build();
+        userRepository.save(user);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long productId_1 = -1L;
 
@@ -214,12 +229,19 @@ class CartServiceTest extends RedisTestContainer {
         // GIVEN
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         ValueOperations<String, List<Long>> values = redisTemplate.opsForValue();
-        Long productId_1 = 1L;
 
-        // WHEN
-        cartService.addCart(productId_1, authentication);
+        List<Long> longList = new ArrayList<>();
+        longList.add(1L);
+
+        values.set("cart::Cart::5", longList);
         List<Long> list1 = values.get("cart::Cart::5");
 
+
+
+        // WHEN
+//        cartService.addCart(productId_1, authentication);
+//        List<Long> list1 = values.get("cart::Cart::5");
+        Long productId_1 = 1L;
         cartService.deleteCart(productId_1, authentication);
         List<Long> list2 = values.get("cart::Cart::5");
 
@@ -372,7 +394,7 @@ class CartServiceTest extends RedisTestContainer {
         String message = exception.getMessage();
 
         // THEN
-        assertEquals("요청하신 자료를 찾을 수 없습니다.", message);
+        assertEquals("주문 리스트에 담긴 상품이 없습니다.", message);
     }
 
     @Test
@@ -405,5 +427,21 @@ class CartServiceTest extends RedisTestContainer {
 
         // THEN
         assertEquals("요청하신 자료를 찾을 수 없습니다.", message);
+    }
+
+    @Test
+    @WithMockUser(username = "Cart::13")
+    @DisplayName("<13> 카트에 상품 추가 -> Access Denied")
+    void addCartAccessDenied() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        userRepository.deleteAll();
+
+        RequestException exception = assertThrows(RequestException.class, ()-> {
+            cartService.addCart(1L, authentication); });
+        String message = exception.getMessage();
+
+        // THEN
+        assertEquals("로그인 후 사용해주세요.", message);
     }
 }

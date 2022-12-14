@@ -39,6 +39,9 @@ public class OrderService {
 
         if(orderNum < 1) throw new RequestException(ORDER_NUM_EXCEPTION);
 
+        Product productTest = productRepository.findByProductId(productId);
+        if( productTest == null ) throw new RequestException(NOT_FOUND_EXCEPTION);
+
         User user = getUser(authentication);
 
         Product product = productModify(productId, orderNum, user.getAge());

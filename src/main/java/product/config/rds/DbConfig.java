@@ -1,6 +1,7 @@
 package product.config.rds;
 
 import com.zaxxer.hikari.HikariDataSource;
+import jdk.jfr.Enabled;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;

@@ -2,19 +2,12 @@ package product.controller.admin;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import product.entity.user.Authority;
-import product.exception.RequestException;
 import product.response.Response;
 import product.service.admin.AdminService;
 
-import java.util.Objects;
-
-import static product.exception.ExceptionType.NOT_FOUND_EXCEPTION;
 import static product.response.Response.success;
 
 @Slf4j
@@ -37,13 +30,6 @@ public class AdminController {
     public Response warmupPipeLine(@PathVariable Long categoryId) {
 
         adminService.warmupPipeLine(categoryId);
-        return success("SUCCESS ^__^ !!");
-    }
-
-    // Warm UP -> Named Post
-    @GetMapping("/warmup/{categoryId}")
-    public Response warmup(@PathVariable Long categoryId) {
-        adminService.warmup(categoryId);
         return success("SUCCESS ^__^ !!");
     }
 }

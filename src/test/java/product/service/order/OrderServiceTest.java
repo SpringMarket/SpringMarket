@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.transaction.annotation.Transactional;
+import product.MysqlTestContainer;
 import product.dto.order.MyPageResponseDto;
 import product.entity.order.Orders;
 import product.entity.product.Product;
@@ -36,7 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Transactional
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(MockitoExtension.class)
-class OrderServiceTest{
+class OrderServiceTest extends MysqlTestContainer {
 
     @Autowired
     private OrderService orderService;
@@ -293,7 +294,7 @@ class OrderServiceTest{
         String message = exception.getMessage();
 
         // THEN
-        assertEquals("접근 권한이 없습니다.", message);
+        assertEquals("로그인 후 사용해주세요.", message);
     }
 
     @Test
@@ -323,7 +324,7 @@ class OrderServiceTest{
         String message = exception.getMessage();
 
         // THEN
-        assertEquals("주문 완료된 상품은 취소가 불가능합니다.", message);
+        assertEquals("주문이 완료되거나 취소된 상품입니다.", message);
     }
 
     @Test
@@ -353,7 +354,7 @@ class OrderServiceTest{
         String message = exception.getMessage();
 
         // THEN
-        assertEquals("주문 완료된 상품은 취소가 불가능합니다.", message);
+        assertEquals("주문이 완료되거나 취소된 상품입니다.", message);
     }
 
     @Test
@@ -383,6 +384,53 @@ class OrderServiceTest{
         // THEN
         assertEquals("요청하신 자료를 찾을 수 없습니다.", message);
     }
+
+    @Test
+    @WithMockUser(username = "Order::10")
+    @DisplayName("<8> 주문 목록 조회 -> Access Denied")
+    void myPageAccessDenied() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        userRepository.deleteAll();
+
+        Pageable pageable = Pageable.ofSize(10);
+
+        RequestException exception = assertThrows(RequestException.class, ()-> {
+            orderService.myPage(pageable, authentication); });
+        String message = exception.getMessage();
+
+        // THEN
+        assertEquals("로그인 후 사용해주세요.", message);
+    }
+
+    @Test
+    @WithMockUser(username = "Order::11")
+    @DisplayName("<9> 상품 주문 -> Order Num Exception")
+    void orderProductOrderNum() {
+
+        // GIVEN
+        User user = User.builder()
+                .email("Order::11")
+                .password("password")
+                .age("20대")
+                .authority(Authority.ROLE_USER)
+                .build();
+        userRepository.save(user);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Long productId = 999L;
+        Long orderNum = 0L;
+
+        // WHEN
+        RequestException exception = assertThrows(RequestException.class, ()-> {
+            orderService.orderProduct(productId, orderNum, authentication); });
+        String message = exception.getMessage();
+
+        // THEN
+        assertEquals("주문 수량을 확인해주세요.", message);
+    }
+}
 
 //    @Test
 //    @DisplayName("주문 취소")
@@ -420,4 +468,3 @@ class OrderServiceTest{
 //        assertThat(product).isEqualTo(productCheck);
 //        assertThat(product.getStock().getStock()).isEqualTo(10);
 //    }
-}

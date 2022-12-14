@@ -47,7 +47,6 @@ public class CartService { // Redis 테스트 코드 : 제윤
 
 
     public void deleteCart(Long productId, Authentication authentication){
-
         String key = "cart::" + authentication.getName();
         cartRedisService.deleteCart(key, productId);
     }

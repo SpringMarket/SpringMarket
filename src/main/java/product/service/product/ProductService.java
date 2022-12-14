@@ -86,10 +86,4 @@ public class ProductService {
         log.info("View Increment");
         productRedisService.incrementView(key, productId);
     }
-
-    @Transactional
-    public void viewTest(Long productId) {
-        Product product = productRepository.findByProductId(productId);
-        product.viewTest();
-    }
 }
