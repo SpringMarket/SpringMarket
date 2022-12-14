@@ -432,6 +432,9 @@ logback-access 모듈을 이용해 api 통신 관련 통신 로그 또한 파일
   - ![10,000 view redis1](https://user-images.githubusercontent.com/112923814/207050998-1e314ddd-4fee-49f4-9b76-157514757c0c.png)
   - ![10,000 view redis graph](https://user-images.githubusercontent.com/112923814/207051036-38937920-808d-4bf0-9414-2a4f4504a93c.png)
 
+</div>
+</details>
+
 <details>
 <summary><strong>📌 조회/정렬 동작 시 두개의 Index가 적용되지 않는 이슈가 발생했습니다. </strong></summary>
 <div markdown="1">       
@@ -448,9 +451,6 @@ logback-access 모듈을 이용해 api 통신 관련 통신 로그 또한 파일
   - 키워드에 따른 속도 편차는 발생하지만 평균 500ms로 성능의 안정화를 이루었습니다. 
   - ( 약 11,900%의 성능향상 효과를 얻었습니다. ) </br>
   
-</div>
-</details>
-
 </div>
 </details>
 
