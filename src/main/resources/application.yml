@@ -89,8 +89,8 @@ spring:
 
   # REDIS
   redis:
-    host: localhost
-    port: 6379
+    host: ${SPRING_REDIS_HOST}
+    port: ${SPRING_REDIS_PORT}
 
   # SWAGGER
   mvc:
