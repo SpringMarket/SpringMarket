@@ -23,23 +23,10 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '11'
-          
-      - name: Setup MySQL
-        uses: samin/mysql-action@v1
-        with:
-          character set server: 'utf8' 
-          mysql database: 'db' 
-          mysql user: 'user'
-          mysql password: 1234
-          
-      - name: Start Redis
-        uses: supercharge/redis-github-action@1.1.0
-        with:
-          redis-version: 6
 
       - name: Grant execute permission for gradlew
         working-directory: ./
-        run: chmod +x ./gradlew -x test
+        run: chmod +x ./gradlew
         shell: bash
         
       - name: cache
@@ -55,7 +42,7 @@ jobs:
 
       - name: Build with Gradle
         working-directory: ./
-        run: ./gradlew build
+        run: ./gradlew build -x test
         shell: bash
 
 
