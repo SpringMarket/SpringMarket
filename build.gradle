@@ -22,6 +22,29 @@ tasks.withType(Test) {
     useJUnitPlatform()
 }
 
+jacocoTestReport {
+    reports {
+        html.enabled true
+        xml.enabled false
+        csv.enabled true
+    }
+
+    def Qdomains = []
+    for(qPattern in "**/QA" .. "**/QZ"){
+        Qdomains.add(qPattern+"*")
+    }
+
+    afterEvaluate {
+
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it,
+                    exclude: [] + Qdomains + ['/product/config*'] + ['*.*fulltestsearch.*'] + ['/product/dto*'] + ['/product/entity*'] + ['/product/ProductApplication*'] + ['*.*querydsl.*'])
+        }))
+    }
+
+    finalizedBy 'jacocoTestCoverageVerification'
+}
+
 tasks.jacocoTestCoverageVerification {
 
     def Qdomains = []
@@ -34,16 +57,16 @@ tasks.jacocoTestCoverageVerification {
     violationRules {
         rule {
             element = "CLASS"
-
             limit {
                 counter = "LINE"
                 value = "COVEREDRATIO"
+//                minimum = 0.7
                 minimum = "0.00".toBigDecimal()
             }
-
-            excludes = [] + Qdomains
+            excludes =[ ['/product/config*'] + ['*.*fulltestsearch.*'] + ['/product/dto*'] + ['/product/entity*'] + ['/product/ProductApplication*'] + ['*.*querydsl.*'] ] + Qdomains
         }
     }
+
 }
 
 

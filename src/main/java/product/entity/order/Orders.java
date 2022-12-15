@@ -45,15 +45,6 @@ public class Orders {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
-
-    // 이 코드 누가 짰어요 ??
-    public String changeStatus(Orders orders){
-        if (LocalDateTime.now().isBefore(orders.getOrderTime().plusDays(7))) {
-            this.orderStatus = "배송완료";
-        }
-        return orderStatus;
-    }
-
     public void cancel(){
         this.orderStatus = "주문취소";
     }

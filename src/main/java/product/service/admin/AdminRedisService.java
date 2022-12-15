@@ -65,16 +65,4 @@ public class AdminRedisService {
         }
         return i.getOver_forty();
     }
-
-/*    // 상품 상세 페이지 캐싱 -> NonePipeLine
-    public void setProduct(String key, ProductDetailResponseDto data, Duration duration) {
-        ValueOperations<String, ProductDetailResponseDto> values = redisTemplateDetailDto.opsForValue();
-        values.set(key, data, duration);
-    }
-
-    // 랭킹보드 캐싱 -> NonePipeLine
-    public void setRankingBoard(String key, ProductMainResponseDto data, double score) {
-        ZSetOperations<String, ProductMainResponseDto> values = redisTemplateMainDto.opsForZSet();
-        values.add(key, data, score);
-    }*/
 }

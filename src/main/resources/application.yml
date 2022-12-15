@@ -24,18 +24,23 @@ spring:
   datasource:
     hikari:
       leak-detection-threshold: '2000'
+      maximum-pool-size: 20
     username: ${RDS_USERNAME}
     password: ${RDS_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://${RDS_HOSTNAME}:${RDS_PORT}/${RDS_DB_NAME}
 
 
-    # Replica
-#    replica-list:
-#      - name: replica_1
-#        url: ${RDS_REPLICA_HOSTNAME_1}
-#      - name: replica_2
-#        url: ${RDS_REPLICA_HOSTNAME_2}
+    #Replica
+    replica-list:
+      - name: replica_1
+        url: ${RDS_REPLICA_HOSTNAME_1}
+      - name: replica_2
+        url: ${RDS_REPLICA_HOSTNAME_2}
+      - name: replica_3
+        url: ${RDS_REPLICA_HOSTNAME_3}
+      - name: replica_4
+        url: ${RDS_REPLICA_HOSTNAME_4}
 
   # REDIS
   redis:
@@ -46,6 +51,52 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+
+# JWT
+jwt:
+  secret: c3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LXR1dG9yaWFsLWppd29vbi1zcHJpbmctYm9vdC1zZWN1cml0eS1qd3QtdHV0b3JpYWwK
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  # JPA
+  jpa:
+    generate-ddl: 'true'
+    properties:
+      hibernate:
+        dialect: product.config.query.MySQL8DialectCustom
+        format_sql: 'true'
+        physical_naming_strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+        defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+
+
+  # DB
+  datasource:
+    hikari:
+      leak-detection-threshold: '2000'
+      maximum-pool-size: 20
+    username: ${TEST_USERNAME}
+    password: ${TEST_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${TEST_URL}
+
+
+  # REDIS
+  redis:
+    host: ${SPRING_REDIS_HOST}
+    port: ${SPRING_REDIS_PORT}
+
+  # SWAGGER
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
 
 # JWT
 jwt:

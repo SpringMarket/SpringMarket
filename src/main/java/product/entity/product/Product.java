@@ -51,6 +51,10 @@ public class Product {
     }
     public void cancelChangeStock(Long orderNum) { this.stock += orderNum;}
 
+    public void viewTest(){
+        this.view += 1;
+    }
+
 
     @Column(nullable = false)
     private Long categoryId;
