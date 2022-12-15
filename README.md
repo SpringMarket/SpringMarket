@@ -5,7 +5,9 @@
 
 
 # 🌏 프로젝트 소개
+
 - **1000만건의 상품 데이터가 있는 상황에서 사용자 편의성을 극대화 해보고자 했습니다.**
+
 
 
 
@@ -131,13 +133,10 @@
   <summary><strong> 1️⃣ Query DSL</strong></summary>
     <div markdown="1"> 
       
-1. 동적인 쿼리 작성이 편리하다.
-      -  프로젝트 특성 상 조회 시 여러 가지 조건에 따라 동적으로 쿼리문이 실행되어야 하는 상황이 존재
-2. 자동 완성 등 IDE의 도움을 받을 수 있다.
-3. 문자가 아닌 코드로 쿼리를 작성함으로써, 컴파일 시점에 문법 오류를 쉽게 확인할 수 있다.
-      - 쿼리문을 작성하며 자동완성과 문법 오류를 검증할 수 있기 때문에 편리함
-4. 쿼리 작성 시 제약 조건 등을 메서드 추출을 통해 재사용할 수 있다.
-      - 쿼리문이 길어지게 되면 가독성이 떨어지는데 메서드를 사용하여 재사용하여 쿼리문의 길이를 줄이면 가독성이 증가함
+1. 동적인 쿼리 작성이 필요했습니다.
+2. 자동 완성 등 IDE의 도움을 받을 수 있어 편리합니다.
+3. 문자가 아닌 코드로 쿼리를 작성함으로써, 컴파일 시점에 문법 오류를 쉽게 확인할 수 있어 더욱 안전합니다.
+4. 쿼리 작성 시 제약 조건 등을 메서드 추출을 통해 재사용할 수 있었고 가독성이 좋아졌습니다.
       
   </details> 
   
@@ -145,8 +144,7 @@
   <summary><strong> 2️⃣ Full Text Search</strong></summary>
     <div markdown="1">     
       
-  - 대용량 데이터를 조회하기 위해서는 like 키워드는 너무 성능이 떨어진다고 생각되어 인덱스를 사용하여 조회하는 full text index를 사용하면 조회 성능이 향상될 것으로 예상되어 사용하게 됬다.
-  - 1000만건이 되는 데이터의 키워드를 조회하려고 하기 like 키워드만으로 조회를 하기에는 한계가 있다는 것을 느꼈다. 1000만 건의 5분의 1 수준 200만건을 조회하는데도 32.09초가 걸려 목표로하는 2초 이내의 조회를 하기에는 많이 부족해 보여서 인덱스를 활용하여 조회하는 full-text-search를 도입하여 조회 성능을 향상시키고자 했다.
+  - 대용량 데이터에서 빠른 키워드 조회를 위해 사용했습니다.
       
     </div>
   </details> 
@@ -155,21 +153,19 @@
   <summary><strong> 3️⃣ RDS- MySQL</strong></summary>
     <div markdown="1">     
     <br>
-대용량 데이터를 다루기 때문에 PostgreSQL과 MySQL 사이에서 고민을 했는데 MySQL을 선택한 이유에 대해서 작성해 보았다.
+    
+- 대용량 데이터를 다루기 때문에 PostgreSQL과 MySQL 사이에서 고민을 했는데 MySQL을 선택한 이유에 대해서 작성해 보았습니다.
 
-1. 프로젝트 전 MySQL을 미리 학습한 경험이 있어 빠르게 마무리해야 하는 프로젝트 특성 상 다른 DB보다 빠르게 프로젝트에 적용이 가능하기 때문에 선택하게 됬다.
-2. 단순 CRUD 시 MySQL의 성능이 조금 더 우수하다. 
+1. 프로젝트 전 MySQL을 미리 학습한 경험이 있어 빠르게 마무리해야 하는 프로젝트 특성 상 다른 DB보다 빠르게 프로젝트에 적용이 가능하기 때문에 선택했습니다.
+2. 단순 CRUD 시 MySQL의 성능이 조금 더 우수했습니다.
     
-    PostgreSQL은 Update시 MySQL과는 다르게 변경 전 값을 삭제 마크처리 후 변경 후 값을 새 행으로 추가하는 방식으로 작업이 진행되기 때문에 Update의 성능이 떨어진다. 하지만 Update 기능이 많이 일어나는 프로젝트 특성 상 MySQL을 사용하는 것이 적합하다고 생각됐다. (그래서 PostgreSQL은 보통 Insert, Select 위주의 서비스에 사용된다)
+    PostgreSQL은 Update시 MySQL과는 다르게 변경 전 값을 삭제 마크처리 후 변경 후 값을 새 행으로 추가하는 방식으로 작업이 진행되기 때문에 Update의 성능이 떨어졌고, Update 기능이 많이 일어나는 프로젝트 특성 상 MySQL을 사용하는 것이 적합하다고 생각했습니다. (그래서 PostgreSQL은 보통 Insert, Select 위주의 서비스에 사용된다고 합니다.)
     
 
-3. 현업에서 MySQL의 점유율 높기 때문에 레퍼런스를 찾기 쉽다.
+3. 현업에서 MySQL의 점유율 높기 때문에 레퍼런스를 찾기 쉬웠습니다.
     
-    PostgreSQL도 4위의 점유율과 급격하게 성장하고 있지만 MySQL은 전 세계 2위의 점유율을 가지고 있고 오랫동안 높은 점유율을 가지고 있기 때문에 개발을 처음 공부하는 입장으로서 많은 레퍼런스들을 참고 할 수 있다는 점에서 선택하였다.
-    
-4. 전문 검색 기능을 사용할 수 있다.
-    
-    MySQL 과 PostgreSQL 모두 ‘full-text-search’ 전문 검색 기능을 지원하고 있다.
+    PostgreSQL도 4위의 점유율과 급격하게 성장하고 있지만 MySQL은 전 세계 2위의 점유율을 가지고 있고 오랫동안 높은 점유율을 가지고 있기 때문에 개발을 공부하는 입장으로서 많은 레퍼런스들을 참고 할 수 있다는 점에서 선택하였습니다.
+   
     </div>
   </details> 
   
@@ -177,8 +173,8 @@
   <details>
   <summary><strong> 4️⃣ AWS ElastiCache for Redis</strong></summary>
     <div markdown="1">
-      AWS 아키텍처로 구성된 프로젝트에서 최적화된 서비스와 
-팀 프로젝트 환경에서 효과적인 모니터링을 위해서 사용
+      1. AWS 아키텍처로 구성된 프로젝트에서 최적화된 서비스와 팀 프로젝트 환경에서 효과적인 모니터링을 위해서 AWS 클라우드 제품을 사용했습니다.
+      2. 다양한 데이터 타입과 영속화가 필요했습니다.
     
   </details> 
   
@@ -212,6 +208,7 @@
   <details>
   <summary><strong> 7️⃣ AWS Elastic Beanstalk</strong></summary>
     <div markdown="1">
+    
 <!--  -->
 - 다양한 인프라 서비스를 간편하게 사용할 수 있습니다.
 < 용량 프로비저닝, 로드 밸런싱, 모니터링, 협업 도구 >
@@ -256,7 +253,9 @@ logback-access 모듈을 이용해 api 통신 관련 통신 로그 또한 파일
   <summary><strong> 🔟 TestContainer</strong></summary>
     <div markdown="1">     
     <br>
-Redis를 사용한 코드를 어느 환경에서든 바로 테스트가 가능하게 하기 위해서 사용 
+    
+- DB를 사용한 서비스 코드를 어느 환경에서든 바로 테스트가 가능하게 하기 위해서 사용했습니다.
+
 <!--     </div> -->
   </details> 
   
@@ -372,8 +371,8 @@ Redis를 사용한 코드를 어느 환경에서든 바로 테스트가 가능�
 #### ✔ 모니터링
 - Cloud Watch를 사용하여 **로그 + 성능 지표를 모니터링** 하고 있습니다.
 - CPU가 70%를 초과하면 알림이 울리는 **경보 프로세스**를 구축했습니다. 
-#### ✔ 테스트 커버리지 95%
-- 과감한 코드 리팩토링과 자신있는 배포를 위해서 95% 미달성 시 배포가 되지 않도록 제한을 걸었습니다.
+#### ✔ 테스트 커버리지 90%
+- 프로젝트의 안정성을 위해 **테스트 커버리지를 90%**로 설정했습니다.
 - 불필요한 프로덕션 코드를 전부 제거하고 모든 코드를 이해하고 싶었습니다.
 - <details><summary><strong>📢 클린코드 中</strong></summary><div markdown="1">       <br/><pre>얼마만큼의 코드를 자동화한 단위 테스트로 계산해야 할까? 대답할 필요조차 없다.<br/> 모조리 다 해야 한다. 모.조.리! 100% 테스트 커버리지를 권장하냐고? 권장이 아니라 강력히 요구한다. <br/>작성한 코드는 한 줄도 빠짐없이 전부 테스트해야 한다. 군말은 필요 없다. ― 클린코드 (로버트 마틴 저)</pre></div></details>
 #### ✔ React를 통한 클라이언트 코드 작성
@@ -383,25 +382,6 @@ Redis를 사용한 코드를 어느 환경에서든 바로 테스트가 가능�
 <br/>
 
 ## 🎯 트러블 슈팅
-
-<details>
-<summary><strong>📌 조회/정렬 동작 시 두개의 Index가 적용되지 않는 이슈가 발생했습니다. </strong></summary>
-<div markdown="1">       
-
-#### ❗ 문제상황
-  - Full-Text-Search 키워드 필터가 포함된 필터링 조회 동작 시 타임아웃이 발생했습니다.
-  - 필터링 조회에서 정렬(조회순, 날짜순)은 필수적으로 이루어져야 하는데 Full-Text-Search 키워드 필터가 동작하면서 Full-Text-Index가 쿼리에 적용되었고, 이로인해 정렬 컬럼의 인덱스가 누락되어 sort에 부하가 발생했습니다.
-  
-#### 💡 Solution :
-  - 필터링 조회 시 정렬 컬럼으로 인덱스를 사용하기 위해 키워드 검색은 contains문을 사용하였습니다.
-  - 키워드만으로 검색이 이루어질 때는 Full-Text-Search가 동작 되도록 설정했습니다.
- 
-#### ✔ 결과
-  - 키워드에 따른 속도 편차는 발생하지만 평균 500ms로 성능의 안정화를 이루었습니다. 
-  - ( 약 11,900%의 성능향상 효과를 얻었습니다. ) </br>
-  
-</div>
-</details>
 
 <details>
 <summary><strong>📌 5,000 건의 상품 데이터 Cache Warmup 동작 시 Redis Latency의 지연이 발생했습니다.</strong> </summary>
@@ -454,8 +434,25 @@ Redis를 사용한 코드를 어느 환경에서든 바로 테스트가 가능�
   - ![10,000 view redis1](https://user-images.githubusercontent.com/112923814/207050998-1e314ddd-4fee-49f4-9b76-157514757c0c.png)
   - ![10,000 view redis graph](https://user-images.githubusercontent.com/112923814/207051036-38937920-808d-4bf0-9414-2a4f4504a93c.png)
 
+</div>
+</details>
 
+<details>
+<summary><strong>📌 조회/정렬 동작 시 두개의 Index가 적용되지 않는 이슈가 발생했습니다. </strong></summary>
+<div markdown="1">       
 
+#### ❗ 문제상황
+  - Full-Text-Search 키워드 필터가 포함된 필터링 조회 동작 시 타임아웃이 발생했습니다.
+  - 필터링 조회에서 정렬(조회순, 날짜순)은 필수적으로 이루어져야 하는데 Full-Text-Search 키워드 필터가 동작하면서 Full-Text-Index가 쿼리에 적용되었고, 이로인해 정렬 컬럼의 인덱스가 누락되어 sort에 부하가 발생했습니다.
+  
+#### 💡 Solution :
+  - 필터링 조회 시 정렬 컬럼으로 인덱스를 사용하기 위해 키워드 검색은 contains문을 사용하였습니다.
+  - 키워드만으로 검색이 이루어질 때는 Full-Text-Search가 동작 되도록 설정했습니다.
+ 
+#### ✔ 결과
+  - 키워드에 따른 속도 편차는 발생하지만 평균 500ms로 성능의 안정화를 이루었습니다. 
+  - ( 약 11,900%의 성능향상 효과를 얻었습니다. ) </br>
+  
 </div>
 </details>
 
@@ -509,7 +506,15 @@ Redis를 사용한 코드를 어느 환경에서든 바로 테스트가 가능�
 
 ## 🧑‍💻팀원
 
-|송제윤|윤수영|계현준|
-|:--|:--|:--|
-|jy|sy|hj|
+<table>
+  <tbody>
+    <tr>
+      <td align="center"><a href="https://github.com/JeyunSong"><img src="https://user-images.githubusercontent.com/87157566/207309118-7b605a47-bd31-44ff-806c-dc6aef3d85f9.jpg" width="200px;" /><br /><sub><b>송제윤</b></sub></a><br /></td>
+      <td align="center"><a href="https://github.com/kyebalza"><img src="https://user-images.githubusercontent.com/87157566/207311363-ce5707ee-5679-44e3-a955-7642771be89d.jpg" width="200px;" /><br /><sub><b>계현준</b></sub></a><br /></td>
+      <td align="center"><a href="https://github.com/Suyoung225"><img src="https://user-images.githubusercontent.com/87157566/207468174-6be4110a-40f2-471b-97ca-b64dda0c8b24.jpg" width="200px; "/><br /><sub><b>윤수영</b></sub></a><br /></td>
+     <tr/>
+  </tbody>
+</table>
+
+
 

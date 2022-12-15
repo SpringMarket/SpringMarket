@@ -39,7 +39,7 @@ jobs:
 
       - name: Grant execute permission for gradlew
         working-directory: ./
-        run: chmod +x ./gradlew
+        run: chmod +x ./gradlew -x test
         shell: bash
         
       - name: cache
