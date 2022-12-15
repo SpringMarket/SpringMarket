@@ -474,35 +474,67 @@ logback-access 모듈을 이용해 api 통신 관련 통신 로그 또한 파일
 </div>
 </details>
 
+<br/>
+
+## 🪨 기술적 챌린지
+### AWS 프리티어 인스턴스의 동작 최적화 
+**✔ 아키텍처 및 애플리케이션 튜닝을 통한 여러 전략**
+</br></br>
 <details>
-<summary><strong>📌 AWS 인스턴스 성능 튜닝</strong></summary>
-<div markdown="1">       
+<summary><strong> 📣 Step1. DB 읽기 전용 복제본을 생성해 Read 요청을 분산 </strong></summary>
+<div markdown="1">     
 
-#### ❗ 문제상황
-  - 스케일업 이전에 프리티어 인스턴스로 성능 최적화를 진행해보고자 했습니다.
-  
-#### 💡 Step 3
-  
-   1. <strong>DB 읽기 전용 복제본을 생성해 Read 요청을 분산합니다.</strong></br>
-   2. <strong>Hikari Connection Pool 최적의 개수를 찾아야 했습니다.</strong></br>
-   > Cache Write Back 전략으로 조회수를 관리하고 있었기에 Connection Pool 확장이 필요했습니다.
-   > RDS micro.t3 인스턴스의 성능을 고려한 확장이 필요했습니다. </br>
-   3. <strong>Time_Wait 소켓의 최적화가 필요했습니다.</strong></br>
-   > 낮은 성능의 DB로 대규모 상품 데이터를 핸들링하는 상황이기에, 남아있는 모든 소켓에 요청마다
-   > TCP handshake가 발생하는데에서 생기는 불필요한 성능 낭비를 없애야 했습니다.
-
+#### ❔원인
+  - 하나의 DB에 많은 조회와 주문이 몰리면서 CPU에 병목이 발생
   
 #### ✔ 결과
-  - Step 1. Main DB에는 Write 요청만을 동작시키고 Replica DB에 Read 동작을 분산 동작시켜 부하를 분산했습니다.
-  - Step 2. Jmeter 부하테스트를 통해 에러율이 가장 낮아지는 Connection Pool Size가 20임을 발견했습니다.
-  > Default Size인 10개에서 20개로 확장하니 1초 동안 이루어지는 동시 주문 150건 기준 에러율이 371% 하락했습니다.</br>
-  > ( Error 21.04% -> Error  5.67% )  
-  - Step 3. KeepAlive 적용을 통해 매 요청마다 새로운 세션을 만들지 않고, 1024개의 세션을 연결한 뒤 그 연결을 통해 요청을 처리하게 만들었습니다.
+  - Main DB에서는 Write 요청만 동작
+  - 동일 상황에서 CPU의 안정화 
+  
+  ![image](https://user-images.githubusercontent.com/112923814/207860046-ace2a74e-4710-4cac-99f3-dc7d650d9811.png)
+
+  
 
 </div>
 </details>
 
+<details>
+<summary><strong> 📣 Step2. Hikari Connection Pool 최적의 개수 적용 </strong></summary>
+<div markdown="1">     
+
+#### ❔원인
+  -  Cache Write Back 전략으로 조회수를 관리하고 있었기에 다중 DB Update를 위한
+       Hikari CP 확장이 필요했으나 </br>RDS micro.t3 인스턴스의 성능을 고려한 확장 필요
+  
+#### ✔ 결과
+  -  Jmeter 부하테스트를 통해 에러율이 가장 낮아지는 Connection Pool Size가 20임을 발견
+  
+![image](https://user-images.githubusercontent.com/112923814/207860175-26edd3dc-3838-4b57-9354-07913d9474b5.png)
+
+
+</div>
+</details>
+
+<details>
+<summary><strong> 📣 Step3. Time_Wait 소켓의 최적화 </strong></summary>
+<div markdown="1">     
+
+#### ❔원인
+  -  낮은 성능의 DB로 대규모 상품 데이터를 핸들링하는 상황에서, 남아있는 모든 소켓에 요청마다</br> TCP handshake가 발생하면서 불필요한 성능 낭비 발생
+  
+#### ✔ 결과
+  -  <strong>KeepAlive 적용</strong>을 통해 매 요청마다 새로운 세션을 만들지 않고,</br> 1024개의 세션을 연결한 뒤 그 연결을 통해 요청을 처리하도록 설정
+      </br></br>
+ ![image](https://user-images.githubusercontent.com/112923814/207860282-2bfab5e0-411d-43b4-ac3a-6a86e2b174fb.png)
+
+</div>
+</details>
+
+
+
+
 <br/>
+
 
 ## 🧑‍💻팀원
 
