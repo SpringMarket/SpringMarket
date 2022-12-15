@@ -504,6 +504,68 @@ logback-access 모듈을 이용해 api 통신 관련 통신 로그 또한 파일
 
 <br/>
 
+## 🪨 기술적 챌린지
+
+### AWS 프리티어 인스턴스의 동작 최적화 - 아키텍처 및 애플리케이션 튜닝을 통한 여러 전략
+
+<details>
+<summary><strong> 📣 Step1. DB 읽기 전용 복제본을 생성해 Read 요청을 분산 </strong></summary>
+<div markdown="1">     
+
+#### ❔원인
+  - 하나의 DB에 많은 조회와 주문이 몰리면서 CPU에 병목이 발생
+  
+#### ✔ 결과
+  - Main DB에서는 Write 요청 동작
+  - 동일 상황에서 CPU의 안정화 
+
+</div>
+</details>
+
+<details>
+<summary><strong> 📣 Step2. Hikari Connection Pool 최적의 개수 적용 </strong></summary>
+<div markdown="1">     
+
+#### ❔원인
+  -  Cache Write Back 전략으로 조회수를 관리하고 있었기에 다중 DB Update를 위한
+       Hikari CP 확장이 필요했으나 RDS micro.t3 인스턴스의 성능을 고려한 확장 필요
+  
+#### ✔ 결과
+  -  Jmeter 부하테스트를 통해 에러율이 가장 낮아지는 Connection Pool Size가 20임을 발견
+  
+  - 10초 간 1500건의 주문 요청에서 발생한 에러율 지표 ( DB 업데이트가 발생하는 기능)  
+  
+  
+  Pool 10 : Error 21.04% <br>
+Pool 13 : Error 14.53% <br>
+Pool 17 : Error 11.24% <br>
+🎉 Pool 20 : Error  5.67% 🎉 <br>
+Pool 30 : Error 29.20% <br>
+Pool 60 : Error 35.50% <br>
+
+</div>
+</details>
+
+<details>
+<summary><strong> 📣 Step3. Time_Wait 소켓의 최적화 </strong></summary>
+<div markdown="1">     
+
+#### ❔원인
+  -  낮은 성능의 DB로 대규모 상품 데이터를 핸들링하는 상황에서, 남아있는 모든 소켓에 요청마다 TCP handshake가 발생하면서 불필요한 성능 낭비 발생
+  
+#### ✔ 결과
+  -  KeepAlive 적용을 통해 매 요청마다 새로운 세션을 만들지 않고, 
+      1024개의 세션을 연결한 뒤 그 연결을 통해 요청을 처리하도록 설정
+ 
+</div>
+</details>
+
+
+
+
+<br/>
+
+
 ## 🧑‍💻팀원
 
 <table>
