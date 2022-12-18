@@ -267,6 +267,23 @@ logback-access 모듈을 이용해 api 통신 관련 통신 로그 또한 파일
 
 ## 🔥 주요 기능
 
+<details> 
+<summary><strong> 애플리케이션 미리보기 </strong></summary>
+<div markdown="1">      
+</br> 
+ 
+| **회원가입/로그인** | **메인페이지 랭킹보드** |
+| :---: | :---: |
+| <img src="https://user-images.githubusercontent.com/112923814/208289007-d9dcc5ad-4b5d-4507-b77a-1285910eb93d.gif" width="70%" height="70%"/> | <img src="https://user-images.githubusercontent.com/112923814/208288878-e6405325-aa81-46f9-a43c-acbd68135c3b.gif" width="70%" height="70%"/> |
+| **필터링 검색** | **키워드 검색** |
+| <img src="https://user-images.githubusercontent.com/112923814/208288950-e9c3acfb-71c0-468a-a7e7-808f821f9e9f.gif" width="70%" height="70%"/>  | <img src="https://user-images.githubusercontent.com/112923814/208288955-8ca24c79-c5e8-4acb-a928-bab62156b6e4.gif" width="70%" height="70%"/>  |
+| **장바구니** | **주문** |
+| <img src="https://user-images.githubusercontent.com/112923814/208288959-bf086f38-0c6d-4ccb-b229-52b5a6a1ecfd.gif" width="70%" height="70%"/>  | <img src="https://user-images.githubusercontent.com/112923814/208288954-76a59d7b-2668-4575-862e-80644aa4b6f0.gif" width="70%" height="70%"/>  |
+  
+</div>
+</details>
+<br>
+
 
 ### ✔ 검색
 
@@ -280,7 +297,7 @@ logback-access 모듈을 이용해 api 통신 관련 통신 로그 또한 파일
 </br> 
  
   - **Redis Sorted Set을 통해 평균 100ms의 속도로 랭킹보드를 제공하고 있습니다.**
-  - 메인 페이지에 접근할 때마다 Order By가 동작하는 기존의 코드보다 **28배 성능이 향상**되었습니다. ( 28s -> 100ms )
+  - 메인 페이지에 접근할 때마다 Order By가 동작하는 기존의 코드보다 **27900% 조회 성능이 향상**되었습니다. ( 28s -> 100ms )
   - 파이프라인 + 스케줄러를 통해 주기적으로 랭킹보드를 세팅하고 있습니다.</br></br>
   
 </div>
@@ -314,7 +331,7 @@ logback-access 모듈을 이용해 api 통신 관련 통신 로그 또한 파일
 <div markdown="1">    
 <br>
 
-  - 키워드 조회 시 Full-Text-Search 방식을 사용하여 like문을 사용한 쿼리보다 **약 634% 성능을 개선**했습니다.</br></br>
+  - 키워드 조회 시 Full-Text-Search 방식을 사용하여 like문을 사용한 쿼리보다 **약 634% 조회 성능을 개선**했습니다.</br></br>
   
 </div>
 </details>
@@ -364,21 +381,21 @@ logback-access 모듈을 이용해 api 통신 관련 통신 로그 또한 파일
 
 ## 💉 프로젝트 관리
 #### ✔ 애플리케이션 배포
-- Github Actions + Elastic Beanstalk 사용으로 **CI/CD 환경을 구축**했습니다.
+- Github Actions + Elastic Beanstalk 사용으로 **CI/CD 환경을 구축**했습니다. ( 추가 배치를 통한 롤링 )
 - ALB를 활용한 **Trigger 기반 오토 스케일링**으로 유동적인 트래픽에 효율적으로 대응하고 있습니다.
-- Github Actions CI 동작 시 **Gradle 세팅 캐싱**을 통해 더욱 생산성을 높였습니다.
-- 인터넷 보안 환경과 UX를 위해 **HTTPS**를 적용했습니다.
+- Github Actions CI 동작 시 **Gradle 세팅 캐싱**을 통해 더욱 생산성을 높였습니다. ( 2m -> 1m 9s )
+- 인터넷 보안 환경을 위해 **HTTPS**를 적용했습니다.
 #### ✔ 모니터링
 - Cloud Watch를 사용하여 **로그 + 성능 지표를 모니터링** 하고 있습니다.
 - CPU가 70%를 초과하면 알림이 울리는 **경보 프로세스**를 구축했습니다.
   ( 경보 시 오토 스케일링 동작 )
-#### ✔ 테스트 커버리지 90%
-- 프로젝트의 안정성을 위해 <strong>테스트 커버리지를 90%</strong>로 설정했습니다.
-- 불필요한 프로덕션 코드를 전부 제거하고 모든 코드를 이해하고 싶었습니다.
+#### ✔ 테스트 커버리지 91%
+- 발생할 수 있는 주요 시나리오에 대해 대처하고자 했습니다.
+- 쓰지 않는 Lombok 코드와 같이 사용하지 않거나 중복된 프로덕션 코드를 제거하고 코드에 대한 이해도를 올리고자 했습니다.
 - <details><summary><strong>📢 클린코드 中</strong></summary><div markdown="1">       <br/><pre>얼마만큼의 코드를 자동화한 단위 테스트로 계산해야 할까? 대답할 필요조차 없다.<br/> 모조리 다 해야 한다. 모.조.리! 100% 테스트 커버리지를 권장하냐고? 권장이 아니라 강력히 요구한다. <br/>작성한 코드는 한 줄도 빠짐없이 전부 테스트해야 한다. 군말은 필요 없다. ― 클린코드 (로버트 마틴 저)</pre></div></details>
 #### ✔ React를 통한 클라이언트 코드 작성
 - **Single Page Application** 구현으로 UX를 최대화 시키고자 했습니다.
-- 백엔드 프로젝트지만 React 코드를 직접 작성하여 **실제 협업 프로세스**처럼 진행하고자 했습니다.   
+- 백엔드 프로젝트지만 React 코드를 직접 작성하여 프론트엔드와 함께 진행하는 **실제 협업 프로세스**처럼 진행하고자 했습니다.   
 
 <br/>
 
@@ -417,7 +434,7 @@ logback-access 모듈을 이용해 api 통신 관련 통신 로그 또한 파일
 <div markdown="1">       
   
 #### ❗ 문제상황
-  - 높은 트래픽이 발생할 때 조회가 일어날 때마다 발생하는 Update 쿼리는 서버에 큰 무리가 있었습니다.
+  - 높은 트래픽이 발생할 때 조회와 함께 발생하는 Update 쿼리는 서버에 큰 무리가 있었습니다.
   - <strong>10초간 상품 상세 조회가 1만회 동작할 때 에러율이 62.31% 발생했습니다.</strong> 
   - ![10,000 view update1](https://user-images.githubusercontent.com/112923814/207050945-515b7aec-1999-4547-bbba-53dc37670325.png)
   - ![10,000 view update graph](https://user-images.githubusercontent.com/112923814/207050910-be5d0354-3d3a-4312-9077-b8db909638d2.png)
@@ -439,7 +456,7 @@ logback-access 모듈을 이용해 api 통신 관련 통신 로그 또한 파일
 </details>
 
 <details>
-<summary><strong>📌 조회/정렬 동작 시 두개의 Index가 적용되지 않는 이슈가 발생했습니다. </strong></summary>
+<summary><strong>📌 필터링 조회 동작 시 Index가 적용되지 않는 이슈가 발생했습니다. </strong></summary>
 <div markdown="1">       
 
 #### ❗ 문제상황
@@ -458,7 +475,7 @@ logback-access 모듈을 이용해 api 통신 관련 통신 로그 또한 파일
 </details>
 
 <details>
-<summary><strong>📌 쿼리문 동작 시 cross join이 발생하여 성능 이슈가 발생했습니다. </strong></summary>
+<summary><strong>📌 조회 쿼리 동작 시 cross join이 발생하여 성능 이슈가 발생했습니다. </strong></summary>
 <div markdown="1">       
 
 #### ❗ 문제상황
